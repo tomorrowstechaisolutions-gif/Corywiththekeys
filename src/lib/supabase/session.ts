@@ -6,12 +6,12 @@ import { publicEnv } from "@/lib/env";
 
 /**
  * Refreshes the Supabase auth cookie on every matched request and gates
- * /admin behind a signed-in user.
+ * /admin behind a signed-in user. Called from src/proxy.ts.
  *
  * This is the FIRST of three layers, and the weakest one — it only proves
  * that someone is signed in. Whether they are active staff, and what they
  * may do, is decided by `requireStaff()` in the admin layout and ultimately
- * by Row Level Security in Postgres. Middleware alone is never the gate.
+ * by Row Level Security in Postgres. The proxy alone is never the gate.
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
