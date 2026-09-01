@@ -238,7 +238,7 @@ export function NextRideCta() {
               View Inventory
             </Link>
             <Link
-              href="/apply"
+              href="/finance"
               className="rounded-md border border-white/35 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white hover:bg-white/10"
             >
               Get Approved

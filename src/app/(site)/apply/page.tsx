@@ -1,23 +1,11 @@
-import type { Metadata } from "next";
+import { permanentRedirect } from "next/navigation";
 
-import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
-
-export const metadata: Metadata = {
-  title: "Apply",
-};
-
-export default function ApplyPage() {
-  return (
-    <PagePlaceholder
-      eyebrow="Get Approved"
-      title="Apply"
-      description="Route placeholder for the multi-step credit application. Submissions write to Supabase and surface in /admin/applications."
-      scope={[
-        "Multi-step application form with validation",
-        "Soft-pull consent and disclosures",
-        "Document upload to Supabase Storage",
-        "Confirmation + status tracking",
-      ]}
-    />
-  );
+/**
+ * /apply predates /finance and is linked from older material.
+ *
+ * A 308 rather than a rebuilt page: there is one financing entry point now,
+ * and search engines should forget this one rather than index two.
+ */
+export default function ApplyPage(): never {
+  permanentRedirect("/finance");
 }

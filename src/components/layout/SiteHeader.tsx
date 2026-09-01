@@ -30,7 +30,7 @@ export function SiteHeader() {
               {CONTACT.phone}
             </a>
             <Link
-              href="/apply"
+              href="/finance"
               className="rounded-md bg-keyblue-600 px-3.5 py-2 text-xs font-bold leading-tight transition hover:bg-keyblue-500 sm:px-4 sm:text-sm"
             >
               Get Approved

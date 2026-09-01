@@ -47,7 +47,7 @@ export function InventoryHero() {
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/apply"
+              href="/finance"
               className="inline-flex items-center justify-center gap-2 rounded-md bg-keyblue-600 px-6 py-3.5 text-sm font-bold transition hover:bg-keyblue-500"
             >
               Get Pre-Approved <span aria-hidden>→</span>

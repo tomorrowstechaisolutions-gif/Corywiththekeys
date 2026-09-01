@@ -161,7 +161,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
           </Link>
         ) : null}
         <Link
-          href="/apply"
+          href="/finance"
           className="rounded-md bg-keyblue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-keyblue-500"
         >
           Get Pre-Approved

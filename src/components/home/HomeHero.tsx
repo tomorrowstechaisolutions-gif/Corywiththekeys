@@ -55,7 +55,7 @@ export function HomeHero() {
               View Inventory <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/apply"
+              href="/finance"
               className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 px-6 py-3.5 text-sm font-bold transition hover:border-white hover:bg-white/10"
             >
               Apply Now <span aria-hidden>→</span>

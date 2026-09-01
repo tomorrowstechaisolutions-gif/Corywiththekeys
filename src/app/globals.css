@@ -33,6 +33,14 @@
   --brand-blue-electric: #0a66ff;
   --brand-gold: #d6a321;
   --brand-shop-muted: #9aa4af;
+
+  /* Finance page — black and metallic gold. */
+  --brand-finance-bg: #050505;
+  --brand-finance-panel: #0a0a0a;
+  --brand-gold-300: #f0c45a;
+  --brand-gold-400: #e0b449;
+  --brand-gold-500: #d4a33d;
+  --brand-finance-muted: #b8b8b8;
   --brand-muted: #8fa3c0;
   --brand-line: #1d3358;
 }
@@ -57,6 +65,13 @@
   --color-keyblue-electric: var(--brand-blue-electric);
   --color-keygold: var(--brand-gold);
   --color-shop-muted: var(--brand-shop-muted);
+
+  --color-finance-bg: var(--brand-finance-bg);
+  --color-finance-panel: var(--brand-finance-panel);
+  --color-gold-300: var(--brand-gold-300);
+  --color-gold-400: var(--brand-gold-400);
+  --color-gold-500: var(--brand-gold-500);
+  --color-finance-muted: var(--brand-finance-muted);
 
   --color-ink: var(--brand-ink);
   --color-muted: var(--brand-muted);

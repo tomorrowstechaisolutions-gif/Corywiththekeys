@@ -77,7 +77,7 @@ export function MobileNav() {
               Call or text {CONTACT.phone}
             </a>
             <Link
-              href="/apply"
+              href="/finance"
               className="flex items-center justify-center rounded-md bg-keyblue-600 px-4 py-3 text-base font-bold text-white"
             >
               Get Approved
