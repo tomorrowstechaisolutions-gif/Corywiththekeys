@@ -100,7 +100,7 @@ export function QuoteBanner() {
           src="/brand/shop/quote-banner.webp"
           alt={`“${quote}” — ${QUOTE.attribution}. ${QUOTE.headline} ${QUOTE.headlineAccent} ${QUOTE.body}`}
           width={2172}
-          height={724}
+          height={490}
           loading="lazy"
           sizes="100vw"
           className="h-auto w-full"
@@ -119,7 +119,7 @@ export function QuoteBanner() {
           height={1320}
           loading="lazy"
           sizes="(max-width: 1536px) 34vw, 520px"
-          className="absolute bottom-0 left-[54%] h-[93%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
+          className="absolute bottom-0 left-[54%] h-[96%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
         />
       </div>
 
