@@ -2,30 +2,30 @@ import Image from "next/image";
 
 import { Container } from "@/components/ui/Container";
 import { STORY } from "@/data/about";
-import { SITE } from "@/lib/constants";
 
 export function OurStory() {
   return (
-    <section className="bg-navy-950 py-10 lg:py-14">
+    <section id="our-story" className="scroll-mt-20 bg-navy-950 pb-6 pt-8 lg:pb-8 lg:pt-10">
       <Container>
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-navy-900 to-navy-950">
-          <div className="grid gap-0 md:grid-cols-[minmax(0,20rem)_1fr]">
-            <div className="relative aspect-4/3 md:aspect-auto md:min-h-[26rem]">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#060d1c]">
+          <div className="grid md:grid-cols-[minmax(0,22rem)_1fr]">
+            <div className="relative h-72 md:h-auto md:min-h-[24rem]">
               <Image
                 src={STORY.portrait}
                 alt={STORY.portraitAlt}
                 fill
-                sizes="(max-width: 768px) 100vw, 320px"
+                sizes="(max-width: 768px) 100vw, 352px"
                 className="object-cover object-top"
               />
+              {/* Blends the cut-out portrait into the card on desktop. */}
               <div
                 aria-hidden
-                className="absolute inset-0 bg-linear-to-t from-navy-950/70 to-transparent md:bg-linear-to-r md:from-transparent md:to-navy-950/60"
+                className="absolute inset-0 bg-[linear-gradient(to_top,#060d1c_0%,transparent_35%)] md:bg-[linear-gradient(to_right,transparent_55%,#060d1c_100%)]"
               />
             </div>
 
-            <div className="p-6 sm:p-8 lg:p-10">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-keyblue-400">
+            <div className="p-6 sm:p-8 lg:py-12 lg:pl-4 lg:pr-12">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-keyblue-400">
                 {STORY.eyebrow}
               </p>
 
@@ -33,17 +33,25 @@ export function OurStory() {
                 {STORY.heading}
               </h2>
 
+              <span
+                aria-hidden
+                className="mt-4 block h-0.5 w-14 rounded-full bg-keyblue-500"
+              />
+
               <div className="mt-5 max-w-xl space-y-4 text-sm leading-relaxed text-white/75 sm:text-base">
                 {STORY.paragraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
 
-              <p className="mt-8 font-serif text-3xl font-bold italic text-keyblue-400">
-                {SITE.personality.split(" ")[0]}
+              <p
+                className="mt-7 text-5xl leading-none text-keyblue-500"
+                style={{ fontFamily: "var(--font-signature)" }}
+              >
+                {STORY.signature}
               </p>
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/45">
-                With The Keys
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+                {STORY.signatureSub}
               </p>
             </div>
           </div>

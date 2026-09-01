@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Display faces, self-hosted so no request ever leaves the site. */
+@import "@fontsource/anton/latin-400.css";
+@import "@fontsource/great-vibes/latin-400.css";
+
 /*
  * The Key Konnect — brand tokens
  * Palette taken from the approved "Official Car Plug of the People" design.
@@ -45,6 +49,10 @@
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Anton for the big condensed display type; Great Vibes for the signature. */
+  --font-display: "Anton", ui-sans-serif, system-ui, "Arial Narrow", sans-serif;
+  --font-signature: "Great Vibes", ui-serif, Georgia, serif;
 }
 
 * {

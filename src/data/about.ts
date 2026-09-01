@@ -19,8 +19,11 @@ export const STORY = {
     "What began as a passion for cars turned into a purpose to help people get on the road to a better life.",
     "We're not here to sell you a car. We're here to build relationships that last.",
   ],
-  portrait: "/brand/about/cory-portrait.webp",
-  portraitAlt: "Cory With The Keys performing on stage",
+  portrait: "/brand/about/cory-story.webp",
+  portraitAlt:
+    "Cory With The Keys in a Cory With The Keys tee and cap at the dealership",
+  signature: "Cory",
+  signatureSub: "With The Keys",
 } as const;
 
 /**
@@ -30,6 +33,13 @@ export const STORY = {
  * a hero CTA that goes nowhere is worse than no CTA at all.
  */
 export const STORY_VIDEO_URL: ExternalUrl = null;
+
+/**
+ * Where the hero button goes when there is no video yet: down to the story
+ * section. The button still appears, as the comp shows it, but it takes the
+ * visitor somewhere real instead of nowhere.
+ */
+export const STORY_FALLBACK_HREF = "#our-story";
 
 export type Value = {
   key: string;
@@ -52,12 +62,13 @@ export const VALUES: Value[] = [
  * dealership, and in Texas an inaccurate one is a deceptive-trade-practices
  * problem, not a typo.
  *
- * So the whole block is gated: set `confirmed: true` only once Cory has
- * confirmed each figure, correcting any that are wrong first. Until then the
- * section simply does not render and the page reads fine without it.
+ * Switched on at John's request so the page matches the approved comp. The
+ * gate is still here: set `confirmed` back to false and the block disappears
+ * cleanly. Correct any figure Cory says is wrong — these are published
+ * claims now, not layout.
  */
 export const STATS = {
-  confirmed: false,
+  confirmed: true,
   items: [
     { value: "10+", label: "Years in Business" },
     { value: "1000+", label: "Happy Customers" },
@@ -128,7 +139,8 @@ export const HERO = {
   script: "With The Keys",
   lines: [
     "More than a car lot.",
-    "It's a movement built on trust, loyalty and community.",
+    "It's a movement built on trust,",
+    "loyalty and community.",
   ],
   image: "/brand/about/hero-team.webp",
   imageAlt:
