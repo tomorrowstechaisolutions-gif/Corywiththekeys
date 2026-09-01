@@ -1,21 +1,37 @@
 import Link from "next/link";
 
-/** Admin console top bar. Auth state and account menu are wired up later. */
-export function AdminTopbar() {
-  return (
-    <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6">
-      <p className="text-sm font-semibold text-navy-900">Admin Console</p>
+import { signOut } from "@/app/(auth)/login/actions";
+import { displayName, ROLE_LABELS, type Profile } from "@/lib/auth";
 
-      <div className="flex items-center gap-4 text-sm">
+/** Admin console top bar. Shows who is signed in and how to leave. */
+export function AdminTopbar({ profile }: { profile: Profile }) {
+  return (
+    <header className="flex h-14 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-6">
+      <div className="min-w-0">
+        <p className="truncate text-sm font-semibold text-navy-900">
+          {displayName(profile)}
+        </p>
+        <p className="truncate text-xs text-navy-700">
+          {profile.title ?? ROLE_LABELS[profile.role]}
+          {profile.title ? (
+            <span className="text-muted"> · {ROLE_LABELS[profile.role]}</span>
+          ) : null}
+        </p>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-4 text-sm">
         <Link href="/" className="text-navy-700 hover:text-keyblue-600">
           View site
         </Link>
-        <span
-          className="rounded-full bg-slate-100 px-3 py-1 text-xs text-navy-700"
-          title="Supabase Auth is not wired up yet"
-        >
-          Not signed in
-        </span>
+
+        <form action={signOut}>
+          <button
+            type="submit"
+            className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-navy-700 transition hover:bg-slate-50"
+          >
+            Sign out
+          </button>
+        </form>
       </div>
     </header>
   );

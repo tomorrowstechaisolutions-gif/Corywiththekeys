@@ -44,19 +44,3 @@ export const SITE_NAV = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
-
-/** Admin console navigation. */
-export const ADMIN_NAV = [
-  { label: "Dashboard", href: "/admin/dashboard" },
-  { label: "Leads", href: "/admin/leads" },
-  { label: "Pipeline", href: "/admin/pipeline" },
-  { label: "Inventory", href: "/admin/inventory" },
-  { label: "Applications", href: "/admin/applications" },
-  { label: "Trade-Ins", href: "/admin/trade-ins" },
-  { label: "Appointments", href: "/admin/appointments" },
-  { label: "Customers", href: "/admin/customers" },
-  { label: "Messages", href: "/admin/messages" },
-  { label: "Partner Lots", href: "/admin/partner-lots" },
-  { label: "Analytics", href: "/admin/analytics" },
-  { label: "Settings", href: "/admin/settings" },
-] as const;

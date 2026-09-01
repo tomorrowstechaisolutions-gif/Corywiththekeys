@@ -82,10 +82,44 @@ Key rules baked into the database, not just convention:
 - **No regulated PII.** The site collects prequalification data only —
   banded income and down payment, no DOB, SSN, licence or account data.
 
+## Auth
+
+Staff sign in at `/login` with email + password. There is no public sign-up
+route, and new accounts land **inactive** — an admin must activate them and
+assign a role before they can see anything.
+
+Access is checked in three independent layers. Each one assumes the layer
+above it may be wrong:
+
+| Layer | File | Proves |
+| ----- | ---- | ------ |
+| Middleware | `src/middleware.ts` | A session exists; redirects to `/login` |
+| Layout guard | `src/app/admin/layout.tsx` → `requireStaff()` | The profile is active staff |
+| Row Level Security | `supabase/migrations/0004_rls.sql` | What the query may actually return |
+
+Roles are `admin` / `sales` / `viewer`, separate from `profiles.title`, which
+is a display job title with no effect on permissions. `/admin/settings` and
+`/admin/analytics` call `requireRole('admin')`; the sidebar hides them for
+other roles, but hiding a link is presentation — the guard is the gate.
+
+### Creating the first admin
+
+1. Supabase dashboard → **Authentication → Users → Add user** (confirm the email).
+2. Promote them:
+
+```sql
+update public.profiles
+   set role = 'admin', is_active = true, title = 'Head of IT Administrator'
+ where email = 'you@example.com';
+```
+
+3. Turn public sign-ups off: **Authentication → Sign In / Providers → Email →
+   Allow new users to sign up = OFF**.
+
+A trigger prevents demoting, deactivating or deleting the last active admin,
+so the console cannot be locked out of itself.
+
 ## Status
 
-Phase 1 scaffold and phase 2 schema complete. Routes still render
-structural placeholders; no auth wiring and no page designs yet.
-
-`/admin` is currently unprotected — middleware lands with the auth phase,
-before anything deploys.
+Phases 1–3 complete: scaffold, database, auth. Routes still render
+structural placeholders; no page designs yet.

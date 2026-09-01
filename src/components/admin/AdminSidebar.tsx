@@ -1,9 +1,13 @@
 import Link from "next/link";
 
-import { ADMIN_NAV, SITE } from "@/lib/constants";
+import { navFor } from "@/lib/admin-nav";
+import { ROLE_LABELS, type Profile } from "@/lib/auth";
+import { SITE } from "@/lib/constants";
 
-/** Admin console navigation rail. Structure only. */
-export function AdminSidebar() {
+/** Admin console navigation rail, filtered to what this role may open. */
+export function AdminSidebar({ profile }: { profile: Profile }) {
+  const items = navFor(profile.role);
+
   return (
     <aside className="hidden w-60 shrink-0 border-r border-line bg-navy-950 text-white lg:block">
       <div className="px-5 py-5">
@@ -17,11 +21,11 @@ export function AdminSidebar() {
 
       <nav aria-label="Admin" className="px-2 pb-8">
         <ul className="space-y-0.5">
-          {ADMIN_NAV.map((item) => (
+          {items.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-navy-800 hover:text-white"
+                className="block rounded-md px-3 py-2 text-sm text-muted transition hover:bg-navy-800 hover:text-white"
               >
                 {item.label}
               </Link>
@@ -29,6 +33,12 @@ export function AdminSidebar() {
           ))}
         </ul>
       </nav>
+
+      <div className="px-5 pb-6">
+        <p className="text-[10px] uppercase tracking-[0.18em] text-muted">
+          Signed in as {ROLE_LABELS[profile.role]}
+        </p>
+      </div>
     </aside>
   );
 }
