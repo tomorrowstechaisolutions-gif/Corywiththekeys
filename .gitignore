@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 !.env.example
+
+# Sync tarballs used to move work onto this machine — never source.
+*.tgz
