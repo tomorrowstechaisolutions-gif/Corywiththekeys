@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/*
+ * The Key Konnect — brand tokens
+ * Palette taken from the approved "Official Car Plug of the People" design.
+ * Tokens only. Page-level styling lands in a later phase.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #0a1a35;
+
+  --brand-navy-950: #050f22;
+  --brand-navy-900: #0a1a35;
+  --brand-navy-800: #0f2547;
+  --brand-navy-700: #16305a;
+
+  --brand-blue-700: #1449ab;
+  --brand-blue-600: #1b5fd9;
+  --brand-blue-500: #2f7bf0;
+  --brand-blue-400: #5b9bff;
+
+  --brand-ink: #0b1220;
+  --brand-muted: #8fa3c0;
+  --brand-line: #1d3358;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-navy-950: var(--brand-navy-950);
+  --color-navy-900: var(--brand-navy-900);
+  --color-navy-800: var(--brand-navy-800);
+  --color-navy-700: var(--brand-navy-700);
+
+  --color-keyblue-700: var(--brand-blue-700);
+  --color-keyblue-600: var(--brand-blue-600);
+  --color-keyblue-500: var(--brand-blue-500);
+  --color-keyblue-400: var(--brand-blue-400);
+
+  --color-ink: var(--brand-ink);
+  --color-muted: var(--brand-muted);
+  --color-line: var(--brand-line);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
