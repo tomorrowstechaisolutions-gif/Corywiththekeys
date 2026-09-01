@@ -8,9 +8,14 @@ import { HERO, STORY_FALLBACK_HREF, STORY_VIDEO_URL } from "@/data/about";
  * as real HTML so it reflows on a phone, can be selected, and is readable by
  * Google.
  *
- * The gradient is written out longhand rather than using the utility scale so
- * the fade finishes around 60% of the width — dark enough to hold the copy,
- * clear enough that the team is not buried behind it.
+ * On desktop the photograph does not span the page: it occupies the right
+ * side and its left edge dissolves into the same black the section sits on,
+ * so the type has real darkness behind it rather than a dimmed picture. The
+ * gradients are written longhand so the dissolve finishes before the headline
+ * starts — a utility-scale fade cannot be positioned that precisely.
+ *
+ * On a phone there is no room for two columns, so the photograph goes back to
+ * full width and fades upward from the bottom instead.
  */
 export function AboutHero() {
   const buttonHref = STORY_VIDEO_URL ?? STORY_FALLBACK_HREF;
@@ -18,19 +23,21 @@ export function AboutHero() {
 
   return (
     <section className="relative isolate flex min-h-[32rem] items-end overflow-hidden bg-black text-white lg:min-h-[40rem] lg:items-center">
-      <Image
-        src={HERO.image}
-        alt={HERO.imageAlt}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-[62%_center] lg:object-[58%_center]"
-      />
+      <div className="absolute inset-y-0 right-0 w-full lg:w-[64%]">
+        <Image
+          src={HERO.image}
+          alt={HERO.imageAlt}
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 64vw"
+          className="object-cover object-[62%_center] lg:object-[52%_center]"
+        />
 
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(to_top,#000_0%,rgba(0,0,0,0.7)_38%,transparent_78%)] lg:bg-[linear-gradient(to_right,#000_0%,rgba(0,0,0,0.72)_34%,transparent_62%)]"
-      />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[linear-gradient(to_top,#000_0%,rgba(0,0,0,0.7)_38%,transparent_78%)] lg:bg-[linear-gradient(to_right,#000_0%,rgba(0,0,0,0.94)_12%,rgba(0,0,0,0.62)_28%,rgba(0,0,0,0.24)_44%,transparent_62%)]"
+        />
+      </div>
 
       <Container className="relative py-12 lg:py-20">
         <div className="max-w-xl">
