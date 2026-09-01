@@ -79,73 +79,91 @@ export function CollectionTiles() {
   );
 }
 
+/**
+ * The campaign banner.
+ *
+ * The artwork is used as supplied on desktop, where it reads at full width.
+ * That artwork carries its own lettering as pixels, and a 3:1 banner shrunk
+ * to a 390px phone renders that lettering about eight pixels tall — so below
+ * `lg` the same texture is used as a background and the words are set as real
+ * HTML instead. Either way the alt text carries the quote, so the section is
+ * never invisible to Google or a screen reader.
+ */
 export function QuoteBanner() {
+  const quote = `${QUOTE.lines.join(" ")} ${QUOTE.emphasis.join(" ")}`;
+
   return (
-    <section className="relative isolate overflow-hidden border-y border-white/8 bg-shop-ink">
-      <Image
-        src="/brand/shop/hero-car.webp"
-        alt=""
-        fill
-        loading="lazy"
-        sizes="100vw"
-        className="object-cover object-center opacity-30"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_50%,rgba(10,102,255,0.16),transparent_70%)]"
-      />
+    <section className="border-y border-white/8 bg-shop-ink">
+      {/* Desktop: the banner exactly as designed. */}
+      <div className="relative mx-auto hidden max-w-[2172px] lg:block">
+        <Image
+          src="/brand/shop/quote-banner.webp"
+          alt={`“${quote}” — ${QUOTE.attribution}. ${QUOTE.headline} ${QUOTE.headlineAccent} ${QUOTE.body}`}
+          width={2172}
+          height={724}
+          loading="lazy"
+          sizes="100vw"
+          className="h-auto w-full"
+          priority={false}
+        />
+      </div>
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[1.15fr_0.7fr_1fr] lg:gap-8 lg:px-8 lg:py-0">
-        <blockquote className="lg:py-12">
-          <p
-            className="text-2xl leading-tight text-white sm:text-3xl lg:text-[2.1rem]"
-            style={{ fontFamily: "var(--font-marker)" }}
-          >
-            &ldquo;{QUOTE.lines.join(" ")}{" "}
-            <span className="text-keyblue-electric">
-              {QUOTE.emphasis.join(" ")}
-            </span>
-            &rdquo;
-          </p>
-          <footer
-            className="mt-4 text-xl text-white/80"
-            style={{ fontFamily: "var(--font-signature)" }}
-          >
-            {QUOTE.attribution}
-          </footer>
-        </blockquote>
+      {/* Phone and tablet: same texture, words set as type. */}
+      <div className="relative isolate overflow-hidden lg:hidden">
+        <Image
+          src="/brand/shop/quote-texture.webp"
+          alt=""
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(2,6,9,0.72),rgba(2,6,9,0.86))]"
+        />
 
-        {/* Cory again — same real photograph, cropped from the chest up. */}
-        <div className="relative hidden h-full min-h-[19rem] lg:block">
-          <Image
-            src="/brand/about/cory-cutout.webp"
-            alt="Cory With The Keys"
-            width={718}
-            height={1000}
-            loading="lazy"
-            sizes="360px"
-            className="absolute bottom-0 left-1/2 h-[112%] w-auto max-w-none -translate-x-1/2 object-contain object-top"
-          />
-        </div>
+        <div className="relative mx-auto max-w-[1400px] px-4 py-12 sm:px-6">
+          <blockquote>
+            <p
+              className="text-2xl uppercase leading-[1.15] text-white sm:text-3xl"
+              style={{ fontFamily: "var(--font-marker)" }}
+            >
+              &ldquo;{QUOTE.lines.join(" ")}{" "}
+              <span className="text-keyblue-electric">
+                {QUOTE.emphasis.join(" ")}
+              </span>
+              &rdquo;
+            </p>
+            <footer
+              className="mt-4 text-xl text-white/80"
+              style={{ fontFamily: "var(--font-signature)" }}
+            >
+              {QUOTE.attribution}
+            </footer>
+          </blockquote>
 
-        <div className="lg:py-12">
-          <h2 className="text-xl font-extrabold uppercase tracking-wide text-white sm:text-2xl">
-            {QUOTE.headline}
-            <br />
-            <span className="text-keyblue-electric">{QUOTE.headlineAccent}</span>
-          </h2>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-shop-muted">
-            {QUOTE.body}
-          </p>
-          <p
-            className="mt-5 text-4xl leading-none text-keygold"
-            style={{ fontFamily: "var(--font-signature)" }}
-          >
-            Cory
-          </p>
-          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-            With The Keys
-          </p>
+          <div className="mt-10 border-t border-white/10 pt-8">
+            <h2 className="text-xl font-extrabold uppercase tracking-wide text-white sm:text-2xl">
+              {QUOTE.headline}
+              <br />
+              <span className="text-keyblue-electric">
+                {QUOTE.headlineAccent}
+              </span>
+            </h2>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-shop-muted">
+              {QUOTE.body}
+            </p>
+            <p
+              className="mt-5 text-4xl leading-none text-keygold"
+              style={{ fontFamily: "var(--font-signature)" }}
+            >
+              Cory
+            </p>
+            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+              With The Keys
+            </p>
+          </div>
         </div>
       </div>
     </section>
