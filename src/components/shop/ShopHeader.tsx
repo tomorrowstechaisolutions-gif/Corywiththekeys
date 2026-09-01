@@ -16,8 +16,14 @@ import {
 import { COLLECTIONS, PRODUCTS } from "@/data/shop";
 import { SITE } from "@/lib/constants";
 
+/**
+ * "Home" is the dealership site, not the store front page — the store is a
+ * section of thekeykonnect.com, not a separate destination, and a visitor who
+ * came for merch still needs a way back to the cars.
+ */
 const NAV = [
-  { label: "Home", href: "/shop" },
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/shop" },
   { label: "New Drops", href: "/shop?filter=new" },
   { label: "Tees", href: "/shop?filter=tees" },
   { label: "Hoodies", href: "/shop?filter=hoodies" },
@@ -87,7 +93,7 @@ export function ShopHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/8 bg-shop-ink/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-4 sm:px-6 lg:h-[72px] lg:px-8">
-        <Link href="/shop" className="flex shrink-0 items-center gap-2.5">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <KeyMark />
           <span className="leading-none">
             <span className="block font-serif text-lg font-bold italic tracking-tight text-white lg:text-xl">
@@ -104,24 +110,21 @@ export function ShopHeader() {
           className="ml-auto hidden items-center gap-6 xl:flex"
         >
           <Link
-            href="/shop"
-            className={`text-[13px] font-semibold uppercase tracking-wide transition ${
-              pathname === "/shop"
-                ? "text-white"
-                : "text-white/70 hover:text-white"
-            }`}
+            href="/"
+            className="text-[13px] font-semibold uppercase tracking-wide text-white/70 transition hover:text-white"
           >
             Home
           </Link>
 
           <div className="group relative">
-            <button
-              type="button"
-              className="flex items-center gap-1 text-[13px] font-semibold uppercase tracking-wide text-white/70 transition hover:text-white"
-              aria-haspopup="true"
+            <Link
+              href="/shop"
+              className={`flex items-center gap-1 text-[13px] font-semibold uppercase tracking-wide transition ${
+                pathname === "/shop" ? "text-white" : "text-white/70 hover:text-white"
+              }`}
             >
               Shop <ChevronDown />
-            </button>
+            </Link>
             <div className="invisible absolute left-0 top-full z-10 w-56 border border-white/10 bg-shop-panel p-2 opacity-0 shadow-2xl transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
               {COLLECTIONS.map((c) => (
                 <Link
@@ -135,7 +138,7 @@ export function ShopHeader() {
             </div>
           </div>
 
-          {NAV.slice(1).map((item) => (
+          {NAV.slice(2).map((item) => (
             <Link
               key={item.label}
               href={item.href}
