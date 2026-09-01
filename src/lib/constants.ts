@@ -49,9 +49,24 @@ export const SITE_NAV = [
  * Social profiles. Placeholder URLs until Cory confirms the real handles —
  * the labels are correct, only the hrefs need swapping.
  */
-export const SOCIAL_LINKS = [
-  { label: "Facebook", short: "f", href: "https://facebook.com/" },
-  { label: "Instagram", short: "ig", href: "https://instagram.com/" },
-  { label: "TikTok", short: "tt", href: "https://tiktok.com/" },
-  { label: "YouTube", short: "yt", href: "https://youtube.com/" },
+/**
+ * Cory's profiles.
+ *
+ * A null href means we do not have that profile's URL yet, and the link is
+ * not rendered — the placeholders that used to sit here pointed at
+ * facebook.com and instagram.com themselves, which sent visitors to a login
+ * page rather than to Cory. Paste a real URL to switch one back on.
+ *
+ * YouTube and Linktree are confirmed; the rest are waiting on real handles.
+ */
+export const SOCIAL_LINKS: {
+  label: string;
+  short: string;
+  href: string | null;
+}[] = [
+  { label: "Facebook", short: "f", href: null },
+  { label: "Instagram", short: "ig", href: null },
+  { label: "TikTok", short: "tt", href: null },
+  { label: "YouTube", short: "yt", href: "https://www.youtube.com/@Corywthekeys" },
+  { label: "Linktree", short: "lt", href: "https://linktr.ee/corywiththekeys" },
 ] as const;

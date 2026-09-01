@@ -28,10 +28,10 @@ export function SiteFooter() {
             </p>
 
             <ul className="mt-5 flex gap-3">
-              {SOCIAL_LINKS.map((social) => (
+              {SOCIAL_LINKS.filter((social) => social.href).map((social) => (
                 <li key={social.label}>
                   <a
-                    href={social.href}
+                    href={social.href as string}
                     target="_blank"
                     rel="noreferrer"
                     aria-label={social.label}
