@@ -5,33 +5,42 @@ import { BENEFIT_ICONS } from "@/components/shop/icons";
 import { HERO_BENEFITS } from "@/data/shop";
 
 /**
- * Hero: type on the left, Cory on the right against the car.
+ * Hero.
  *
- * The automotive scene is assembled from real assets rather than a generated
- * composite — the car and its blue headlights are a crop of the stage
- * photograph, Cory is the transparent cut-out of the actual photo, and the
- * haze and rim light are CSS gradients layered between them. Nothing about
- * him is redrawn.
+ * The supplied composite is used whole — Cory, the car, the halo headlights
+ * and the smoke are all one photograph, so nothing here is assembled, tinted
+ * or redrawn. The shot already leaves the left third dark and empty, which is
+ * exactly where the type goes.
+ *
+ * On desktop the photograph is the background and the copy sits over it. On a
+ * phone that would put white text across his chest, so the layout flips: copy
+ * first, photograph underneath it as its own block.
  */
 export function ShopHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-shop-ink">
-      {/* Car, headlights and haze. */}
-      <div aria-hidden className="absolute inset-y-0 right-0 w-full lg:w-[62%]">
+    <section className="relative isolate flex flex-col overflow-hidden bg-shop-ink lg:block lg:min-h-[42rem]">
+      <div className="relative order-2 h-72 w-full sm:h-96 lg:absolute lg:inset-0 lg:order-none lg:h-full">
         <Image
-          src="/brand/shop/hero-car.webp"
-          alt=""
+          src="/brand/shop/hero.webp"
+          alt="Cory With The Keys in front of a black performance car with blue halo headlights"
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 62vw"
-          className="object-cover object-[78%_center] opacity-80"
+          sizes="100vw"
+          className="object-cover object-[68%_18%] lg:object-[72%_16%]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(60%_55%_at_62%_46%,rgba(10,102,255,0.28),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#020609_0%,rgba(2,6,9,0.8)_22%,transparent_52%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_top,#020609,transparent)]" />
+
+        {/* Desktop only: protects the copy column without dimming the phone crop. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden lg:block lg:bg-[linear-gradient(to_right,#020609_4%,rgba(2,6,9,0.82)_26%,rgba(2,6,9,0.25)_46%,transparent_60%)]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(to_top,#050a0f,transparent)] lg:h-24"
+        />
       </div>
 
-      <div className="relative mx-auto grid max-w-[1400px] gap-8 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-[1fr_46%] lg:gap-4 lg:px-8 lg:pb-14 lg:pt-16">
+      <div className="relative order-1 mx-auto w-full max-w-[1400px] px-4 pb-8 pt-12 sm:px-6 lg:order-none lg:px-8 lg:pb-24 lg:pt-24">
         <div className="max-w-xl">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-keyblue-electric">
             Official Merch
@@ -65,7 +74,7 @@ export function ShopHero() {
             </Link>
             <Link
               href="/shop?filter=new"
-              className="border border-white/35 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white hover:bg-white/10"
+              className="border border-white/35 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm transition hover:border-white hover:bg-white/10"
             >
               New Drops
             </Link>
@@ -99,23 +108,6 @@ export function ShopHero() {
               </li>
             ))}
           </ul>
-        </div>
-
-        {/* Cory. The real photograph, cut out — never redrawn. */}
-        <div className="relative -mb-10 h-72 sm:h-96 lg:mb-0 lg:h-auto lg:min-h-[30rem]">
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 top-1/4 bg-[radial-gradient(50%_50%_at_50%_60%,rgba(10,102,255,0.22),transparent_72%)]"
-          />
-          <Image
-            src="/brand/about/cory-cutout.webp"
-            alt="Cory With The Keys wearing the Cory With The Keys tee and cap"
-            width={718}
-            height={1000}
-            priority
-            sizes="(max-width: 1024px) 70vw, 620px"
-            className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 object-contain object-bottom drop-shadow-[0_0_40px_rgba(10,102,255,0.35)]"
-          />
         </div>
       </div>
     </section>
