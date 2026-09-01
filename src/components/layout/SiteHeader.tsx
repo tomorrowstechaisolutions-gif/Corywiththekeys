@@ -1,8 +1,9 @@
 import Link from "next/link";
 
 import { MobileNav } from "@/components/layout/MobileNav";
+import { SiteNav } from "@/components/layout/SiteNav";
 import { Container } from "@/components/ui/Container";
-import { CONTACT, SITE, SITE_NAV } from "@/lib/constants";
+import { CONTACT, SITE } from "@/lib/constants";
 
 /** Public site header. Dark navy bar, brand left, nav centre, CTAs right. */
 export function SiteHeader() {
@@ -19,20 +20,7 @@ export function SiteHeader() {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden xl:block">
-            <ul className="flex items-center gap-5 text-sm font-medium">
-              {SITE_NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="whitespace-nowrap text-white/85 transition hover:text-white"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <SiteNav />
 
           <div className="flex shrink-0 items-center gap-3">
             <a
