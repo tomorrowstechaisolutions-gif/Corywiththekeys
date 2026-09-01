@@ -1,7 +1,7 @@
 import { MediaTile } from "@/components/music/MediaTile";
 import { SectionHeading } from "@/components/music/SectionHeading";
 import { Container } from "@/components/ui/Container";
-import { ALL_MUSIC_URL, POPULAR_TRACKS, firstStreamingUrl } from "@/data/cory-links";
+import { ALL_MUSIC_URL, POPULAR_TRACKS, trackArtwork, trackUrl } from "@/data/cory-links";
 
 export function PopularTracks() {
   if (POPULAR_TRACKS.length === 0) return null;
@@ -17,12 +17,12 @@ export function PopularTracks() {
 
         <ul className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
           {POPULAR_TRACKS.map((track) => {
-            const href = firstStreamingUrl(track.links);
+            const href = trackUrl(track);
 
             return (
               <li key={track.title} className="group">
                 <MediaTile
-                  image={track.artwork}
+                  image={trackArtwork(track)}
                   alt={`${track.title} cover art`}
                   href={href}
                   aspect="square"

@@ -17,6 +17,22 @@
 
 export type ExternalUrl = string | null;
 
+/**
+ * Verified YouTube video ids. Each one was checked against YouTube's oEmbed
+ * endpoint, so the title and channel below are what YouTube actually returns
+ * — not a guess.
+ */
+export const VIDEO_IDS = {
+  /** "Cory with the Keys - 13 Years Old (Feat. RNB FOE MOB)" — @Corywthekeys */
+  thirteenYearsOld: "f63hlQCZszk",
+  /** "Started From The Bottom (Cumbia Remix)" — uploaded by Lil' Flip TV */
+  startedFromTheBottom: "xxwTZAUUvQg",
+  /** "Cory with the Keys 'Drive Away'" — @Corywthekeys */
+  driveAway: "ZfNdkNepZls",
+} as const;
+
+export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@Corywthekeys";
+
 export type PlatformKey =
   | "spotify"
   | "appleMusic"
@@ -66,8 +82,9 @@ export const PROFILES: Profile[] = [
   {
     key: "youtube",
     label: "YouTube",
-    handle: "/corywiththekeys",
-    url: null,
+    handle: "@Corywthekeys",
+    // Confirmed: this is the channel that hosts his official videos.
+    url: YOUTUBE_CHANNEL_URL,
     accent: "bg-[#FF0000] text-white",
   },
   {
@@ -124,28 +141,72 @@ export type MusicVideo = {
 };
 
 export const MUSIC_VIDEOS: MusicVideo[] = [
+  {
+    title: "13 Years Old",
+    subtitle: "feat. RNB FOE MOB",
+    youtubeId: VIDEO_IDS.thirteenYearsOld,
+    url: null,
+    thumbnail: null,
+  },
   { title: "I Am the 1", subtitle: "feat. Chalie Boy", youtubeId: null, url: null, thumbnail: null },
-  { title: "Started From The Bottom", subtitle: "with Lil' Flip", youtubeId: null, url: null, thumbnail: null },
+  {
+    title: "Started From The Bottom",
+    // Titled accurately: the version that exists online is the Cumbia Remix,
+    // and it lives on Lil' Flip's channel rather than Cory's.
+    subtitle: "Cumbia Remix, with Lil' Flip & Negami",
+    youtubeId: VIDEO_IDS.startedFromTheBottom,
+    url: null,
+    thumbnail: null,
+  },
+  {
+    title: "Drive Away",
+    subtitle: null,
+    youtubeId: VIDEO_IDS.driveAway,
+    url: null,
+    thumbnail: null,
+  },
   { title: "Lost With You", subtitle: null, youtubeId: null, url: null, thumbnail: null },
-  { title: "Drive Away", subtitle: null, youtubeId: null, url: null, thumbnail: null },
 ];
 
 export type Track = {
   title: string;
   featuring: string | null;
   artwork: string | null;
+  /**
+   * Falls back to the YouTube video when there is no streaming link yet, so a
+   * track people can actually hear is never a dead tile.
+   */
+  youtubeId?: string | null;
   links: StreamingLinks;
 };
 
 export const POPULAR_TRACKS: Track[] = [
-  { title: "Started From The Bottom", featuring: "Lil' Flip", artwork: null, links: EMPTY_STREAMING },
+  {
+    title: "13 Years Old",
+    featuring: "RNB FOE MOB",
+    artwork: null,
+    youtubeId: VIDEO_IDS.thirteenYearsOld,
+    links: EMPTY_STREAMING,
+  },
+  {
+    title: "Started From The Bottom",
+    featuring: "Lil' Flip & Negami",
+    artwork: null,
+    youtubeId: VIDEO_IDS.startedFromTheBottom,
+    links: EMPTY_STREAMING,
+  },
+  {
+    title: "Drive Away",
+    featuring: null,
+    artwork: null,
+    youtubeId: VIDEO_IDS.driveAway,
+    links: EMPTY_STREAMING,
+  },
   { title: "Lost With You", featuring: null, artwork: null, links: EMPTY_STREAMING },
-  { title: "Drive Away", featuring: null, artwork: null, links: EMPTY_STREAMING },
   { title: "Ride", featuring: null, artwork: null, links: EMPTY_STREAMING },
   { title: "Put You in a Ride", featuring: null, artwork: null, links: EMPTY_STREAMING },
   { title: "Callin My Phone", featuring: null, artwork: null, links: EMPTY_STREAMING },
   { title: "This Moment", featuring: null, artwork: null, links: EMPTY_STREAMING },
-  { title: "13 Years Old", featuring: null, artwork: null, links: EMPTY_STREAMING },
 ];
 
 export type Feature = {
@@ -189,8 +250,22 @@ export const FEATURES: Feature[] = [
   },
 ];
 
+/**
+ * The song that sits in the looping player near the top of the page.
+ *
+ * Autoplay with sound is blocked by every current browser, so this plays on
+ * the visitor's click and then repeats until they stop it.
+ */
+export const FEATURED_VIDEO = {
+  youtubeId: VIDEO_IDS.thirteenYearsOld,
+  title: "13 Years Old",
+  featuring: "RNB FOE MOB",
+  eyebrow: "On Repeat",
+  blurb: "Cory's own pick. Press play and let it ride.",
+} as const;
+
 /** "View all" destinations. Null hides the link rather than dead-ending. */
-export const ALL_VIDEOS_URL: ExternalUrl = null;
+export const ALL_VIDEOS_URL: ExternalUrl = `${YOUTUBE_CHANNEL_URL}/videos`;
 export const ALL_MUSIC_URL: ExternalUrl = null;
 export const ALL_FEATURES_URL: ExternalUrl = null;
 
@@ -244,4 +319,18 @@ export function hasAnyStreaming(links: StreamingLinks): boolean {
 
 export function firstStreamingUrl(links: StreamingLinks): ExternalUrl {
   return links.spotify ?? links.appleMusic ?? links.youtubeMusic ?? null;
+}
+
+/**
+ * Where a track tile should point. Streaming wins when it exists; otherwise
+ * the YouTube video, if there is one; otherwise nothing, and the tile renders
+ * without a play button.
+ */
+export function trackUrl(track: Track): ExternalUrl {
+  return firstStreamingUrl(track.links) ?? mediaUrl({ youtubeId: track.youtubeId });
+}
+
+/** Artwork for a track: supplied art, else the YouTube frame, else null. */
+export function trackArtwork(track: Track): string | null {
+  return track.artwork ?? mediaImage({ youtubeId: track.youtubeId });
 }
