@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { useCart } from "@/components/shop/CartProvider";
+import { useCatalogue } from "@/components/shop/CatalogueProvider";
 import {
   AccountIcon,
   BagIcon,
@@ -13,7 +14,7 @@ import {
   MenuIcon,
   SearchIcon,
 } from "@/components/shop/icons";
-import { COLLECTIONS, PRODUCTS } from "@/data/shop";
+import { COLLECTIONS } from "@/data/shop";
 import { SITE } from "@/lib/constants";
 
 /**
@@ -54,6 +55,7 @@ function KeyMark() {
 
 export function ShopHeader() {
   const { count, open, ready } = useCart();
+  const catalogue = useCatalogue();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -83,7 +85,7 @@ export function ShopHeader() {
   }, []);
 
   const results = query.trim()
-    ? PRODUCTS.filter((p) =>
+    ? catalogue.filter((p) =>
         `${p.name} ${p.subtitle} ${p.category}`
           .toLowerCase()
           .includes(query.trim().toLowerCase()),

@@ -25,15 +25,22 @@ export function ProductDetail({ product }: { product: Product }) {
   const [adding, setAdding] = useState(false);
 
   const image = product.images[active] ?? product.images[0];
+  const unavailable = product.soldOut || product.comingSoon;
+  const stockNotice = product.soldOut
+    ? "Sold out. Text us and we will let you know when it is back."
+    : product.comingSoon
+      ? "Coming soon. Text us to be told the moment it drops."
+      : null;
 
   function handleAdd(thenOpen: boolean) {
-    if (!size) {
+    if (unavailable) return;
+    if (product.sizes.length > 0 && !size) {
       setError("Choose a size first.");
       return;
     }
     setError(null);
     setAdding(true);
-    add(product.slug, size, color, quantity);
+    add(product.slug, size ?? "One size", color, quantity);
     // Brief confirmation state; the drawer opens itself on add.
     window.setTimeout(() => setAdding(false), 700);
     if (thenOpen) open();
@@ -54,14 +61,20 @@ export function ProductDetail({ product }: { product: Product }) {
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
         <div>
           <div className="relative aspect-square overflow-hidden border border-white/10 bg-[#0a0e11]">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 640px"
-              className="object-contain"
-            />
+            {image ? (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 640px"
+                className="object-contain"
+              />
+            ) : (
+              <span className="grid h-full w-full place-items-center text-xs font-bold uppercase tracking-wider text-white/30">
+                Photo coming soon
+              </span>
+            )}
           </div>
 
           {product.images.length > 1 ? (
@@ -104,13 +117,24 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <p className="mt-4 text-2xl font-bold text-white">
             {formatPrice(product.price)}
+            {product.compareAt && product.compareAt > product.price ? (
+              <span className="ml-2 text-base font-normal text-shop-muted line-through">
+                {formatPrice(product.compareAt)}
+              </span>
+            ) : null}
           </p>
+
+          {stockNotice ? (
+            <p className="mt-3 inline-block border border-white/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white/80">
+              {product.soldOut ? "Sold Out" : "Coming Soon"}
+            </p>
+          ) : null}
 
           <p className="mt-5 max-w-md text-sm leading-relaxed text-white/75">
             {product.description}
           </p>
 
-          <fieldset className="mt-7">
+          <fieldset className="mt-7" hidden={product.colors.length === 0}>
             <legend className="text-[11px] font-bold uppercase tracking-wider text-white">
               Colour: <span className="text-shop-muted">{color}</span>
             </legend>
@@ -133,7 +157,7 @@ export function ProductDetail({ product }: { product: Product }) {
             </div>
           </fieldset>
 
-          <fieldset className="mt-6">
+          <fieldset className="mt-6" hidden={product.sizes.length === 0}>
             <legend className="text-[11px] font-bold uppercase tracking-wider text-white">
               Size
             </legend>
@@ -200,21 +224,34 @@ export function ProductDetail({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => handleAdd(false)}
-              className="flex-1 bg-keyblue-electric py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff] disabled:opacity-70"
-              disabled={adding}
+              className="flex-1 bg-keyblue-electric py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff] disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={adding || unavailable}
             >
-              {adding ? "Added ✓" : "Add To Bag"}
+              {unavailable
+                ? product.soldOut
+                  ? "Sold Out"
+                  : "Coming Soon"
+                : adding
+                  ? "Added ✓"
+                  : "Add To Bag"}
             </button>
             <button
               type="button"
               onClick={() => handleAdd(true)}
-              className="flex-1 border border-white/30 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white hover:bg-white/10"
+              disabled={unavailable}
+              className="flex-1 border border-white/30 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Buy Now
             </button>
           </div>
 
-          {!STORE.checkoutEnabled ? (
+          {stockNotice ? (
+            <p className="mt-3 text-[11px] leading-relaxed text-white/45">
+              {stockNotice} {CONTACT.phone}
+            </p>
+          ) : null}
+
+          {!STORE.checkoutEnabled && !stockNotice ? (
             <p className="mt-3 text-[11px] leading-relaxed text-white/45">
               Online checkout opens once this drop ships. Add to the bag to hold
               your picks, then text {CONTACT.phone} to order.
@@ -222,7 +259,7 @@ export function ProductDetail({ product }: { product: Product }) {
           ) : null}
 
           <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
-            <details className="group py-3.5">
+            <details className="group py-3.5" hidden={product.details.length === 0}>
               <summary className="cursor-pointer list-none text-[11px] font-bold uppercase tracking-wider text-white">
                 Details
               </summary>

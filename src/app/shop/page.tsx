@@ -11,8 +11,9 @@ import {
   SectionHead,
 } from "@/components/shop/Sections";
 import { ShopHero } from "@/components/shop/ShopHero";
-import { COLLECTIONS, PRODUCTS } from "@/data/shop";
+import { COLLECTIONS, type Product } from "@/data/shop";
 import { SITE } from "@/lib/constants";
+import { getStoreProducts } from "@/lib/shop-catalogue";
 
 const DESCRIPTION =
   "Official Cory With The Keys merch. Keys 2 Success hoodies, statement tees and the Hustle collection — built for people who refuse to quit.";
@@ -33,8 +34,12 @@ export const metadata: Metadata = {
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 /** Category filters map onto the catalogue without a separate taxonomy. */
-function applyFilter(filter: string | undefined, collection: string | undefined) {
-  let list = PRODUCTS;
+function applyFilter(
+  all: Product[],
+  filter: string | undefined,
+  collection: string | undefined,
+) {
+  let list = all;
 
   if (collection) {
     list = list.filter((p) => p.collection === collection);
@@ -74,7 +79,7 @@ export default async function ShopPage({
   const collection =
     typeof params.collection === "string" ? params.collection : undefined;
 
-  const products = applyFilter(filter, collection);
+  const products = applyFilter(await getStoreProducts(), filter, collection);
   const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
   const filtered = Boolean(filter || collection);
 

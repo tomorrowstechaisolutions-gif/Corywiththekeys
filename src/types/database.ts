@@ -1012,6 +1012,113 @@ export type Database = {
           },
         ]
       }
+      product_images: {
+        Row: {
+          alt: string | null
+          created_at: string
+          external_url: string | null
+          id: string
+          is_primary: boolean
+          position: number
+          product_id: string
+          storage_path: string | null
+        }
+        Insert: {
+          alt?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          is_primary?: boolean
+          position?: number
+          product_id: string
+          storage_path?: string | null
+        }
+        Update: {
+          alt?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          is_primary?: boolean
+          position?: number
+          product_id?: string
+          storage_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string
+          collection: string | null
+          colors: Json
+          compare_at: number | null
+          created_at: string
+          description: string | null
+          details: string[]
+          id: string
+          is_new: boolean
+          name: string
+          photography_is_render: boolean
+          position: number
+          price: number
+          sizes: string[]
+          slug: string
+          status: Database["public"]["Enums"]["product_status"]
+          stock: Database["public"]["Enums"]["product_stock"]
+          subtitle: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          collection?: string | null
+          colors?: Json
+          compare_at?: number | null
+          created_at?: string
+          description?: string | null
+          details?: string[]
+          id?: string
+          is_new?: boolean
+          name: string
+          photography_is_render?: boolean
+          position?: number
+          price: number
+          sizes?: string[]
+          slug: string
+          status?: Database["public"]["Enums"]["product_status"]
+          stock?: Database["public"]["Enums"]["product_stock"]
+          subtitle?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          collection?: string | null
+          colors?: Json
+          compare_at?: number | null
+          created_at?: string
+          description?: string | null
+          details?: string[]
+          id?: string
+          is_new?: boolean
+          name?: string
+          photography_is_render?: boolean
+          position?: number
+          price?: number
+          sizes?: string[]
+          slug?: string
+          status?: Database["public"]["Enums"]["product_status"]
+          stock?: Database["public"]["Enums"]["product_stock"]
+          subtitle?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -1664,6 +1771,8 @@ export type Database = {
         | "not_qualified"
         | "converted"
         | "closed"
+      product_status: "draft" | "published" | "archived"
+      product_stock: "in_stock" | "sold_out" | "coming_soon"
       review_status: "pending" | "published" | "hidden"
       submission_outcome:
         | "accepted"
@@ -1903,6 +2012,8 @@ export const Constants = {
         "converted",
         "closed",
       ],
+      product_status: ["draft", "published", "archived"],
+      product_stock: ["in_stock", "sold_out", "coming_soon"],
       review_status: ["pending", "published", "hidden"],
       submission_outcome: [
         "accepted",

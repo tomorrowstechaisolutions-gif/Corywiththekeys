@@ -1,5 +1,3 @@
-import { PRODUCTS } from "@/data/shop";
-
 export type CartLine = {
   /** productSlug|size|color — one line per variant. */
   id: string;
@@ -51,7 +49,13 @@ function lineId(slug: string, size: string, color: string) {
   return `${slug}|${size}|${color}`;
 }
 
-/** Drops anything that no longer matches a real product, size or colour. */
+/**
+ * Drops anything that is not a well-formed line.
+ *
+ * Whether the product, size and colour still EXIST is decided against the
+ * live catalogue in useCart — this module runs before React and has no
+ * catalogue to check against, and a stale line simply does not render.
+ */
 function sanitize(raw: unknown): CartLine[] {
   if (!Array.isArray(raw)) return [];
   const out: CartLine[] = [];
@@ -60,10 +64,6 @@ function sanitize(raw: unknown): CartLine[] {
     const { slug, size, color, quantity } = entry as Record<string, unknown>;
     if (typeof slug !== "string" || typeof size !== "string") continue;
     if (typeof color !== "string" || typeof quantity !== "number") continue;
-    const product = PRODUCTS.find((p) => p.slug === slug);
-    if (!product) continue;
-    if (!product.sizes.includes(size)) continue;
-    if (!product.colors.some((c) => c.name === color)) continue;
     out.push({
       id: lineId(slug, size, color),
       slug,

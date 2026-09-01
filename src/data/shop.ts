@@ -1,5 +1,10 @@
 /**
- * The Key Konnect merch store — catalogue, collections and store settings.
+ * The Key Konnect merch store — types, collections and store settings.
+ *
+ * THE CATALOGUE ITSELF NO LONGER LIVES HERE. Products come from the `products`
+ * and `product_images` tables and are managed at /admin/shop; the storefront
+ * reads them through `src/lib/shop-catalogue.ts`. SEED_PRODUCTS below is the
+ * original hard-coded set, kept only as the seed for a fresh database.
  *
  * ── TWO THINGS TO READ BEFORE THIS STORE TAKES MONEY ──────────────────────
  *
@@ -48,11 +53,15 @@ export type Product = {
   details: string[];
   /** True while the imagery is a mockup render rather than a real photo. */
   photographyIsRender: boolean;
+  /** Stock state, set per product in the admin. */
+  soldOut: boolean;
+  comingSoon: boolean;
 };
 
 export const SIZES = ["S", "M", "L", "XL", "2XL", "3XL"] as const;
 
-export const PRODUCTS: Product[] = [
+/** Seed data for a fresh database. The live store reads Supabase. */
+export const SEED_PRODUCTS: Product[] = [
   {
     slug: "keys-2-success-signature-hoodie",
     name: "Keys 2 Success",
@@ -84,6 +93,8 @@ export const PRODUCTS: Product[] = [
       "Screen-printed script front and back",
     ],
     photographyIsRender: true,
+    soldOut: false,
+    comingSoon: false,
   },
   {
     slug: "sober-truth-crewneck",
@@ -114,6 +125,8 @@ export const PRODUCTS: Product[] = [
       "Front script, back statement print",
     ],
     photographyIsRender: true,
+    soldOut: false,
+    comingSoon: false,
   },
   {
     slug: "hustle-harder-hoodie",
@@ -144,6 +157,8 @@ export const PRODUCTS: Product[] = [
       "Four-line back print with signature",
     ],
     photographyIsRender: true,
+    soldOut: false,
+    comingSoon: false,
   },
   {
     slug: "mind-to-hustle-tee",
@@ -174,6 +189,8 @@ export const PRODUCTS: Product[] = [
       "Full-colour back graphic, script signature",
     ],
     photographyIsRender: true,
+    soldOut: false,
+    comingSoon: false,
   },
 ];
 
@@ -311,13 +328,3 @@ export function formatPrice(value: Money): string {
   return `$${value.toFixed(2)}`;
 }
 
-export function productsInCollection(slug: string): Product[] {
-  return PRODUCTS.filter((p) => p.collection === slug);
-}
-
-export function findProduct(slug: string): Product | undefined {
-  return PRODUCTS.find((p) => p.slug === slug);
-}
-
-/** True while any product is still shown with mockup art. */
-export const HAS_RENDER_PHOTOGRAPHY = PRODUCTS.some((p) => p.photographyIsRender);

@@ -4,14 +4,10 @@ import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { SectionHead } from "@/components/shop/Sections";
 import { ProductDetail } from "@/components/shop/ProductDetail";
-import { PRODUCTS, findProduct } from "@/data/shop";
 import { SITE } from "@/lib/constants";
+import { getStoreProduct, getStoreProducts } from "@/lib/shop-catalogue";
 
 type Params = Promise<{ slug: string }>;
-
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -19,11 +15,15 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = findProduct(slug);
+  const product = await getStoreProduct(slug);
   if (!product) return { title: "Product not found" };
 
+  const image = product.images[0];
+
   return {
-    title: `${product.name} — ${product.subtitle}`,
+    title: product.subtitle
+      ? `${product.name} — ${product.subtitle}`
+      : product.name,
     description: product.description,
     alternates: { canonical: `/shop/${product.slug}` },
     openGraph: {
@@ -32,17 +32,20 @@ export async function generateMetadata({
       url: `${SITE.url}/shop/${product.slug}`,
       siteName: SITE.name,
       type: "website",
-      images: [{ url: product.images[0].src, alt: product.images[0].alt }],
+      images: image ? [{ url: image.src, alt: image.alt }] : undefined,
     },
   };
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = findProduct(slug);
+  const [product, all] = await Promise.all([
+    getStoreProduct(slug),
+    getStoreProducts(),
+  ]);
   if (!product) notFound();
 
-  const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 4);
+  const related = all.filter((p) => p.slug !== product.slug).slice(0, 4);
 
   return (
     <>

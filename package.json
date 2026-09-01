@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:products": "tsx scripts/seed-products.ts"
   },
   "dependencies": {
     "@fontsource/anton": "^5.3.0",
@@ -18,6 +19,7 @@
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
     "zod": "^4.5.4"
   },
   "devDependencies": {
@@ -25,10 +27,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "description": "The Key Konnect — the official car plug of the people."
+  "description": "The Key Konnect \u2014 the official car plug of the people."
 }
