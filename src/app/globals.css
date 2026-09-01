@@ -3,6 +3,7 @@
 /* Display faces, self-hosted so no request ever leaves the site. */
 @import "@fontsource/anton/latin-400.css";
 @import "@fontsource/great-vibes/latin-400.css";
+@import "@fontsource/permanent-marker/latin-400.css";
 
 /*
  * The Key Konnect — brand tokens
@@ -24,6 +25,14 @@
   --brand-blue-400: #5b9bff;
 
   --brand-ink: #0b1220;
+
+  /* Merch store palette — deeper blacks, electric blue, gold accents. */
+  --brand-shop-ink: #020609;
+  --brand-shop-bg: #050a0f;
+  --brand-shop-panel: #091018;
+  --brand-blue-electric: #0a66ff;
+  --brand-gold: #d6a321;
+  --brand-shop-muted: #9aa4af;
   --brand-muted: #8fa3c0;
   --brand-line: #1d3358;
 }
@@ -42,6 +51,13 @@
   --color-keyblue-500: var(--brand-blue-500);
   --color-keyblue-400: var(--brand-blue-400);
 
+  --color-shop-ink: var(--brand-shop-ink);
+  --color-shop-bg: var(--brand-shop-bg);
+  --color-shop-panel: var(--brand-shop-panel);
+  --color-keyblue-electric: var(--brand-blue-electric);
+  --color-keygold: var(--brand-gold);
+  --color-shop-muted: var(--brand-shop-muted);
+
   --color-ink: var(--brand-ink);
   --color-muted: var(--brand-muted);
   --color-line: var(--brand-line);
@@ -53,6 +69,7 @@
   /* Anton for the big condensed display type; Great Vibes for the signature. */
   --font-display: "Anton", ui-sans-serif, system-ui, "Arial Narrow", sans-serif;
   --font-signature: "Great Vibes", ui-serif, Georgia, serif;
+  --font-marker: "Permanent Marker", "Comic Sans MS", cursive;
 }
 
 * {
