@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import { VIDEO_PLAY_EVENT } from "@/components/music/SongPlayer";
+
 /**
  * A click-to-play YouTube player that repeats forever.
  *
@@ -53,7 +55,11 @@ export function LoopingVideo({
       ) : (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
+          onClick={() => {
+            // Stop the audio bar before the video starts talking over it.
+            window.dispatchEvent(new CustomEvent(VIDEO_PLAY_EVENT));
+            setPlaying(true);
+          }}
           aria-label={`Play ${title} on repeat`}
           className="group absolute inset-0 h-full w-full cursor-pointer"
         >

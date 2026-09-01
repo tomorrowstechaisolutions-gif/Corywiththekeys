@@ -264,6 +264,26 @@ export const FEATURED_VIDEO = {
   blurb: "Cory's own pick. Press play and let it ride.",
 } as const;
 
+/**
+ * The song that plays on the music page itself, from our own server.
+ *
+ * IMPORTANT — it cannot start before the visitor touches the page. Chrome,
+ * Safari and Firefox all refuse to start audible media until the visitor has
+ * interacted with the document, and hosting the file ourselves changes
+ * nothing: the rule is about audio, not about where the audio came from. The
+ * player therefore asks to start, and if it is refused it waits and starts on
+ * the visitor's first click, tap or keypress anywhere on the page.
+ *
+ * Set `startOnFirstInteraction` to false to make it a plain press-play bar.
+ */
+export const FEATURED_AUDIO = {
+  src: "/audio/13-years-old.m4a",
+  title: "13 Years Old",
+  featuring: "RNB FOE MOB",
+  youtubeId: VIDEO_IDS.thirteenYearsOld,
+  startOnFirstInteraction: true,
+} as const;
+
 /** "View all" destinations. Null hides the link rather than dead-ending. */
 export const ALL_VIDEOS_URL: ExternalUrl = `${YOUTUBE_CHANNEL_URL}/videos`;
 export const ALL_MUSIC_URL: ExternalUrl = null;

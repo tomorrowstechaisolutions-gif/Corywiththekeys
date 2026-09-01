@@ -8,6 +8,7 @@ import { NeedARide } from "@/components/music/NeedARide";
 import { NewRelease } from "@/components/music/NewRelease";
 import { OnRepeat } from "@/components/music/OnRepeat";
 import { PopularTracks } from "@/components/music/PopularTracks";
+import { SongPlayer } from "@/components/music/SongPlayer";
 import { LINKTREE_URL, PROFILES } from "@/data/cory-links";
 import { SITE } from "@/lib/constants";
 
@@ -86,6 +87,7 @@ export default function MusicPage() {
       <Interviews />
       <FollowCory />
       <NeedARide />
+      <SongPlayer />
     </div>
   );
 }
