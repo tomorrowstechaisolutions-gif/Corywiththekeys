@@ -94,7 +94,7 @@ export function QuoteBanner() {
 
   return (
     <section className="border-y border-white/8 bg-shop-ink">
-      {/* Desktop: the banner exactly as designed. */}
+      {/* Desktop: the banner as designed, with Cory standing in the gap. */}
       <div className="relative mx-auto hidden max-w-[2172px] lg:block">
         <Image
           src="/brand/shop/quote-banner.webp"
@@ -104,7 +104,22 @@ export function QuoteBanner() {
           loading="lazy"
           sizes="100vw"
           className="h-auto w-full"
-          priority={false}
+        />
+
+        {/*
+          Sized against the banner's own height and centred on it, so he sits
+          in the empty middle the artwork leaves for him at any width. Height
+          drives the size — never a fixed pixel width — so he keeps his
+          proportions as the banner scales.
+        */}
+        <Image
+          src="/brand/shop/cory-banner.webp"
+          alt="Cory With The Keys"
+          width={900}
+          height={1320}
+          loading="lazy"
+          sizes="(max-width: 1536px) 34vw, 520px"
+          className="absolute bottom-0 left-[54%] h-[93%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
         />
       </div>
 
