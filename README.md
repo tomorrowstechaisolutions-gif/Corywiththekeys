@@ -57,7 +57,35 @@ src/
   types/         shared types + generated Supabase schema types
 ```
 
+## Database
+
+Schema lives in `supabase/migrations/`, applied to Supabase project
+`jxcwytbeiskjtgvumlws`. 20 tables, RLS on every one.
+
+Regenerate types after any migration:
+
+```bash
+npx supabase gen types typescript --project-id jxcwytbeiskjtgvumlws > src/types/database.ts
+```
+
+Key rules baked into the database, not just convention:
+
+- **Public writes never use the anon key.** No table has an anonymous
+  INSERT policy. Forms go Browser -> Server Action -> service role. See
+  `docs/architecture-forms.md`.
+- **Feed imports must call `feed_upsert_vehicle()`**, never write to
+  `vehicles` directly. Writing directly is treated as a manual edit and
+  locks the columns it touched.
+- **Manual edits win over feeds.** Editing a vehicle in the admin records
+  the touched columns in `locked_fields`; a sync cannot overwrite them
+  until `unlock_vehicle_fields()` releases them.
+- **No regulated PII.** The site collects prequalification data only —
+  banded income and down payment, no DOB, SSN, licence or account data.
+
 ## Status
 
-Scaffold only. Every route renders a structural placeholder that states what
-it will contain. No database tables, no auth wiring, no page designs yet.
+Phase 1 scaffold and phase 2 schema complete. Routes still render
+structural placeholders; no auth wiring and no page designs yet.
+
+`/admin` is currently unprotected — middleware lands with the auth phase,
+before anything deploys.
