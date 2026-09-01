@@ -204,79 +204,77 @@ export async function unlockVehicleFields(id: string, fields: string[]) {
   revalidatePath(`/admin/inventory/${id}`);
 }
 
-const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
-const ALLOWED_PHOTO_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/avif",
-];
-
-export async function uploadVehiclePhotos(
+/**
+ * Record photos the browser has ALREADY uploaded to Supabase Storage.
+ *
+ * The files do not pass through this server. Server Actions cap request
+ * bodies at 1 MB, and buffering a 10 MB photo through Next.js on its way to
+ * Storage is wasteful even when it fits. The browser uploads directly with
+ * the signed-in user's session — storage RLS still requires can_write() — and
+ * this action only writes the database rows.
+ *
+ * Because the client chooses the paths, every one is checked against the
+ * vehicle's own prefix and confirmed to exist before a row is written.
+ */
+export async function registerVehiclePhotos(
   vehicleId: string,
-  _prev: FormState,
-  formData: FormData,
+  paths: string[],
 ): Promise<FormState> {
   const { denied } = await guard();
   if (denied) return { error: denied };
 
-  const files = formData
-    .getAll("photos")
-    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+  if (paths.length === 0) return { error: "No photos to save." };
 
-  if (files.length === 0) {
-    return { error: "Choose at least one image." };
+  // A client could send any path. Only this vehicle's folder is acceptable.
+  const prefix = `${vehicleId}/`;
+  if (paths.some((path) => !path.startsWith(prefix) || path.includes(".."))) {
+    return { error: "Those photos do not belong to this vehicle." };
   }
 
   const supabase = await createClient();
 
+  const { data: objects } = await supabase.storage
+    .from("vehicle-photos")
+    .list(vehicleId);
+
+  const present = new Set((objects ?? []).map((o) => `${prefix}${o.name}`));
+  const verified = paths.filter((path) => present.has(path));
+
+  if (verified.length === 0) {
+    return { error: "Those uploads did not arrive. Please try again." };
+  }
+
   const { data: existing } = await supabase
     .from("vehicle_photos")
-    .select("id, position, is_primary")
+    .select("position, is_primary")
     .eq("vehicle_id", vehicleId)
     .order("position", { ascending: false });
 
   let position = existing?.[0]?.position ?? -1;
   let hasPrimary = (existing ?? []).some((p) => p.is_primary);
 
-  for (const file of files) {
-    if (!ALLOWED_PHOTO_TYPES.includes(file.type)) {
-      return { error: `${file.name} is not a JPEG, PNG, WebP or AVIF image.` };
-    }
-    if (file.size > MAX_PHOTO_BYTES) {
-      return { error: `${file.name} is larger than 10 MB.` };
-    }
-
-    const extension = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-    const path = `${vehicleId}/${crypto.randomUUID()}.${extension}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from("vehicle-photos")
-      .upload(path, file, { contentType: file.type, upsert: false });
-
-    if (uploadError) {
-      return { error: `Could not upload ${file.name}. ${uploadError.message}` };
-    }
-
+  const rows = verified.map((path) => {
     position += 1;
-
-    const { error: rowError } = await supabase.from("vehicle_photos").insert({
+    const row = {
       vehicle_id: vehicleId,
       storage_path: path,
       position,
       is_primary: !hasPrimary,
-    });
-
-    if (rowError) {
-      // Do not leave an orphaned file in the bucket.
-      await supabase.storage.from("vehicle-photos").remove([path]);
-      return { error: `Could not save ${file.name}. Please try again.` };
-    }
-
+    };
     hasPrimary = true;
+    return row;
+  });
+
+  const { error } = await supabase.from("vehicle_photos").insert(rows);
+
+  if (error) {
+    // Do not leave orphaned files sitting in the bucket.
+    await supabase.storage.from("vehicle-photos").remove(verified);
+    return { error: "Could not save those photos. Please try again." };
   }
 
   revalidatePath(`/admin/inventory/${vehicleId}`);
+  revalidatePath("/admin/inventory");
   return { ok: true };
 }
 
@@ -337,6 +335,51 @@ export async function setPrimaryPhoto(photoId: string, vehicleId: string) {
     .from("vehicle_photos")
     .update({ is_primary: true })
     .eq("id", photoId);
+
+  revalidatePath(`/admin/inventory/${vehicleId}`);
+}
+
+/**
+ * Reorder a photo by swapping positions with its neighbour.
+ *
+ * Position drives the order on the public listing, so this is how the gallery
+ * gets arranged. The lead image is separate — see setPrimaryPhoto.
+ */
+export async function moveVehiclePhoto(
+  photoId: string,
+  vehicleId: string,
+  direction: "up" | "down",
+) {
+  const { denied } = await guard();
+  if (denied) return;
+
+  const supabase = await createClient();
+
+  const { data: photos } = await supabase
+    .from("vehicle_photos")
+    .select("id, position")
+    .eq("vehicle_id", vehicleId)
+    .order("position", { ascending: true });
+
+  if (!photos) return;
+
+  const index = photos.findIndex((p) => p.id === photoId);
+  const swapWith = direction === "up" ? index - 1 : index + 1;
+
+  if (index === -1 || swapWith < 0 || swapWith >= photos.length) return;
+
+  const current = photos[index];
+  const other = photos[swapWith];
+
+  await supabase
+    .from("vehicle_photos")
+    .update({ position: other.position })
+    .eq("id", current.id);
+
+  await supabase
+    .from("vehicle_photos")
+    .update({ position: current.position })
+    .eq("id", other.id);
 
   revalidatePath(`/admin/inventory/${vehicleId}`);
 }
