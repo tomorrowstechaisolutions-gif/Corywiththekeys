@@ -32,14 +32,14 @@ export function OurStory() {
             aria-hidden
             className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-[#060d1c]"
           >
-            <div className="absolute inset-y-0 left-0 w-full md:w-[22rem]">
+            <div className="absolute inset-y-0 left-0 w-full md:w-[24rem]">
               <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,#0d1729_0px,#0d1729_10px,#070f1e_10px,#070f1e_26px)] opacity-90" />
               <div className="absolute inset-0 bg-[radial-gradient(120%_75%_at_25%_35%,rgba(91,155,255,0.18),transparent_65%)]" />
               <div className="absolute inset-y-0 right-0 w-24 bg-[linear-gradient(to_right,transparent,#060d1c)]" />
             </div>
           </div>
 
-          <div className="relative grid md:grid-cols-[22rem_1fr]">
+          <div className="relative grid md:grid-cols-[24rem_1fr]">
             {/* Portrait column. Cory is taller than the card on purpose. */}
             <div className="relative h-60 md:h-auto md:min-h-[25rem]">
               {/*
@@ -54,7 +54,7 @@ export function OurStory() {
                 width={718}
                 height={1000}
                 priority
-                sizes="(max-width: 768px) 60vw, 380px"
+                sizes="(max-width: 768px) 60vw, 400px"
                 className="absolute bottom-0 left-1/2 h-[calc(100%+2rem)] w-auto max-w-none -translate-x-1/2 object-contain object-bottom md:h-[calc(100%+2.5rem)]"
               />
             </div>
