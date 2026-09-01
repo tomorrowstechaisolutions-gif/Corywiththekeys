@@ -19,7 +19,7 @@ export const STORY = {
     "What began as a passion for cars turned into a purpose to help people get on the road to a better life.",
     "We're not here to sell you a car. We're here to build relationships that last.",
   ],
-  portrait: "/brand/about/cory-story.webp",
+  portrait: "/brand/about/cory-cutout.webp",
   portraitAlt:
     "Cory With The Keys in a Cory With The Keys tee and cap at the dealership",
   signature: "Cory",
