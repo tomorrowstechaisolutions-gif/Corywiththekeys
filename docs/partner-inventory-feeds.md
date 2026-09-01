@@ -11,25 +11,40 @@ each lot to authorise a feed, then writing one connector per feed format.
 
 | Lot | Address | Platform | Units | Feed status |
 |---|---|---|---|---|
-| Performance Motors | 2200 E Rancier Ave, Killeen TX 76543 | DealerSync | ~43 | Not requested |
 | McLeod Auto Sales | 3405 E Stan Schlueter Loop, Killeen TX 76542 | DealerOn | 200+ | Not requested |
+| Performance Motors | 2200 E Rancier Ave, Killeen TX 76543 | DealerSync | ~43 | Not requested |
 | Platinum Autoplex | 217 W Veterans Memorial Blvd, Killeen TX 76541 | AutoRevolution | Unknown | Not requested |
 | Shelley's Auto Sales | 727 S Main St, Belton TX 76513 | DealerCenter | Unknown | Not requested |
-| **(5th lot — link never arrived)** | | | | |
+| Drive Away Auto Sales | 4301 E Stan Schlueter Loop Bldg 2, Killeen TX 76542 | DealerCenter | Unknown | Not requested |
 
-All four are already loaded in `partner_lots` with `display_on_site = false`.
+All five are loaded in `partner_lots` with `display_on_site = false`.
 
-Four different platforms across four lots, so there is no single integration
-that covers them. Each connector is written once against that vendor's export
-format; if a fifth lot turns out to also be on DealerSync or DealerCenter, it
-reuses the connector already written and costs almost nothing to add.
+### Four connectors, not five
+
+| Platform | Lots | Priority |
+|---|---|---|
+| DealerCenter | Shelley's, Drive Away | Build first — covers two lots |
+| DealerOn | McLeod | Build first — 200+ units, the largest single source |
+| DealerSync | Performance Motors | Then |
+| AutoRevolution | Platinum Autoplex | Then |
+
+DealerCenter is the only platform serving more than one lot, so that connector
+earns its keep twice. McLeod alone carries more inventory than the other four
+combined as far as we know, so between them those two connectors are most of
+the value in the project.
+
+Geography worth knowing: McLeod and Drive Away are both on E Stan Schlueter
+Loop, and Platinum Autoplex sits on W Veterans Memorial a few blocks from The
+Key Konnect's own lot. Four of the five are in Killeen; only Shelley's is out
+in Belton.
 
 ## Feeds, not scraping
 
-Two of the four sites — Performance Motors and Shelley's — publish a
-`robots.txt` that blocks scrapers and AI crawlers with a blanket `Disallow: /`
-(CCBot, Bytespider, Diffbot, AI2Bot, GPTBot, Googlebot-Extended). That is a
-refusal in the only machine-readable form a website has. We honour it.
+Three of the five sites — Performance Motors, Shelley's and Drive Away —
+publish a `robots.txt` that blocks scrapers and AI crawlers with a blanket
+`Disallow: /` (GPTBot, CCBot, Bytespider, Diffbot, AI2Bot, Google-Extended,
+Amazonbot and roughly twenty more). That is a refusal in the only
+machine-readable form a website has. We honour it.
 
 The practical case is just as strong:
 
