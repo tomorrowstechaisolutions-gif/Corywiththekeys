@@ -44,3 +44,14 @@ export const SITE_NAV = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
+
+/**
+ * Social profiles. Placeholder URLs until Cory confirms the real handles —
+ * the labels are correct, only the hrefs need swapping.
+ */
+export const SOCIAL_LINKS = [
+  { label: "Facebook", short: "f", href: "https://facebook.com/" },
+  { label: "Instagram", short: "ig", href: "https://instagram.com/" },
+  { label: "TikTok", short: "tt", href: "https://tiktok.com/" },
+  { label: "YouTube", short: "yt", href: "https://youtube.com/" },
+] as const;

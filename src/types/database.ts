@@ -1337,7 +1337,9 @@ export type Database = {
           model: string
           monthly_payment: number | null
           partner_lot_id: string | null
+          previous_price: number | null
           price: number | null
+          price_changed_at: string | null
           slug: string
           sold_at: string | null
           source: Database["public"]["Enums"]["vehicle_source"]
@@ -1376,7 +1378,9 @@ export type Database = {
           model: string
           monthly_payment?: number | null
           partner_lot_id?: string | null
+          previous_price?: number | null
           price?: number | null
+          price_changed_at?: string | null
           slug: string
           sold_at?: string | null
           source?: Database["public"]["Enums"]["vehicle_source"]
@@ -1415,7 +1419,9 @@ export type Database = {
           model?: string
           monthly_payment?: number | null
           partner_lot_id?: string | null
+          previous_price?: number | null
           price?: number | null
+          price_changed_at?: string | null
           slug?: string
           sold_at?: string | null
           source?: Database["public"]["Enums"]["vehicle_source"]
@@ -1485,7 +1491,9 @@ export type Database = {
           partner_lot_id: string | null
           partner_lot_name: string | null
           partner_lot_slug: string | null
+          previous_price: number | null
           price: number | null
+          price_changed_at: string | null
           slug: string | null
           sold_at: string | null
           source: Database["public"]["Enums"]["vehicle_source"] | null
@@ -1637,6 +1645,7 @@ export type Database = {
         | "referral"
         | "social"
         | "other"
+        | "find_my_car"
       lead_status:
         | "new"
         | "contacted"
@@ -1872,6 +1881,7 @@ export const Constants = {
         "referral",
         "social",
         "other",
+        "find_my_car",
       ],
       lead_status: [
         "new",

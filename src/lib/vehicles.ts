@@ -126,3 +126,102 @@ export const COLUMN_LABELS: Record<string, string> = {
 export function columnLabel(column: string): string {
   return COLUMN_LABELS[column] ?? column;
 }
+
+/**
+ * Assumptions behind every "Est. $X/mo" figure on the site.
+ *
+ * These are ESTIMATES for shopping, not offers. They are stated in one place
+ * so the disclaimer, the payment filter and the card all agree, and so the
+ * numbers can be corrected in a single edit when Cory's real lender terms
+ * are known.
+ */
+export const FINANCE_ASSUMPTIONS = {
+  termMonths: 72,
+  annualRate: 0.129,
+  downPaymentRate: 0.1,
+} as const;
+
+export const PAYMENT_DISCLAIMER =
+  "*Estimated payments with approved credit. Tax, title, fees, down payment, interest rate, and loan terms may affect actual payment. Not a guarantee of approval or terms.";
+
+/** Standard amortised payment. Returns null when there is no price to work from. */
+export function estimateMonthlyPayment(price: number | null): number | null {
+  if (!price || price <= 0) return null;
+
+  const { termMonths, annualRate, downPaymentRate } = FINANCE_ASSUMPTIONS;
+  const financed = price * (1 - downPaymentRate);
+  const monthlyRate = annualRate / 12;
+
+  const payment =
+    (financed * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -termMonths));
+
+  return Math.round(payment);
+}
+
+/**
+ * The inverse: the highest sticker price that lands under a given monthly
+ * payment. Used so the "Monthly Payment" filter can still include vehicles
+ * that have no stored payment figure.
+ */
+export function priceForPayment(payment: number): number {
+  const { termMonths, annualRate, downPaymentRate } = FINANCE_ASSUMPTIONS;
+  const monthlyRate = annualRate / 12;
+
+  const financed =
+    (payment * (1 - Math.pow(1 + monthlyRate, -termMonths))) / monthlyRate;
+
+  return Math.round(financed / (1 - downPaymentRate));
+}
+
+/** The payment to show: the one staff entered, else the estimate. */
+export function displayPayment(vehicle: {
+  price: number | null;
+  monthly_payment: number | null;
+}): number | null {
+  return vehicle.monthly_payment
+    ? Math.round(vehicle.monthly_payment)
+    : estimateMonthlyPayment(vehicle.price);
+}
+
+export type VehicleBadge = {
+  label: string;
+  className: string;
+};
+
+const NEW_ARRIVAL_DAYS = 21;
+
+/**
+ * At most one badge per card. Order is deliberate: a hand-picked Featured
+ * flag outranks an automatic one, and a price drop is the strongest reason
+ * for a shopper to look twice.
+ */
+export function vehicleBadge(vehicle: {
+  is_featured: boolean;
+  previous_price: number | null;
+  price: number | null;
+  source: VehicleSource;
+  created_at: string;
+}): VehicleBadge | null {
+  if (vehicle.is_featured) {
+    return { label: "Featured", className: "bg-keyblue-600 text-white" };
+  }
+
+  if (
+    vehicle.previous_price !== null &&
+    vehicle.price !== null &&
+    vehicle.previous_price > vehicle.price
+  ) {
+    return { label: "Price Drop", className: "bg-emerald-600 text-white" };
+  }
+
+  const ageMs = Date.now() - new Date(vehicle.created_at).getTime();
+  if (ageMs < NEW_ARRIVAL_DAYS * 86_400_000) {
+    return { label: "New Arrival", className: "bg-keyblue-500 text-white" };
+  }
+
+  if (vehicle.source === "partner") {
+    return { label: "Partner Lot", className: "bg-violet-600 text-white" };
+  }
+
+  return null;
+}

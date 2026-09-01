@@ -1,46 +1,69 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { CONTACT, HOURS, SITE, SITE_NAV } from "@/lib/constants";
+import { CONTACT, HOURS, SITE, SITE_NAV, SOCIAL_LINKS } from "@/lib/constants";
 
-/** Public site footer. Structure only — visual design comes later. */
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  [
+    CONTACT.address.line1,
+    CONTACT.address.line2,
+    `${CONTACT.address.city}, ${CONTACT.address.state} ${CONTACT.address.postalCode}`,
+  ].join(", "),
+)}`;
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="mt-auto bg-navy-950 text-white">
-      <Container className="py-12">
+      <Container className="py-12 lg:py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-lg font-bold">{SITE.name}</p>
-            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
+            <p className="font-serif text-xl font-bold italic">{SITE.name}</p>
+            <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-keyblue-400">
               {SITE.tagline}
             </p>
-            <p className="mt-4 text-sm text-muted">
+            <p className="mt-4 text-sm text-white/70">
               The Official Car Plug of the People.
             </p>
+
+            <ul className="mt-5 flex gap-3">
+              {SOCIAL_LINKS.map((social) => (
+                <li key={social.label}>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={social.label}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-xs font-bold transition hover:bg-keyblue-600"
+                  >
+                    {social.short}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider">
-              Contact
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
+            <p className="text-xs font-bold uppercase tracking-wider">Contact</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-white/75">
               <li>
-                <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
+                <a href={CONTACT.phoneHref} className="hover:text-white">
+                  {CONTACT.phone}
+                </a>
               </li>
               <li>
-                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                <a href={`mailto:${CONTACT.email}`} className="hover:text-white">
+                  {CONTACT.email}
+                </a>
               </li>
               <li>{SITE.domain}</li>
             </ul>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider">
-              Location
-            </p>
-            <address className="mt-3 space-y-1 text-sm not-italic text-muted">
+            <p className="text-xs font-bold uppercase tracking-wider">Location</p>
+            <address className="mt-4 space-y-1 text-sm not-italic text-white/75">
               <p>{CONTACT.address.line1}</p>
               <p>{CONTACT.address.line2}</p>
               <p>
@@ -48,24 +71,31 @@ export function SiteFooter() {
                 {CONTACT.address.postalCode}
               </p>
             </address>
+            <a
+              href={mapsHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-keyblue-600 px-3 py-1.5 text-xs font-bold transition hover:bg-keyblue-500"
+            >
+              Get Directions <span aria-hidden>→</span>
+            </a>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider">
-              Hours
-            </p>
-            <ul className="mt-3 space-y-1 text-sm text-muted">
+            <p className="text-xs font-bold uppercase tracking-wider">Hours</p>
+            <dl className="mt-4 space-y-2 text-sm text-white/75">
               {HOURS.map((entry) => (
-                <li key={entry.days}>
-                  {entry.days}: {entry.hours}
-                </li>
+                <div key={entry.days} className="flex justify-between gap-3">
+                  <dt>{entry.days}</dt>
+                  <dd className="text-right text-white/90">{entry.hours}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </div>
         </div>
 
-        <nav aria-label="Footer" className="mt-10 border-t border-line pt-6">
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+        <nav aria-label="Footer" className="mt-10 border-t border-white/10 pt-6">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/70">
             {SITE_NAV.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-white">
@@ -76,7 +106,7 @@ export function SiteFooter() {
           </ul>
         </nav>
 
-        <p className="mt-6 text-xs text-muted">
+        <p className="mt-6 text-center text-xs text-white/50">
           &copy; {year} {SITE.name}. All rights reserved.
         </p>
       </Container>
