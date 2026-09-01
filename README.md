@@ -119,7 +119,25 @@ update public.profiles
 A trigger prevents demoting, deactivating or deleting the last active admin,
 so the console cannot be locked out of itself.
 
+## Inventory
+
+`/admin/inventory` is the working vehicle manager: list with status filters
+and search, create, edit, photo upload, publish.
+
+Two things worth knowing before changing it:
+
+- **Admin writes run on the signed-in user's session, never the service
+  role.** RLS still applies, and `audit_log` records `auth.uid()` as the
+  actor. Under the service role that is null and the audit trail cannot tell
+  you who changed a price.
+- **Editing a feed-sourced vehicle locks the fields you touched.** The edit
+  page lists them and lets you release one back to the feed. This is the
+  `locked_fields` mechanism from `0002_inventory_sync.sql`.
+
+Photos go to the `vehicle-photos` bucket. The first upload becomes the lead
+image; deleting the lead image promotes the next one automatically.
+
 ## Status
 
-Phases 1–3 complete: scaffold, database, auth. Routes still render
-structural placeholders; no page designs yet.
+Phases 1–4 complete: scaffold, database, auth, inventory manager. The public
+site still renders structural placeholders; no page designs yet.
