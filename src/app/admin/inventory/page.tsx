@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -24,7 +24,7 @@ export default async function AdminInventoryPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const profile = await requireStaff();
+  const profile = await requireSection("inventory");
   const { status, q, source } = await searchParams;
 
   const supabase = await createClient();

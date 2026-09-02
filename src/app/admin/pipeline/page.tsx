@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
+import { requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Pipeline",
 };
 
-export default function AdminPipelinePage() {
+export default async function AdminPipelinePage() {
+  await requireSection("pipeline");
+
   return (
     <PagePlaceholder
       eyebrow="Admin"

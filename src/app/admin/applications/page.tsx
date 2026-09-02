@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
+import { requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Prequalifications",
 };
 
-export default function AdminApplicationsPage() {
+export default async function AdminApplicationsPage() {
+  await requireSection("applications");
+
   return (
     <PagePlaceholder
       eyebrow="Admin"

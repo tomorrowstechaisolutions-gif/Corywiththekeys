@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
-import { displayName, requireStaff, ROLE_LABELS } from "@/lib/auth";
+import { ROLE_LABELS, displayName, requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -12,7 +12,7 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  const profile = await requireStaff();
+  const profile = await requireSection("dashboard");
   const { error } = await searchParams;
 
   return (

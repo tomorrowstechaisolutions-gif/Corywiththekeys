@@ -15,7 +15,7 @@ import { SITE } from "@/lib/constants";
  * in the topbar takes over.
  */
 export function AdminSidebar({ profile }: { profile: Profile }) {
-  const items = navFor(profile.role);
+  const items = navFor(profile);
 
   return (
     <aside className="hidden w-60 shrink-0 border-r border-line bg-navy-950 text-white md:block">

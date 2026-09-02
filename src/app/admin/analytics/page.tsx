@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
-import { requireRole } from "@/lib/auth";
+import { requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Analytics",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function AdminAnalyticsPage() {
   // Admin only — revenue and margin reporting is not a sales-role view.
-  await requireRole("admin");
+  await requireSection("analytics");
 
   return (
     <PagePlaceholder

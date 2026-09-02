@@ -9,7 +9,7 @@ import { displayName, ROLE_LABELS, type Profile } from "@/lib/auth";
 export function AdminTopbar({ profile }: { profile: Profile }) {
   return (
     <header className="flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:gap-4 sm:px-6">
-      <AdminMobileNav items={navFor(profile.role)} />
+      <AdminMobileNav items={navFor(profile)} />
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-navy-900">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 import { setPartnerLotActive } from "./actions";
@@ -11,7 +11,7 @@ import { PartnerLotForm } from "./PartnerLotForm";
 export const metadata: Metadata = { title: "Partner Lots" };
 
 export default async function AdminPartnerLotsPage() {
-  const profile = await requireStaff();
+  const profile = await requireSection("partner-lots");
   const editable = canWrite(profile);
 
   const supabase = await createClient();

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
   columnLabel,
@@ -26,7 +26,7 @@ export default async function EditVehiclePage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ created?: string }>;
 }) {
-  const profile = await requireStaff();
+  const profile = await requireSection("inventory");
   const { id } = await params;
   const { created } = await searchParams;
 

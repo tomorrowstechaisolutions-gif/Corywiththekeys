@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
+import { requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Messages",
 };
 
-export default function AdminMessagesPage() {
+export default async function AdminMessagesPage() {
+  await requireSection("messages");
+
   return (
     <PagePlaceholder
       eyebrow="Admin"

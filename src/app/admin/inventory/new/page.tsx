@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 import { createVehicle } from "../actions";
@@ -12,7 +12,7 @@ import { VehicleForm } from "../VehicleForm";
 export const metadata: Metadata = { title: "Add vehicle" };
 
 export default async function NewVehiclePage() {
-  const profile = await requireStaff();
+  const profile = await requireSection("inventory");
 
   if (!canWrite(profile)) {
     redirect("/admin/inventory?error=forbidden");

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/components/ui/PagePlaceholder";
-import { requireRole } from "@/lib/auth";
+import { requireSection } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -9,16 +9,15 @@ export const metadata: Metadata = {
 
 export default async function AdminSettingsPage() {
   // Admin only. Sales and viewer are redirected to the dashboard.
-  await requireRole("admin");
+  await requireSection("settings");
 
   return (
     <PagePlaceholder
       eyebrow="Admin"
       title="Settings"
-      description="Business, user and integration configuration. Restricted to admins."
+      description="Business and integration configuration. Staff access lives on the Team screen."
       scope={[
         "Business profile, hours and contact details",
-        "Team members — invite, assign role, set job title, activate/deactivate",
         "Notification preferences",
         "Integration keys and webhooks",
       ]}

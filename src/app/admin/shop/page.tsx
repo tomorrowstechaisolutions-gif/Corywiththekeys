@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -30,7 +30,7 @@ export default async function AdminShopPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const profile = await requireStaff();
+  const profile = await requireSection("shop");
   const { status, q } = await searchParams;
   const editable = canWrite(profile);
 

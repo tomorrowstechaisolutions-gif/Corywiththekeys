@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
-import { canWrite, requireStaff } from "@/lib/auth";
+import { canWrite, requireSection } from "@/lib/auth";
 
 import { createProduct } from "../actions";
 import { ProductForm } from "../ProductForm";
@@ -11,7 +11,7 @@ import { ProductForm } from "../ProductForm";
 export const metadata: Metadata = { title: "Add product" };
 
 export default async function NewProductPage() {
-  const profile = await requireStaff();
+  const profile = await requireSection("shop");
 
   if (!canWrite(profile)) {
     redirect("/admin/shop?error=forbidden");
