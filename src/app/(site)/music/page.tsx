@@ -9,7 +9,7 @@ import { NewRelease } from "@/components/music/NewRelease";
 import { OnRepeat } from "@/components/music/OnRepeat";
 import { PopularTracks } from "@/components/music/PopularTracks";
 import { SongPlayer } from "@/components/music/SongPlayer";
-import { LINKTREE_URL, PROFILES } from "@/data/cory-links";
+import { LINKTREE_URL, LISTEN_PROFILES, PROFILES } from "@/data/cory-links";
 import { SITE } from "@/lib/constants";
 
 const DESCRIPTION =
@@ -19,6 +19,7 @@ const DESCRIPTION =
 const SAME_AS = [
   LINKTREE_URL,
   ...PROFILES.map((profile) => profile.url),
+  ...LISTEN_PROFILES.map((profile) => profile.url),
 ].filter((url): url is string => Boolean(url));
 
 export const metadata: Metadata = {
@@ -52,9 +53,10 @@ export const metadata: Metadata = {
  * Structured data for the artist.
  *
  * `sameAs` is deliberately built from whatever real profile URLs exist in
- * the link config — right now that is the Linktree only. Listing a URL here
- * that does not resolve would be worse than listing nothing, so the array is
- * derived, never hard-coded.
+ * the link config — socials, streaming artist pages and the Linktree. Every
+ * one of them was opened and confirmed to resolve to Cory. Listing a URL
+ * here that does not resolve would be worse than listing nothing, which is
+ * why the array is derived from the config and never hand-written.
  */
 function MusicianSchema() {
   const schema = {

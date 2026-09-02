@@ -1,12 +1,44 @@
 import { SectionHeading } from "@/components/music/SectionHeading";
 import { Container } from "@/components/ui/Container";
-import { LINKTREE_URL, PROFILES } from "@/data/cory-links";
+import { LINKTREE_URL, LISTEN_PROFILES, PROFILES } from "@/data/cory-links";
 
 export function FollowCory() {
   return (
     <section className="bg-navy-950 py-8 lg:py-10">
       <Container>
-        <SectionHeading title="Follow Cory" />
+        <SectionHeading title="Listen to Cory" />
+
+        <ul className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {LISTEN_PROFILES.map((profile) => (
+            <li key={profile.key}>
+              <a
+                href={profile.url as string}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-white/30 hover:bg-white/10"
+              >
+                <span
+                  aria-hidden
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${profile.accent}`}
+                >
+                  {profile.label.charAt(0)}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-bold text-white">
+                    {profile.label}
+                  </span>
+                  <span className="block truncate text-xs text-white/50">
+                    Full catalogue
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-9">
+          <SectionHeading title="Follow Cory" />
+        </div>
 
         <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {PROFILES.map((profile) => {
