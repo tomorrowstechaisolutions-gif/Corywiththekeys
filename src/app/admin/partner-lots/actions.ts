@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 import { canWrite, requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -18,18 +19,13 @@ async function guard() {
   return canWrite(profile) ? null : "Your role cannot change partner lots.";
 }
 
-export async function createPartnerLot(
-  _prev: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const denied = await guard();
-  if (denied) return { error: denied };
-
-  const parsed = PartnerLotSchema.safeParse({
+function parsePartnerLotForm(formData: FormData) {
+  return PartnerLotSchema.safeParse({
     name: formData.get("name"),
     contact_name: formData.get("contact_name"),
     contact_email: formData.get("contact_email"),
     contact_phone: formData.get("contact_phone"),
+    website: formData.get("website"),
     address_line1: formData.get("address_line1"),
     city: formData.get("city"),
     state: formData.get("state"),
@@ -39,14 +35,27 @@ export async function createPartnerLot(
     is_active: formData.get("is_active"),
     notes: formData.get("notes"),
   });
+}
 
+function collectFieldErrors(issues: z.ZodIssue[]) {
+  const fieldErrors: Record<string, string> = {};
+  for (const issue of issues) {
+    const key = String(issue.path[0] ?? "form");
+    fieldErrors[key] ??= issue.message;
+  }
+  return fieldErrors;
+}
+
+export async function createPartnerLot(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const denied = await guard();
+  if (denied) return { error: denied };
+
+  const parsed = parsePartnerLotForm(formData);
   if (!parsed.success) {
-    const fieldErrors: Record<string, string> = {};
-    for (const issue of parsed.error.issues) {
-      const key = String(issue.path[0] ?? "form");
-      fieldErrors[key] ??= issue.message;
-    }
-    return { fieldErrors };
+    return { fieldErrors: collectFieldErrors(parsed.error.issues) };
   }
 
   const supabase = await createClient();
@@ -71,6 +80,38 @@ export async function createPartnerLot(
   return { ok: true };
 }
 
+/** Edit an existing lot — the only way to fill in a website after the fact. */
+export async function updatePartnerLot(
+  id: string,
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const denied = await guard();
+  if (denied) return { error: denied };
+
+  const parsed = parsePartnerLotForm(formData);
+  if (!parsed.success) {
+    return { fieldErrors: collectFieldErrors(parsed.error.issues) };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("partner_lots")
+    .update(parsed.data)
+    .eq("id", id);
+
+  if (error) {
+    return { error: "Could not save these changes. Please try again." };
+  }
+
+  revalidatePath("/admin/partner-lots");
+  revalidatePath(`/admin/partner-lots/${id}`);
+  revalidatePath("/admin/inventory");
+  return { ok: true };
+}
+
+/** Quick status change from the list view. */
 export async function setPartnerLotActive(id: string, active: boolean) {
   const denied = await guard();
   if (denied) return;

@@ -124,6 +124,26 @@ const url = (max: number) =>
       .nullable(),
   );
 
+/**
+ * A website typed by staff. People paste "shelleysautosales.net" as often as
+ * the full link, so we add the scheme rather than bouncing the form back.
+ * Still http(s) only — a `javascript:` URL in an href is a stored XSS.
+ */
+const website = (max: number) =>
+  z.preprocess((v) => {
+    if (typeof v !== "string") return emptyToNull(v);
+    const trimmed = v.trim();
+    if (trimmed === "") return null;
+    return /^[a-z][a-z0-9+.-]*:/i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  }, z
+    .string()
+    .max(max, `Keep this under ${max} characters.`)
+    .refine(
+      (value) => /^https?:\/\/[^\s]+$/i.test(value),
+      "That does not look like a web address.",
+    )
+    .nullable());
+
 const uuidOrNull = z.preprocess(
   emptyToNull,
   z.string().uuid("Pick a partner lot from the list.").nullable(),
@@ -233,6 +253,7 @@ export const PartnerLotSchema = z.object({
     z.string().email("That does not look like an email address.").nullable(),
   ),
   contact_phone: text(40),
+  website: website(300),
   address_line1: text(160),
   city: text(80),
   state: text(40),

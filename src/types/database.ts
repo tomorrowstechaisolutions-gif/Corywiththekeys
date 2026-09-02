@@ -952,6 +952,7 @@ export type Database = {
           slug: string
           state: string | null
           updated_at: string
+          website: string | null
         }
         Insert: {
           address_line1?: string | null
@@ -971,6 +972,7 @@ export type Database = {
           slug: string
           state?: string | null
           updated_at?: string
+          website?: string | null
         }
         Update: {
           address_line1?: string | null
@@ -990,6 +992,7 @@ export type Database = {
           slug?: string
           state?: string | null
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }

@@ -5,10 +5,19 @@ import { Container } from "@/components/ui/Container";
 import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-import { setPartnerLotActive } from "./actions";
+import { createPartnerLot, setPartnerLotActive } from "./actions";
 import { PartnerLotForm } from "./PartnerLotForm";
 
 export const metadata: Metadata = { title: "Partner Lots" };
+
+/** The list is easier to scan showing "drivekilleen.com" than the full URL. */
+function displayHost(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
 
 export default async function AdminPartnerLotsPage() {
   const profile = await requireSection("partner-lots");
@@ -44,6 +53,7 @@ export default async function AdminPartnerLotsPage() {
           <thead className="border-b border-slate-200 bg-slate-50">
             <tr className="text-xs uppercase tracking-wider text-navy-700">
               <th className="px-4 py-3 font-semibold">Lot</th>
+              <th className="px-4 py-3 font-semibold">Website</th>
               <th className="px-4 py-3 font-semibold">Contact</th>
               <th className="px-4 py-3 font-semibold">Vehicles</th>
               <th className="px-4 py-3 font-semibold">Public credit</th>
@@ -54,10 +64,31 @@ export default async function AdminPartnerLotsPage() {
             {(lots ?? []).map((lot) => (
               <tr key={lot.id} className="hover:bg-slate-50">
                 <td className="px-4 py-3">
-                  <p className="font-semibold text-navy-900">{lot.name}</p>
+                  <Link
+                    href={`/admin/partner-lots/${lot.id}`}
+                    className="font-semibold text-navy-900 hover:text-keyblue-600 hover:underline"
+                  >
+                    {lot.name}
+                  </Link>
                   <p className="text-xs text-navy-700/70">
                     {[lot.city, lot.state].filter(Boolean).join(", ") || "—"}
                   </p>
+                </td>
+                <td className="px-4 py-3">
+                  {lot.website ? (
+                    <a
+                      href={lot.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-keyblue-600 hover:underline"
+                    >
+                      {displayHost(lot.website)}{" "}
+                      <span aria-hidden>&#8599;</span>
+                      <span className="sr-only">(opens in a new tab)</span>
+                    </a>
+                  ) : (
+                    <span className="text-navy-700/60">&#8212;</span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-navy-700">
                   {lot.contact_name ? (
@@ -110,7 +141,7 @@ export default async function AdminPartnerLotsPage() {
 
             {(lots ?? []).length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-12 text-center text-sm text-navy-700">
+                <td colSpan={6} className="px-4 py-12 text-center text-sm text-navy-700">
                   No partner lots yet.
                 </td>
               </tr>
@@ -121,7 +152,7 @@ export default async function AdminPartnerLotsPage() {
 
       {editable ? (
         <div className="mt-6">
-          <PartnerLotForm />
+          <PartnerLotForm action={createPartnerLot} />
         </div>
       ) : null}
     </Container>
