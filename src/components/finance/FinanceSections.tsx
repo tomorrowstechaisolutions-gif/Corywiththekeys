@@ -90,7 +90,7 @@ export function FinanceHero() {
           fill
           priority
           sizes="64vw"
-          className="object-cover object-[38%_center]"
+          className="object-cover object-[55%_center]"
         />
         <div
           aria-hidden
@@ -144,15 +144,19 @@ export function FinanceHero() {
         </div>
       </Container>
 
-      {/* Phone and tablet: the photograph as its own band. */}
-      <div className="relative h-60 w-full sm:h-72 lg:hidden">
+      {/*
+        Phone and tablet: the photograph as its own band. Taller than the old
+        one — the truck is a wide subject, and at 240px it shrank to a detail
+        rather than reading as the hero.
+      */}
+      <div className="relative h-72 w-full sm:h-80 lg:hidden">
         <Image
           src={HERO.image}
           alt={HERO.imageAlt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[42%_center]"
+          className="object-cover object-[52%_58%]"
         />
         <div
           aria-hidden

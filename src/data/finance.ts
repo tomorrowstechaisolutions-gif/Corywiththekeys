@@ -44,13 +44,8 @@ export const HERO = {
   cta: "Start Secure Application",
   ctaNote: "Secure credit application",
   image: "/brand/finance/hero.webp",
-  /**
-   * NOTE FOR REVIEW: the person in this photograph is not the Cory who
-   * appears everywhere else on this site. See the report — the alt text
-   * deliberately does not name him.
-   */
   imageAlt:
-    "A black performance car at night in front of a city skyline, with The Key Konnect crest",
+    "Cory's blue Cybertruck at night in front of a city skyline, lettered in gold with Keys 2 Success and Cory With The Keys",
   quote: {
     lines: ["Cars open doors.", "Opportunities change lives."],
     attribution: "Cory With The Keys",
