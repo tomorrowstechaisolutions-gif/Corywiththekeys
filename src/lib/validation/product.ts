@@ -1,6 +1,15 @@
 import { z } from "zod";
 
 /** Publishing and availability, mirrored from the Postgres enums. */
+/**
+ * How many pictures one product may carry.
+ *
+ * Six is a product page, not an archive: a buyer looking at a hoodie wants
+ * front, back, the print detail and it worn — past that they stop scrolling,
+ * and every extra file is storage and page weight for nothing.
+ */
+export const MAX_PRODUCT_PHOTOS = 6;
+
 export const PRODUCT_STATUS = ["draft", "published", "archived"] as const;
 export const PRODUCT_STOCK = ["in_stock", "sold_out", "coming_soon"] as const;
 

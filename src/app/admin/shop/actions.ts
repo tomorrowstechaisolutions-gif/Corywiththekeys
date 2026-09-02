@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { canWrite, requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
+  MAX_PRODUCT_PHOTOS,
   ProductSchema,
   slugify,
   type ProductInput,
@@ -263,6 +264,22 @@ export async function registerProductPhotos(
     .select("position, is_primary")
     .eq("product_id", productId)
     .order("position", { ascending: false });
+
+  // The real cap. The browser checks too, for a faster message, but a limit
+  // enforced only there is not a limit — this action is reachable directly.
+  const room = MAX_PRODUCT_PHOTOS - (existing?.length ?? 0);
+  if (room <= 0) {
+    await supabase.storage.from(BUCKET).remove(verified);
+    return {
+      error: `This product already has ${MAX_PRODUCT_PHOTOS} images. Delete one before adding another.`,
+    };
+  }
+  if (verified.length > room) {
+    // Keep the files that fit, discard the rest rather than silently dropping
+    // rows and leaving orphans in the bucket.
+    await supabase.storage.from(BUCKET).remove(verified.slice(room));
+    verified.length = room;
+  }
 
   let position = existing?.[0]?.position ?? -1;
   let hasPrimary = (existing ?? []).some((p) => p.is_primary);

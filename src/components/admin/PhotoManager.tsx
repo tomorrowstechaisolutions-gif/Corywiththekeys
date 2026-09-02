@@ -56,6 +56,7 @@ export function PhotoManager({
   mainPhotoHint,
   emptyHint,
   primaryLabel = "Shown on the card",
+  maxPhotos,
 }: {
   entityId: string;
   bucket: string;
@@ -65,6 +66,8 @@ export function PhotoManager({
   mainPhotoHint: React.ReactNode;
   emptyHint: string;
   primaryLabel?: string;
+  /** Cap on how many images this entity may carry. Omitted means no cap. */
+  maxPhotos?: number;
 }) {
   const router = useRouter();
   const [uploads, setUploads] = useState<Upload[]>([]);
@@ -88,6 +91,24 @@ export function PhotoManager({
 
       setError(null);
       const files = Array.from(fileList);
+
+      // Checked here for a fast, specific message; the server checks again,
+      // because a cap enforced only in the browser is not a cap.
+      if (maxPhotos !== undefined) {
+        const room = maxPhotos - photos.length;
+        if (room <= 0) {
+          setError(
+            `That is already ${maxPhotos} images. Delete one before adding another.`,
+          );
+          return;
+        }
+        if (files.length > room) {
+          setError(
+            `Only room for ${room} more image${room === 1 ? "" : "s"} — you picked ${files.length}.`,
+          );
+          return;
+        }
+      }
 
       const rejected = files.find(
         (f) => !ALLOWED.includes(f.type) || f.size > MAX_BYTES,
@@ -162,21 +183,30 @@ export function PhotoManager({
 
       if (inputRef.current) inputRef.current.value = "";
     },
-    [router, entityId, bucket, actions],
+    [router, entityId, bucket, actions, maxPhotos, photos.length],
   );
 
   const busy = uploads.some((u) => u.status === "uploading") || isPending;
+  const full = maxPhotos !== undefined && photos.length >= maxPhotos;
 
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-5">
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-sm font-bold text-navy-900">Photos</h2>
         <p className="text-xs text-navy-700">
-          {photos.length} image{photos.length === 1 ? "" : "s"}
+          {photos.length}
+          {maxPhotos !== undefined ? ` of ${maxPhotos}` : ""} image
+          {photos.length === 1 && maxPhotos === undefined ? "" : "s"}
         </p>
       </div>
 
-      {canEdit ? (
+      {canEdit && full ? (
+        <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm text-navy-700">
+          All {maxPhotos} image slots are used. Delete one below to add another.
+        </p>
+      ) : null}
+
+      {canEdit && !full ? (
         <label
           onDragOver={(event) => {
             event.preventDefault();
@@ -211,6 +241,9 @@ export function PhotoManager({
           <span className="mt-1 text-xs text-navy-700">
             JPEG, PNG, WebP or AVIF · up to 10 MB each · uploads start
             immediately
+            {maxPhotos !== undefined
+              ? ` · ${maxPhotos - photos.length} slot${maxPhotos - photos.length === 1 ? "" : "s"} left`
+              : ""}
           </span>
         </label>
       ) : null}
