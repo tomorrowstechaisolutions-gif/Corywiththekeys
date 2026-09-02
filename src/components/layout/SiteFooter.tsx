@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
@@ -19,8 +20,18 @@ export function SiteFooter() {
       <Container className="py-12 lg:py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-serif text-xl font-bold italic">{SITE.name}</p>
-            <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-gold-500">
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/brand/key-mark.png"
+                alt=""
+                width={512}
+                height={512}
+                loading="lazy"
+                className="h-11 w-11 shrink-0"
+              />
+              <p className="font-serif text-xl font-bold italic">{SITE.name}</p>
+            </div>
+            <p className="mt-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-gold-500">
               {SITE.tagline}
             </p>
             <p className="mt-4 text-sm text-white/70">

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -31,27 +32,6 @@ const NAV = [
   { label: "Accessories", href: "/shop?filter=accessories" },
   { label: "About", href: "/about" },
 ];
-
-/** Crossed keys — the brand mark, drawn rather than shipped as an image. */
-function KeyMark() {
-  return (
-    <svg viewBox="0 0 32 32" className="h-7 w-7 text-keygold" aria-hidden>
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      >
-        <path d="M7 25 21 11" />
-        <circle cx="23.5" cy="8.5" r="3.2" />
-        <path d="M17 15l2.5 2.5M14 18l2 2" />
-        <path d="M25 25 11 11" />
-        <circle cx="8.5" cy="8.5" r="3.2" />
-        <path d="M15 15l-2.5 2.5M18 18l-2 2" />
-      </g>
-    </svg>
-  );
-}
 
 export function ShopHeader() {
   const { count, open, ready } = useCart();
@@ -96,7 +76,14 @@ export function ShopHeader() {
     <header className="sticky top-0 z-50 border-b border-white/8 bg-shop-ink/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-4 sm:px-6 lg:h-[72px] lg:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <KeyMark />
+          <Image
+            src="/brand/key-mark.png"
+            alt=""
+            width={512}
+            height={512}
+            priority
+            className="h-9 w-9 shrink-0 lg:h-10 lg:w-10"
+          />
           <span className="leading-none">
             <span className="block font-serif text-lg font-bold italic tracking-tight text-white lg:text-xl">
               {SITE.name}

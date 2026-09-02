@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { MobileNav } from "@/components/layout/MobileNav";
@@ -17,12 +18,31 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b-2 border-gold-500/45 bg-navy-950 text-white">
       <Container>
         <div className="flex h-16 items-center justify-between gap-4 lg:h-[72px]">
-          <Link href="/" className="flex shrink-0 flex-col leading-none">
-            <span className="font-serif text-xl font-bold italic tracking-tight lg:text-2xl">
-              {SITE.name}
-            </span>
-            <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-gold-500 lg:text-[9px]">
-              {SITE.tagline}
+          {/*
+            The crossed keys sit to the left of the wordmark, and the whole
+            lockup pulls back into the container's own padding so adding the
+            mark does not push the name toward the nav.
+          */}
+          <Link
+            href="/"
+            aria-label={`${SITE.name} — home`}
+            className="-ml-1 flex shrink-0 items-center gap-2.5 sm:-ml-2 lg:-ml-3"
+          >
+            <Image
+              src="/brand/key-mark.png"
+              alt=""
+              width={512}
+              height={512}
+              priority
+              className="h-10 w-10 shrink-0 lg:h-12 lg:w-12"
+            />
+            <span className="flex flex-col leading-none">
+              <span className="font-serif text-xl font-bold italic tracking-tight lg:text-2xl">
+                {SITE.name}
+              </span>
+              <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-gold-500 lg:text-[9px]">
+                {SITE.tagline}
+              </span>
             </span>
           </Link>
 

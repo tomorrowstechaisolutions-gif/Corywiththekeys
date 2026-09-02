@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { COLLECTIONS, STORE } from "@/data/shop";
@@ -8,9 +9,19 @@ export function ShopFooter() {
     <footer className="border-t border-white/8 bg-shop-ink">
       <div className="mx-auto grid max-w-[1400px] gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div>
-          <p className="font-serif text-lg font-bold italic text-white">
-            {SITE.name}
-          </p>
+          <div className="flex items-center gap-2.5">
+            <Image
+              src="/brand/key-mark.png"
+              alt=""
+              width={512}
+              height={512}
+              loading="lazy"
+              className="h-9 w-9 shrink-0"
+            />
+            <p className="font-serif text-lg font-bold italic text-white">
+              {SITE.name}
+            </p>
+          </div>
           <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-keyblue-500">
             {SITE.tagline}
           </p>
