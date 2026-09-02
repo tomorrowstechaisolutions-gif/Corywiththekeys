@@ -26,7 +26,7 @@ export function FinancingBanner() {
 
         <Link
           href="/finance"
-          className="inline-flex shrink-0 items-center gap-2 rounded-md bg-keyblue-600 px-6 py-3 text-sm font-bold transition hover:bg-keyblue-500"
+          className="inline-flex shrink-0 items-center gap-2 rounded-md bg-gold-500 px-6 py-3 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
         >
           Get Pre-Approved <span aria-hidden>→</span>
         </Link>

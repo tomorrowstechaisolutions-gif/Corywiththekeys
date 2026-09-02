@@ -120,7 +120,7 @@ export function VehicleCard({
         ) : null}
 
         {source ? (
-          <p className="mt-1 text-xs font-medium text-violet-700">{source}</p>
+          <p className="mt-1 text-xs font-medium text-keyblue-700">{source}</p>
         ) : null}
 
         <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">

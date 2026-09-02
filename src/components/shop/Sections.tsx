@@ -225,7 +225,7 @@ export function MovementGallery() {
 
   return (
     <section className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
-      <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-keyblue-400">
+      <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-gold-500">
         The Movement
       </h2>
 
@@ -295,7 +295,7 @@ export function ReviewsAndCta() {
           </h2>
           <Link
             href="/shop#featured-drops"
-            className="bg-black px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-shop-panel"
+            className="bg-navy-950 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-shop-panel"
           >
             Shop The Collection
           </Link>

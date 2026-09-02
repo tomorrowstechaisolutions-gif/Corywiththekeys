@@ -18,7 +18,7 @@ export function OnRepeat() {
           <LoopingVideo youtubeId={youtubeId} title={fullTitle} />
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-keyblue-400">
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-gold-500">
               {eyebrow}
             </p>
 

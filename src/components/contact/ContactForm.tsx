@@ -12,7 +12,7 @@ import { CONTACT } from "@/lib/constants";
 import { CONTACT_TOPICS } from "@/lib/validation/contact";
 
 const FIELD =
-  "w-full rounded-md border border-white/12 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-keyblue-500 focus:ring-2 focus:ring-keyblue-500/25";
+  "w-full rounded-md border border-white/12 bg-navy-950/55 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-keyblue-500 focus:ring-2 focus:ring-keyblue-500/25";
 
 function ErrorText({ children, id }: { children: string; id: string }) {
   return (

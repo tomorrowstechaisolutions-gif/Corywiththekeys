@@ -15,12 +15,12 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto bg-navy-950 text-white">
+    <footer className="mt-auto border-t-2 border-gold-500/45 bg-navy-950 text-white">
       <Container className="py-12 lg:py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="font-serif text-xl font-bold italic">{SITE.name}</p>
-            <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-keyblue-400">
+            <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-gold-500">
               {SITE.tagline}
             </p>
             <p className="mt-4 text-sm text-white/70">
@@ -45,7 +45,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider">Contact</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Contact</p>
             <ul className="mt-4 space-y-2.5 text-sm text-white/75">
               <li>
                 <a href={CONTACT.phoneHref} className="hover:text-white">
@@ -62,7 +62,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider">Location</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Location</p>
             <address className="mt-4 space-y-1 text-sm not-italic text-white/75">
               <p>{CONTACT.address.line1}</p>
               <p>{CONTACT.address.line2}</p>
@@ -82,7 +82,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider">Hours</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Hours</p>
             <dl className="mt-4 space-y-2 text-sm text-white/75">
               {HOURS.map((entry) => (
                 <div key={entry.days} className="flex justify-between gap-3">

@@ -35,7 +35,7 @@ export function ProductCard({
 
   return (
     <article className="group relative flex h-full flex-col border border-white/8 bg-shop-panel transition duration-300 focus-within:-translate-y-1 focus-within:border-white/20 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_18px_40px_-18px_rgba(10,102,255,0.55)]">
-      <div className="relative aspect-4/3 overflow-hidden bg-[#0a0e11]">
+      <div className="relative aspect-4/3 overflow-hidden bg-shop-ink">
         <Link href={`/shop/${product.slug}`} className="block h-full w-full">
           {image ? (
             <Image
@@ -88,7 +88,7 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col p-4">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-keyblue-400">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-gold-500">
           {product.category}
         </p>
         <h3 className="mt-1.5 text-sm font-bold uppercase tracking-wide text-white">

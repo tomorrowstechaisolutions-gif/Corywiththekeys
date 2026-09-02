@@ -22,7 +22,7 @@ export function AdminSidebar({ profile }: { profile: Profile }) {
       <div className="px-5 py-5">
         <Link href="/admin/dashboard" className="block leading-tight">
           <span className="block text-sm font-bold">{SITE.name}</span>
-          <span className="block text-[10px] uppercase tracking-[0.18em] text-muted">
+          <span className="block text-[10px] uppercase tracking-[0.18em] text-gold-500">
             Admin Console
           </span>
         </Link>

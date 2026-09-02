@@ -78,7 +78,7 @@ export function MobileNav() {
             </a>
             <Link
               href="/finance"
-              className="flex items-center justify-center rounded-md bg-keyblue-600 px-4 py-3 text-base font-bold text-white"
+              className="flex items-center justify-center rounded-md bg-gold-500 px-4 py-3 text-base font-bold text-navy-950"
             >
               Get Approved
             </Link>

@@ -94,7 +94,7 @@ export function FinanceHero() {
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,rgba(5,5,5,0.95)_11%,rgba(5,5,5,0.6)_26%,rgba(5,5,5,0.15)_42%,transparent_58%)]"
+          className="absolute inset-0 bg-[linear-gradient(to_right,#040a1c_0%,rgba(4,10,28,0.95)_11%,rgba(4,10,28,0.6)_26%,rgba(4,10,28,0.15)_42%,transparent_58%)]"
         />
       </div>
 
@@ -121,7 +121,7 @@ export function FinanceHero() {
               <li
                 key={item.key}
                 className={`flex max-w-[8.5rem] flex-col gap-2 sm:max-w-[9.5rem] sm:px-5 ${
-                  index > 0 ? "sm:border-l sm:border-gold-500/25" : "sm:pl-0"
+                  index > 0 ? "sm:border-l sm:border-keyblue-600/40" : "sm:pl-0"
                 }`}
               >
                 <span className="text-gold-500">
@@ -156,7 +156,7 @@ export function FinanceHero() {
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(to_bottom,#050505_0%,transparent_28%,rgba(5,5,5,0.55)_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,#040a1c_0%,transparent_28%,rgba(4,10,28,0.55)_100%)]"
         />
       </div>
     </section>
@@ -178,7 +178,7 @@ export function FinanceProcess() {
           {STEPS.map((step) => (
             <li
               key={step.number}
-              className="relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-lg border border-gold-500/45 bg-finance-panel"
+              className="relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-lg border border-keyblue-600/55 bg-finance-panel"
             >
               <Image
                 src={step.image}
@@ -190,7 +190,7 @@ export function FinanceProcess() {
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,rgba(5,5,5,0.95)_38%,rgba(5,5,5,0.55)_62%,rgba(5,5,5,0.15)_100%)]"
+                className="absolute inset-0 bg-[linear-gradient(to_right,#040a1c_0%,rgba(4,10,28,0.95)_38%,rgba(4,10,28,0.55)_62%,rgba(4,10,28,0.15)_100%)]"
               />
 
               <div className="relative flex flex-1 flex-col p-6">
@@ -245,12 +245,12 @@ export function FinanceTrustStrip() {
   return (
     <section className="bg-finance-bg pb-12">
       <Container>
-        <ul className="grid gap-6 rounded-lg border border-gold-500/30 bg-finance-panel p-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+        <ul className="grid gap-6 rounded-lg border border-keyblue-600/45 bg-finance-panel p-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
           {TRUST.map((item, index) => (
             <li
               key={item.key}
               className={`text-center lg:px-6 ${
-                index > 0 ? "lg:border-l lg:border-gold-500/20" : ""
+                index > 0 ? "lg:border-l lg:border-keyblue-600/35" : ""
               }`}
             >
               <span className="inline-flex text-gold-500">
@@ -274,7 +274,7 @@ export function FinanceBrandBanner() {
   return (
     <section className="bg-finance-bg pb-12">
       <Container>
-        <div className="grid overflow-hidden rounded-lg border border-gold-500/45 bg-finance-panel lg:grid-cols-[1fr_1.15fr_auto]">
+        <div className="grid overflow-hidden rounded-lg border border-keyblue-600/55 bg-finance-panel lg:grid-cols-[1fr_1.15fr_auto]">
           <div className="relative h-48 lg:h-auto lg:min-h-[15rem]">
             <Image
               src={BANNER.image}
@@ -286,7 +286,7 @@ export function FinanceBrandBanner() {
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-[linear-gradient(to_top,rgba(5,5,5,0.75),transparent_60%)] lg:bg-[linear-gradient(to_right,transparent_55%,#0a0a0a_100%)]"
+              className="absolute inset-0 bg-[linear-gradient(to_top,rgba(4,10,28,0.75),transparent_60%)] lg:bg-[linear-gradient(to_right,transparent_55%,#0a1533_100%)]"
             />
           </div>
 
@@ -309,7 +309,7 @@ export function FinanceBrandBanner() {
             </p>
           </div>
 
-          <div className="border-t border-gold-500/30 p-6 sm:p-8 lg:w-72 lg:border-l lg:border-t-0">
+          <div className="border-t border-keyblue-600/45 p-6 sm:p-8 lg:w-72 lg:border-l lg:border-t-0">
             <h3 className="text-base font-extrabold uppercase leading-tight tracking-tight text-white">
               {BANNER.ctaTitle.map((line) => (
                 <span key={line} className="block">

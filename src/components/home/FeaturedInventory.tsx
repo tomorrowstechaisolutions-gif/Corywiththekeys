@@ -38,6 +38,10 @@ export async function FeaturedInventory() {
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <h2 className="text-2xl font-extrabold tracking-tight text-navy-900">
                 Featured Inventory
+                <span
+                  aria-hidden
+                  className="mt-2 block h-1 w-12 rounded-full bg-gold-500"
+                />
               </h2>
               <Link
                 href="/inventory"

@@ -127,7 +127,7 @@ export default async function ShopPage({
             </p>
             <Link
               href="/shop"
-              className="mt-5 inline-block bg-keyblue-electric px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff]"
+              className="mt-5 inline-block bg-keyblue-electric px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
             >
               View Everything
             </Link>

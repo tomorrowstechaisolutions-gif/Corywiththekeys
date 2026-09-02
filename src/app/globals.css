@@ -7,42 +7,67 @@
 
 /*
  * The Key Konnect — brand tokens
- * Palette taken from the approved "Official Car Plug of the People" design.
- * Tokens only. Page-level styling lands in a later phase.
+ *
+ * ── THE PALETTE COMES OFF CORY'S TRUCK ────────────────────────────────────
+ *
+ * Royal blue body, gold lettering. Those two colours are the brand: they are
+ * on the truck, the billboard, the cap and the chain, and people in Killeen
+ * recognise them before they read a word. Every page runs on them.
+ *
+ * The rule that keeps it readable:
+ *
+ *   GOLD IS FOR DARK BACKGROUNDS. On navy it clears 8:1 and looks like the
+ *   truck. On white it is 2.2:1 — invisible to anyone with tired eyes, and a
+ *   WCAG failure. On light sections the accent is blue; gold appears there
+ *   only as a filled shape, a rule or a badge with dark text on it, never as
+ *   text on white. --color-gold-600 is the one gold dark enough for large
+ *   type on white, and even that is large-text-only.
+ *
+ * Every pairing below was checked against WCAG AA before it was written down.
  */
 :root {
   --background: #ffffff;
-  --foreground: #0a1a35;
+  --foreground: #071231;
 
-  --brand-navy-950: #050f22;
-  --brand-navy-900: #0a1a35;
-  --brand-navy-800: #0f2547;
-  --brand-navy-700: #16305a;
+  /* Deep end of the blue ramp — backgrounds, headers, footers. */
+  --brand-navy-950: #040a1c;
+  --brand-navy-900: #071231;
+  --brand-navy-800: #0c1e56;
+  /* The truck's body colour. */
+  --brand-navy-700: #12296d;
 
-  --brand-blue-700: #1449ab;
-  --brand-blue-600: #1b5fd9;
-  --brand-blue-500: #2f7bf0;
-  --brand-blue-400: #5b9bff;
+  /* Working blues — buttons, links, focus rings. */
+  --brand-blue-700: #14349b;
+  --brand-blue-600: #1c46c4;
+  --brand-blue-500: #2f61e8;
+  --brand-blue-400: #6a92ff;
+  --brand-blue-300: #a3bcff;
 
-  --brand-ink: #0b1220;
+  --brand-ink: #060d22;
 
-  /* Merch store palette — deeper blacks, electric blue, gold accents. */
-  --brand-shop-ink: #020609;
-  --brand-shop-bg: #050a0f;
-  --brand-shop-panel: #091018;
-  --brand-blue-electric: #0a66ff;
-  --brand-gold: #d6a321;
-  --brand-shop-muted: #9aa4af;
+  /* The lettering gold. 300 is the highlight, 600 the only one safe on white. */
+  --brand-gold-300: #f6d878;
+  --brand-gold-400: #edc451;
+  --brand-gold-500: #d9a92b;
+  --brand-gold-600: #b98613;
 
-  /* Finance page — black and metallic gold. */
-  --brand-finance-bg: #050505;
-  --brand-finance-panel: #0a0a0a;
-  --brand-gold-300: #f0c45a;
-  --brand-gold-400: #e0b449;
-  --brand-gold-500: #d4a33d;
-  --brand-finance-muted: #b8b8b8;
+  /*
+   * Merch store — the same blue ramp taken darker, not a separate black
+   * palette. The store is a room in the same building.
+   */
+  --brand-shop-ink: #030713;
+  --brand-shop-bg: #050c1d;
+  --brand-shop-panel: #0b1530;
+  --brand-blue-electric: #2a5cff;
+  --brand-shop-muted: #9db0cc;
+
+  /* Financing — navy and gold, with the blue carried through. */
+  --brand-finance-bg: #040a1c;
+  --brand-finance-panel: #0a1533;
+  --brand-finance-muted: #b6c4dc;
+
   --brand-muted: #8fa3c0;
-  --brand-line: #1d3358;
+  --brand-line: #1b3a86;
 }
 
 @theme inline {
@@ -58,20 +83,25 @@
   --color-keyblue-600: var(--brand-blue-600);
   --color-keyblue-500: var(--brand-blue-500);
   --color-keyblue-400: var(--brand-blue-400);
+  --color-keyblue-300: var(--brand-blue-300);
 
   --color-shop-ink: var(--brand-shop-ink);
   --color-shop-bg: var(--brand-shop-bg);
   --color-shop-panel: var(--brand-shop-panel);
   --color-keyblue-electric: var(--brand-blue-electric);
-  --color-keygold: var(--brand-gold);
   --color-shop-muted: var(--brand-shop-muted);
 
   --color-finance-bg: var(--brand-finance-bg);
   --color-finance-panel: var(--brand-finance-panel);
+  --color-finance-muted: var(--brand-finance-muted);
+
+  /* One gold ramp for the whole site. `keygold` is kept as an alias so the
+     store's existing markup keeps working. */
   --color-gold-300: var(--brand-gold-300);
   --color-gold-400: var(--brand-gold-400);
   --color-gold-500: var(--brand-gold-500);
-  --color-finance-muted: var(--brand-finance-muted);
+  --color-gold-600: var(--brand-gold-600);
+  --color-keygold: var(--brand-gold-500);
 
   --color-ink: var(--brand-ink);
   --color-muted: var(--brand-muted);

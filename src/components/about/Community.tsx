@@ -7,7 +7,7 @@ export function Community() {
   return (
     <section className="bg-navy-950 py-8 lg:py-12">
       <Container>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-keyblue-400">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-500">
           Built on Community
         </p>
         <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
@@ -52,7 +52,7 @@ export function Community() {
 
         {STAFF.length > 0 ? (
           <>
-            <h3 className="mt-10 text-sm font-bold uppercase tracking-[0.18em] text-keyblue-400">
+            <h3 className="mt-10 text-sm font-bold uppercase tracking-[0.18em] text-gold-500">
               The Team
             </h3>
 

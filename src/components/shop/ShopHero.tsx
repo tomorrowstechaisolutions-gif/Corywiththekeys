@@ -42,7 +42,7 @@ export function ShopHero() {
 
       <div className="relative order-1 mx-auto w-full max-w-[1400px] px-4 pb-8 pt-12 sm:px-6 lg:order-none lg:px-8 lg:pb-24 lg:pt-24">
         <div className="max-w-xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-keyblue-electric">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold-500">
             Official Merch
           </p>
 
@@ -54,7 +54,7 @@ export function ShopHero() {
               Keys 2
             </span>
             <span
-              className="mt-1 block -skew-x-12 text-[3.25rem] uppercase leading-[0.9] tracking-wide text-keyblue-electric drop-shadow-[0_2px_22px_rgba(10,102,255,0.45)] sm:text-7xl lg:text-[6rem]"
+              className="mt-1 block -skew-x-12 text-[3.25rem] uppercase leading-[0.9] tracking-wide text-gold-500 drop-shadow-[0_2px_22px_rgba(0,0,0,0.85)] sm:text-7xl lg:text-[6rem]"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Success
@@ -68,7 +68,7 @@ export function ShopHero() {
           <div className="mt-7 flex flex-wrap gap-3">
             <Link
               href="#featured-drops"
-              className="bg-keyblue-electric px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff]"
+              className="bg-keyblue-electric px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
             >
               Shop The Collection
             </Link>

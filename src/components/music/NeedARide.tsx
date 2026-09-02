@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 /** Cross-sell back into inventory — the music brings them, the cars pay. */
 export function NeedARide() {
   return (
-    <section className="relative isolate overflow-hidden bg-black text-white">
+    <section className="relative isolate overflow-hidden bg-navy-950 text-white">
       <Image
         src="/brand/inventory-hero.webp"
         alt=""

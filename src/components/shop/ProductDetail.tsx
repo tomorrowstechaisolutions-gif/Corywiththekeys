@@ -60,7 +60,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
         <div>
-          <div className="relative aspect-square overflow-hidden border border-white/10 bg-[#0a0e11]">
+          <div className="relative aspect-square overflow-hidden border border-white/10 bg-shop-ink">
             {image ? (
               <Image
                 src={image.src}
@@ -107,7 +107,7 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-keyblue-400">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gold-500">
             {product.category}
           </p>
           <h1 className="mt-2 text-3xl font-extrabold uppercase tracking-tight text-white sm:text-4xl">
@@ -224,7 +224,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => handleAdd(false)}
-              className="flex-1 bg-keyblue-electric py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 bg-keyblue-electric py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={adding || unavailable}
             >
               {unavailable

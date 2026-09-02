@@ -162,7 +162,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
         ) : null}
         <Link
           href="/finance"
-          className="rounded-md bg-keyblue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-keyblue-500"
+          className="rounded-md bg-gold-500 px-5 py-2.5 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
         >
           Get Pre-Approved
         </Link>

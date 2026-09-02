@@ -30,12 +30,12 @@ export function OurStory() {
           {/* The card itself: background, border and rounded corners, clipped. */}
           <div
             aria-hidden
-            className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-[#060d1c]"
+            className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-[#071231]"
           >
             <div className="absolute inset-y-0 left-0 w-full md:w-[24rem]">
-              <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,#0d1729_0px,#0d1729_10px,#070f1e_10px,#070f1e_26px)] opacity-90" />
-              <div className="absolute inset-0 bg-[radial-gradient(120%_75%_at_25%_35%,rgba(91,155,255,0.18),transparent_65%)]" />
-              <div className="absolute inset-y-0 right-0 w-24 bg-[linear-gradient(to_right,transparent,#060d1c)]" />
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,#122a63_0px,#122a63_10px,#0a1740_10px,#0a1740_26px)] opacity-90" />
+              <div className="absolute inset-0 bg-[radial-gradient(120%_75%_at_25%_35%,rgba(217,169,43,0.20),transparent_65%)]" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-[linear-gradient(to_right,transparent,#071231)]" />
             </div>
           </div>
 
@@ -60,7 +60,7 @@ export function OurStory() {
             </div>
 
             <div className="p-6 pt-2 sm:p-8 sm:pt-4 md:pt-8 md:pl-8 lg:py-12 lg:pl-11 lg:pr-12">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-keyblue-400">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold-500">
                 {STORY.eyebrow}
               </p>
 
@@ -70,7 +70,7 @@ export function OurStory() {
 
               <span
                 aria-hidden
-                className="mt-4 block h-0.5 w-14 rounded-full bg-keyblue-500"
+                className="mt-4 block h-1 w-14 rounded-full bg-gold-500"
               />
 
               <div className="mt-5 max-w-xl space-y-4 text-sm leading-relaxed text-white/75 sm:text-base">
@@ -80,7 +80,7 @@ export function OurStory() {
               </div>
 
               <p
-                className="mt-7 text-5xl leading-none text-keyblue-500"
+                className="mt-7 text-5xl leading-none text-gold-500"
                 style={{ fontFamily: "var(--font-signature)" }}
               >
                 {STORY.signature}

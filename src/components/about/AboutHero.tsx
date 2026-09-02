@@ -22,7 +22,7 @@ export function AboutHero() {
   const external = Boolean(STORY_VIDEO_URL);
 
   return (
-    <section className="relative isolate flex min-h-[32rem] items-end overflow-hidden bg-black text-white lg:min-h-[40rem] lg:items-center">
+    <section className="relative isolate flex min-h-[32rem] items-end overflow-hidden bg-navy-950 text-white lg:min-h-[40rem] lg:items-center">
       <div className="absolute inset-y-0 right-0 w-full lg:w-[64%]">
         <Image
           src={HERO.image}
@@ -41,7 +41,7 @@ export function AboutHero() {
 
       <Container className="relative py-12 lg:py-20">
         <div className="max-w-xl">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-keyblue-400">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gold-500">
             {HERO.eyebrow}
           </p>
 
@@ -53,7 +53,7 @@ export function AboutHero() {
               {HERO.name}
             </span>
             <span
-              className="mt-1 block -skew-x-12 text-3xl uppercase leading-[0.95] tracking-wide text-keyblue-500 drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:text-4xl lg:text-5xl"
+              className="mt-1 block -skew-x-12 text-3xl uppercase leading-[0.95] tracking-wide text-gold-500 drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:text-4xl lg:text-5xl"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {HERO.script}

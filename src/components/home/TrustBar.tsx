@@ -30,13 +30,19 @@ export function TrustBar() {
         <h2 className="text-center text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
           Why Choose The <span className="text-keyblue-600">Key Konnect</span>?
         </h2>
+        {/* Gold reads at 2.2:1 as text on white — as a filled rule it carries
+            the brand without asking anyone to read it. */}
+        <span
+          aria-hidden
+          className="mx-auto mt-4 block h-1 w-16 rounded-full bg-gold-500"
+        />
 
         <ul className="mt-9 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {REASONS.map((reason) => (
             <li key={reason.title} className="text-center">
               <span
                 aria-hidden
-                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-keyblue-600/10 text-2xl"
+                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-navy-900 text-2xl ring-2 ring-gold-500/60"
               >
                 {reason.icon}
               </span>

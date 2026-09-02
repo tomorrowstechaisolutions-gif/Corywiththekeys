@@ -13,7 +13,7 @@ import { LINKTREE_URL } from "@/data/cory-links";
  */
 export function MusicHeroSection() {
   return (
-    <section className="relative isolate flex min-h-[34rem] items-end overflow-hidden bg-black text-white lg:min-h-[40rem] lg:items-center">
+    <section className="relative isolate flex min-h-[34rem] items-end overflow-hidden bg-navy-950 text-white lg:min-h-[40rem] lg:items-center">
       <div className="absolute inset-0">
         <MusicHeroMedia />
       </div>
@@ -25,7 +25,7 @@ export function MusicHeroSection() {
 
       <Container className="relative py-12 lg:py-20">
         <div className="max-w-xl">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-keyblue-400">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gold-500">
             Official Music
           </p>
 
@@ -33,7 +33,7 @@ export function MusicHeroSection() {
             <span className="block text-6xl font-extrabold leading-[0.85] tracking-tighter text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)] sm:text-7xl lg:text-8xl">
               Cory
             </span>
-            <span className="mt-1 block font-serif text-3xl font-bold italic leading-tight tracking-tight text-keyblue-400 drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)] sm:text-4xl lg:text-5xl">
+            <span className="mt-1 block font-serif text-3xl font-bold italic leading-tight tracking-tight text-gold-500 drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)] sm:text-4xl lg:text-5xl">
               With The Keys
             </span>
           </h1>

@@ -33,7 +33,7 @@ export function HomeHero() {
 
       <Container className="relative py-12 lg:py-24">
         <div className="max-w-xl">
-          <p className="text-sm font-bold uppercase tracking-[0.28em] text-white/90 sm:text-base">
+          <p className="text-sm font-bold uppercase tracking-[0.28em] text-gold-500 sm:text-base">
             The Official
           </p>
 
@@ -56,7 +56,7 @@ export function HomeHero() {
             </Link>
             <Link
               href="/finance"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 px-6 py-3.5 text-sm font-bold transition hover:border-white hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-gold-500 px-6 py-3.5 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
             >
               Apply Now <span aria-hidden>→</span>
             </Link>
@@ -68,7 +68,7 @@ export function HomeHero() {
           >
             <span
               aria-hidden
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-keyblue-600 text-lg"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-500 text-lg text-navy-950"
             >
               ✆
             </span>

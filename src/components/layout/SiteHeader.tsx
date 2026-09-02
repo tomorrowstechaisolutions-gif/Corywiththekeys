@@ -5,17 +5,23 @@ import { SiteNav } from "@/components/layout/SiteNav";
 import { Container } from "@/components/ui/Container";
 import { CONTACT, SITE } from "@/lib/constants";
 
-/** Public site header. Dark navy bar, brand left, nav centre, CTAs right. */
+/**
+ * Public site header.
+ *
+ * Royal blue bar with a gold hairline along the bottom — the truck's colours
+ * in the order they appear on the truck. "Get Approved" is gold because gold
+ * is reserved site-wide for the one action that matters most: applying.
+ */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-navy-950 text-white">
+    <header className="sticky top-0 z-50 border-b-2 border-gold-500/45 bg-navy-950 text-white">
       <Container>
         <div className="flex h-16 items-center justify-between gap-4 lg:h-[72px]">
           <Link href="/" className="flex shrink-0 flex-col leading-none">
             <span className="font-serif text-xl font-bold italic tracking-tight lg:text-2xl">
               {SITE.name}
             </span>
-            <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-keyblue-400 lg:text-[9px]">
+            <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-gold-500 lg:text-[9px]">
               {SITE.tagline}
             </span>
           </Link>
@@ -31,7 +37,7 @@ export function SiteHeader() {
             </a>
             <Link
               href="/finance"
-              className="rounded-md bg-keyblue-600 px-3.5 py-2 text-xs font-bold leading-tight transition hover:bg-keyblue-500 sm:px-4 sm:text-sm"
+              className="rounded-md bg-gold-500 px-3.5 py-2 text-xs font-bold leading-tight text-navy-950 transition hover:bg-gold-400 sm:px-4 sm:text-sm"
             >
               Get Approved
             </Link>

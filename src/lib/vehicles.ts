@@ -203,7 +203,7 @@ export function vehicleBadge(vehicle: {
   created_at: string;
 }): VehicleBadge | null {
   if (vehicle.is_featured) {
-    return { label: "Featured", className: "bg-keyblue-600 text-white" };
+    return { label: "Featured", className: "bg-gold-500 text-navy-950" };
   }
 
   if (
@@ -220,7 +220,7 @@ export function vehicleBadge(vehicle: {
   }
 
   if (vehicle.source === "partner") {
-    return { label: "Partner Lot", className: "bg-violet-600 text-white" };
+    return { label: "Partner Lot", className: "bg-navy-800 text-white" };
   }
 
   return null;

@@ -18,7 +18,7 @@ export function SectionHeading({
 }) {
   return (
     <div id={id} className="flex flex-wrap items-baseline justify-between gap-3 scroll-mt-20">
-      <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-keyblue-400 sm:text-base">
+      <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-gold-500 sm:text-base">
         {title}
       </h2>
       {viewAllUrl && viewAllLabel ? (

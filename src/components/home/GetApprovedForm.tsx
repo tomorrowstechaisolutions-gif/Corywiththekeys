@@ -28,7 +28,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-md bg-keyblue-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-keyblue-500 disabled:cursor-not-allowed disabled:opacity-60"
+      className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-md bg-gold-500 px-6 py-3 text-sm font-bold text-navy-950 transition hover:bg-gold-400 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Sending…" : "Get Started"}
       {pending ? null : <span aria-hidden>→</span>}
@@ -62,7 +62,7 @@ export function GetApprovedForm() {
     return (
       <div
         role="status"
-        className="flex h-full flex-col justify-center rounded-xl bg-navy-900 p-8 text-center text-white"
+        className="flex h-full flex-col justify-center rounded-xl border-t-4 border-gold-500 bg-navy-900 p-8 text-center text-white"
       >
         <p className="text-2xl font-extrabold">You&rsquo;re in.</p>
         <p className="mt-3 text-sm leading-relaxed text-white/80">
@@ -70,7 +70,7 @@ export function GetApprovedForm() {
         </p>
         <a
           href={CONTACT.phoneHref}
-          className="mt-5 inline-flex items-center justify-center rounded-md bg-keyblue-600 px-5 py-3 text-sm font-bold transition hover:bg-keyblue-500"
+          className="mt-5 inline-flex items-center justify-center rounded-md bg-gold-500 px-5 py-3 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
         >
           Call or text {CONTACT.phone}
         </a>
@@ -82,7 +82,7 @@ export function GetApprovedForm() {
     <form
       action={formAction}
       noValidate
-      className="rounded-xl bg-navy-900 p-6 text-white sm:p-7"
+      className="rounded-xl border-t-4 border-gold-500 bg-navy-900 p-6 text-white sm:p-7"
     >
       <h2 className="text-xl font-extrabold">Get Approved Fast</h2>
       <p className="mt-1 text-sm text-white/70">

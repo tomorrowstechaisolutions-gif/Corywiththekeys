@@ -32,7 +32,7 @@ export function InventoryHero() {
 
       <Container className="relative py-10 lg:py-20">
         <div className="max-w-xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-keyblue-400">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold-500">
             Inventory
           </p>
 
@@ -48,7 +48,7 @@ export function InventoryHero() {
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/finance"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-keyblue-600 px-6 py-3.5 text-sm font-bold transition hover:bg-keyblue-500"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-gold-500 px-6 py-3.5 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
             >
               Get Pre-Approved <span aria-hidden>→</span>
             </Link>

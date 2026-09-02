@@ -18,7 +18,7 @@ import {
 } from "@/lib/validation/finance";
 
 const FIELD =
-  "min-h-12 w-full rounded-md border border-gold-500/30 bg-black/50 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/25";
+  "min-h-12 w-full rounded-md border border-keyblue-600/45 bg-navy-950/60 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/25";
 
 const LABEL =
   "block text-[10px] font-bold uppercase tracking-wider text-finance-muted";
@@ -87,7 +87,7 @@ export function FinanceLeadForm() {
   return (
     <section id="what-are-you-looking-for" className="scroll-mt-24 bg-finance-bg pb-14">
       <Container>
-        <div className="rounded-lg border border-gold-500/30 bg-finance-panel p-6 sm:p-8">
+        <div className="rounded-lg border border-keyblue-600/45 bg-finance-panel p-6 sm:p-8">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold-500">
             Optional — before you apply
           </p>

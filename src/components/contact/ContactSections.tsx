@@ -41,7 +41,7 @@ function SocialRow({ className = "" }: { className?: string }) {
  */
 export function ContactHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-black text-white">
+    <section className="relative isolate overflow-hidden bg-navy-950 text-white">
       <div className="absolute inset-y-0 right-0 hidden w-[62%] lg:block">
         <Image
           src={HERO.image}
@@ -59,7 +59,7 @@ export function ContactHero() {
 
       <Container className="relative py-12 lg:py-20">
         <div className="max-w-xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-keyblue-400">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold-500">
             {HERO.eyebrow}
           </p>
 
@@ -175,7 +175,7 @@ export function ContactInfoCards() {
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-keyblue-400 transition hover:gap-2.5 hover:text-white"
+              className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-gold-500 transition hover:gap-2.5 hover:text-white"
             >
               Get Directions <span aria-hidden>→</span>
             </a>
@@ -203,7 +203,7 @@ export function NextRideCta() {
 
   return (
     <Container className="py-8">
-      <div className="relative isolate overflow-hidden rounded-xl border border-keyblue-600/40 bg-black">
+      <div className="relative isolate overflow-hidden rounded-xl border border-keyblue-600/40 bg-navy-950">
         <div className="absolute inset-y-0 right-0 w-[70%] sm:w-[62%]">
           <Image
             src={CTA.image}
@@ -220,7 +220,7 @@ export function NextRideCta() {
         </div>
 
         <div className="relative max-w-lg px-5 py-10 sm:px-8 sm:py-14">
-          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-keyblue-400">
+          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-gold-500">
             {CTA.eyebrow}
           </p>
           <h2 className="mt-3 text-3xl font-extrabold uppercase leading-[0.98] tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -239,7 +239,7 @@ export function NextRideCta() {
             </Link>
             <Link
               href="/finance"
-              className="rounded-md border border-white/35 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white hover:bg-white/10"
+              className="rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-wider text-navy-950 transition hover:bg-gold-400"
             >
               Get Approved
             </Link>

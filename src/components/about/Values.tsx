@@ -50,7 +50,7 @@ export function Values() {
   return (
     <section className="bg-navy-950 py-8 lg:py-12">
       <Container>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-keyblue-400">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-500">
           What We Stand For
         </p>
         <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">

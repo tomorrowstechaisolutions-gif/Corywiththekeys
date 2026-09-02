@@ -27,7 +27,7 @@ export function MobileFinanceCTA() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-gold-500/35 bg-finance-bg/95 p-3 backdrop-blur transition-transform duration-300 lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-keyblue-600/50 bg-finance-bg/95 p-3 backdrop-blur transition-transform duration-300 lg:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
       // Kept out of the tab order while off-screen, so it is not a focus trap.

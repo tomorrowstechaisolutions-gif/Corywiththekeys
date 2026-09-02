@@ -91,7 +91,7 @@ export function CartDrawer() {
             <Link
               href="/shop#featured-drops"
               onClick={close}
-              className="mt-2 bg-keyblue-electric px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff]"
+              className="mt-2 bg-keyblue-electric px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
             >
               Shop The Collection
             </Link>
@@ -186,7 +186,7 @@ export function CartDrawer() {
                 <Link
                   href="/shop/checkout"
                   onClick={close}
-                  className="mt-4 block bg-keyblue-electric py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff]"
+                  className="mt-4 block bg-keyblue-electric py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
                 >
                   Checkout
                 </Link>
@@ -194,7 +194,7 @@ export function CartDrawer() {
                 <div className="mt-4">
                   <a
                     href={`sms:${CONTACT.phoneHref.replace("tel:", "")}`}
-                    className="block bg-keyblue-electric py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#3a84ff]"
+                    className="block bg-keyblue-electric py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
                   >
                     Text Cory To Order
                   </a>
