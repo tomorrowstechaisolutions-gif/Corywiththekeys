@@ -74,6 +74,65 @@ Note also that robots.txt permission is not terms-of-service permission. Dealer
 sites commonly prohibit automated extraction in their ToS, and that is a legal
 question for the business to answer, not a technical one.
 
+## Decision: we do not scrape. Settled.
+
+Both permitted sites were inspected in full before this was decided, so the
+decision rests on what is actually there rather than on principle.
+
+**What the inspection found**
+
+McLeod (DealerOn) publishes schema.org JSON-LD on every listing: VIN, year,
+make, model, trim, price, body type, fuel, engine, description, plus mileage
+and exterior/interior colour in labelled spec fields, and 25+ photos per car on
+a predictable URL pattern. 208 vehicles, paginated 12 to a page. Technically
+this was very tractable.
+
+Platinum Autoplex (AutoRevolution) publishes JSON-LD too, but the data is thin:
+VIN, year, make, model, trim, body, transmission, engine, drivetrain, fuel and
+MPG — and nothing else. No price anywhere on the site; every car is "CALL FOR
+PRICE" and the JSON-LD carries a placeholder `price: 1`. No mileage on any
+page. One photo per vehicle, portrait, 481x640.
+
+**Why we are not doing it anyway**
+
+A concrete example of the hazard, found in the first record examined. McLeod's
+description field reads:
+
+> Odometer is 32826 miles below market average!
+
+That is marketing copy about being below average. The car's actual odometer
+reading is 53,660, in a separate labelled field. A reasonable regex over the
+description publishes 32,826 miles on a car with 53,660 on it.
+
+That one is avoidable — read the labelled field. The unavoidable problem is the
+next one. A scraper does not fail loudly; it fails by returning a plausible
+number. When the vendor restyles a template the parse drifts, and the failure
+surfaces as a wrong price or a wrong odometer on a car The Key Konnect does not
+own, shown to a customer who then drives to Killeen for it. Nobody finds out
+until someone complains.
+
+There is also a business fact we do not have: whether Cory's advertised price
+on a partner car is the partner's price. If there is a markup or commission
+arrangement, republishing their number is wrong from the first day no matter
+how good the parser is.
+
+The blast radius is Cory's credibility on cars that are not his. That is not a
+reasonable thing to risk to save five phone calls.
+
+**What we do instead** — in the order they pay off:
+
+1. Cory asks each partner for a feed (below). Authorised, from the source,
+   updates when they update. McLeod already emits fully structured data, so
+   for them this is a small ask of DealerOn rather than new work.
+2. A CSV export from the partner's own back office, imported through the
+   admin. Same authority, no vendor ticket, available immediately.
+3. Hand-picked cars entered by staff. Best data quality of the three, and for
+   a personal-brand dealership twenty cars Cory actually stands behind may
+   sell better than two hundred he has never seen.
+
+Revisit only if a partner gives explicit written permission — and even then,
+prefer a feed.
+
 ## Feeds beat scraping anyway
 
 Even where crawling is permitted, a feed is the better instrument:
