@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { IntakeQrPanel } from "@/components/admin/IntakeQrPanel";
 import { Container } from "@/components/ui/Container";
+import { timeAgo } from "@/lib/leads";
 import { canWrite, requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency } from "@/lib/utils";
@@ -52,6 +54,36 @@ export default async function AdminInventoryPage({
 
   const { data: vehicles, error } = await query;
 
+  // Submissions from the phone, oldest first — the one waiting longest is the
+  // one somebody is standing around wondering about.
+  const { data: awaitingReview } = await supabase
+    .from("vehicles")
+    .select("id, year, make, model, trim, vin, mileage, price, intake_at, intake_by")
+    .eq("intake_status", "pending")
+    .order("intake_at", { ascending: true })
+    .limit(50);
+
+  const reviewQueue = awaitingReview ?? [];
+
+  // Looked up separately rather than embedded: `vehicles` now has two foreign
+  // keys into `profiles` (created_by and intake_by), and naming the wrong one
+  // in an embed fails at runtime rather than at compile time.
+  const capturedBy = new Map<string, string>();
+  const capturerIds = [
+    ...new Set(reviewQueue.map((row) => row.intake_by).filter(Boolean)),
+  ] as string[];
+
+  if (capturerIds.length > 0) {
+    const { data: capturers } = await supabase
+      .from("profiles")
+      .select("id, full_name, email")
+      .in("id", capturerIds);
+
+    for (const person of capturers ?? []) {
+      capturedBy.set(person.id, person.full_name?.trim() || person.email);
+    }
+  }
+
   const counts = new Map<string, number>();
   const { data: all } = await supabase.from("vehicles").select("status");
   for (const row of all ?? []) {
@@ -87,6 +119,60 @@ export default async function AdminInventoryPage({
           </Link>
         ) : null}
       </div>
+
+      {reviewQueue.length > 0 ? (
+        <section className="mt-6 overflow-hidden rounded-lg border-2 border-gold-600 bg-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-gold-600 px-4 py-3">
+            <h2 className="text-sm font-bold text-white">
+              Needs review — {reviewQueue.length} vehicle
+              {reviewQueue.length === 1 ? "" : "s"} captured on a phone
+            </h2>
+            <span className="text-xs text-white/80">
+              Nothing here is on the public site yet.
+            </span>
+          </div>
+
+          <ul className="divide-y divide-slate-100">
+            {reviewQueue.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/admin/inventory/${item.id}`}
+                  className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 transition hover:bg-slate-50"
+                >
+                  <span className="min-w-0">
+                    <span className="block font-semibold text-navy-900">
+                      {vehicleTitle(item)}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-navy-700/70">
+                      <span className="font-mono">{item.vin ?? "No VIN"}</span>
+                      {item.mileage !== null
+                        ? ` · ${item.mileage.toLocaleString()} miles`
+                        : ""}
+                      {item.price === null ? " · no price yet" : ""}
+                    </span>
+                  </span>
+
+                  <span className="text-right text-xs text-navy-700/70">
+                    <span className="block">
+                      {(item.intake_by && capturedBy.get(item.intake_by)) ||
+                        "Staff"}
+                    </span>
+                    {item.intake_at ? (
+                      <span className="block">{timeAgo(item.intake_at)}</span>
+                    ) : null}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {canWrite(profile) ? (
+        <div className="mt-6">
+          <IntakeQrPanel />
+        </div>
+      ) : null}
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
         {filters.map((filter) => {

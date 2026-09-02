@@ -13,7 +13,14 @@ import {
   vehicleTitle,
 } from "@/lib/vehicles";
 
+import {
+  approveIntake,
+  returnIntake,
+} from "@/app/admin/intake/actions";
+import { isAdmin } from "@/lib/auth";
+
 import { unlockVehicleFields, updateVehicle } from "../actions";
+import { IntakeReview } from "./IntakeReview";
 import { VehicleForm } from "../VehicleForm";
 import { PhotoManager, type PhotoItem } from "./PhotoManager";
 
@@ -24,11 +31,11 @@ export default async function EditVehiclePage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ created?: string }>;
+  searchParams: Promise<{ created?: string; approved?: string }>;
 }) {
   const profile = await requireSection("inventory");
   const { id } = await params;
-  const { created } = await searchParams;
+  const { created, approved } = await searchParams;
 
   const supabase = await createClient();
 
@@ -48,6 +55,17 @@ export default async function EditVehiclePage({
     ]);
 
   if (!vehicle) notFound();
+
+  let capturedBy = "Staff";
+  if (vehicle.intake_by) {
+    const { data: person } = await supabase
+      .from("profiles")
+      .select("full_name, email")
+      .eq("id", vehicle.intake_by)
+      .maybeSingle();
+
+    if (person) capturedBy = person.full_name?.trim() || person.email;
+  }
 
   const editable = canWrite(profile);
 
@@ -108,6 +126,34 @@ export default async function EditVehiclePage({
         >
           Vehicle created. Add photos below, then set the status to Available to
           publish it.
+        </p>
+      ) : null}
+
+      {approved ? (
+        <p
+          role="status"
+          className="mt-5 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+        >
+          {approved === "nopriced"
+            ? "Accepted. It is saved as a draft — set a price and change the status to Available to publish it."
+            : "Accepted and published. It is live on the inventory page now."}
+        </p>
+      ) : null}
+
+      {vehicle.intake_status === "pending" && isAdmin(profile) ? (
+        <IntakeReview
+          approve={approveIntake.bind(null, vehicle.id)}
+          returnAction={returnIntake.bind(null, vehicle.id)}
+          hasPrice={vehicle.price !== null}
+          capturedBy={capturedBy}
+          submittedAt={vehicle.intake_at}
+        />
+      ) : null}
+
+      {vehicle.intake_status === "pending" && !isAdmin(profile) ? (
+        <p className="mt-5 rounded-md border border-gold-600/40 bg-amber-50 px-3 py-2 text-sm text-navy-800">
+          Captured on a phone by {capturedBy}. An admin or Cory has to accept it
+          before it can go on the site.
         </p>
       ) : null}
 

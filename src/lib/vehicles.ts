@@ -36,6 +36,7 @@ export const INGESTION_LABELS: Record<IngestionMethod, string> = {
   xml_feed: "XML feed",
   json_api: "JSON API",
   partner_api: "Partner API",
+  mobile_intake: "Phone intake",
 };
 
 /** Statuses that make a vehicle visible on the public site. */

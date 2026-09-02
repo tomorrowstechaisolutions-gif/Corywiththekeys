@@ -1632,6 +1632,10 @@ export type Database = {
           id: string
           ingestion_method: Database["public"]["Enums"]["ingestion_method"]
           interior_color: string | null
+          intake_at: string | null
+          intake_by: string | null
+          intake_note: string | null
+          intake_status: Database["public"]["Enums"]["intake_status"] | null
           is_featured: boolean
           last_synced_at: string | null
           locked_fields: string[]
@@ -1683,6 +1687,10 @@ export type Database = {
           id?: string
           ingestion_method?: Database["public"]["Enums"]["ingestion_method"]
           interior_color?: string | null
+          intake_at?: string | null
+          intake_by?: string | null
+          intake_note?: string | null
+          intake_status?: Database["public"]["Enums"]["intake_status"] | null
           is_featured?: boolean
           last_synced_at?: string | null
           locked_fields?: string[]
@@ -1734,6 +1742,10 @@ export type Database = {
           id?: string
           ingestion_method?: Database["public"]["Enums"]["ingestion_method"]
           interior_color?: string | null
+          intake_at?: string | null
+          intake_by?: string | null
+          intake_note?: string | null
+          intake_status?: Database["public"]["Enums"]["intake_status"] | null
           is_featured?: boolean
           last_synced_at?: string | null
           locked_fields?: string[]
@@ -1963,6 +1975,8 @@ export type Database = {
         | "xml_feed"
         | "json_api"
         | "partner_api"
+        | "mobile_intake"
+      intake_status: "in_progress" | "pending" | "approved" | "returned"
       lead_event_type:
         | "note"
         | "status_change"
@@ -2220,7 +2234,9 @@ export const Constants = {
         "xml_feed",
         "json_api",
         "partner_api",
+        "mobile_intake",
       ],
+      intake_status: ["in_progress", "pending", "approved", "returned"],
       lead_event_type: [
         "note",
         "status_change",
@@ -2235,6 +2251,7 @@ export const Constants = {
         "prequalification",
         "trade_in",
         "contact_form",
+        "page_assistant",
         "phone",
         "walk_in",
         "referral",
