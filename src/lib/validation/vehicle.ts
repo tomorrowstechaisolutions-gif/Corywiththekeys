@@ -18,6 +18,43 @@ export const VEHICLE_STATUSES = [
 
 export const VEHICLE_SOURCES = ["owned", "partner"] as const;
 
+export const TITLE_STATUSES = [
+  "clean",
+  "salvage",
+  "rebuilt",
+  "flood",
+  "lemon",
+  "not_disclosed",
+] as const;
+
+export const WARRANTY_STATUSES = [
+  "as_is",
+  "remaining_factory",
+  "dealer_warranty",
+  "certified",
+  "not_specified",
+] as const;
+
+export type TitleStatus = (typeof TITLE_STATUSES)[number];
+export type WarrantyStatus = (typeof WARRANTY_STATUSES)[number];
+
+export const TITLE_STATUS_LABELS: Record<TitleStatus, string> = {
+  clean: "Clean title",
+  salvage: "Salvage title",
+  rebuilt: "Rebuilt / reconstructed title",
+  flood: "Flood damage",
+  lemon: "Manufacturer buyback (lemon law)",
+  not_disclosed: "Not disclosed yet",
+};
+
+export const WARRANTY_STATUS_LABELS: Record<WarrantyStatus, string> = {
+  as_is: "Sold as-is, no warranty",
+  remaining_factory: "Remaining factory warranty",
+  dealer_warranty: "Dealer warranty included",
+  certified: "Certified pre-owned",
+  not_specified: "Not specified yet",
+};
+
 const emptyToNull = (value: unknown) =>
   typeof value === "string" && value.trim() === "" ? null : value;
 
@@ -69,6 +106,24 @@ const featureList = z.preprocess((v) => {
     .slice(0, 60);
 }, z.array(z.string().max(80)).max(60));
 
+/**
+ * A link we will render as a button. Only http(s) — a `javascript:` URL in an
+ * href is a stored XSS, and these fields are typed by staff into a form that
+ * ends up on a public page.
+ */
+const url = (max: number) =>
+  z.preprocess(
+    (v) => (typeof v === "string" ? emptyToNull(v.trim()) : emptyToNull(v)),
+    z
+      .string()
+      .max(max)
+      .refine(
+        (value) => /^https?:\/\//i.test(value),
+        "Paste the full link, starting with https://",
+      )
+      .nullable(),
+  );
+
 const uuidOrNull = z.preprocess(
   emptyToNull,
   z.string().uuid("Pick a partner lot from the list.").nullable(),
@@ -114,6 +169,11 @@ export const VehicleSchema = z
     drivetrain: text(40),
     fuel_type: text(40),
     engine: text(60),
+    cylinders: wholeNumber(16),
+    doors: wholeNumber(8),
+    seating: wholeNumber(20),
+    mpg_city: wholeNumber(200),
+    mpg_highway: wholeNumber(200),
 
     price: money,
     monthly_payment: money,
@@ -121,6 +181,12 @@ export const VehicleSchema = z
 
     description: text(4000),
     features: featureList,
+
+    title_status: z.enum(TITLE_STATUSES),
+    history_report_url: url(500),
+    warranty_status: z.enum(WARRANTY_STATUSES),
+    warranty_details: text(500),
+    video_url: url(500),
 
     status: z.enum(VEHICLE_STATUSES),
     is_featured: checkbox,
@@ -134,6 +200,18 @@ export const VehicleSchema = z
     message: "Pick which partner lot this vehicle belongs to.",
     path: ["partner_lot_id"],
   })
+  // Publishing without answering the title question is how an undisclosed
+  // branded title reaches a buyer. Draft is fine; live is not.
+  .refine(
+    (data) =>
+      !["available", "pending"].includes(data.status) ||
+      data.title_status !== "not_disclosed",
+    {
+      message:
+        "Say what the title is before publishing. Buyers are entitled to know, and “not disclosed” must never be what a live listing says.",
+      path: ["title_status"],
+    },
+  )
   // A published vehicle with no price is a support call waiting to happen.
   .refine(
     (data) =>

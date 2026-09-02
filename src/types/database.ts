@@ -1424,7 +1424,9 @@ export type Database = {
           body_type: string | null
           created_at: string
           created_by: string | null
+          cylinders: number | null
           description: string | null
+          doors: number | null
           down_payment: number | null
           drivetrain: string | null
           engine: string | null
@@ -1433,6 +1435,7 @@ export type Database = {
           features: string[]
           feed_id: string | null
           fuel_type: string | null
+          history_report_url: string | null
           id: string
           ingestion_method: Database["public"]["Enums"]["ingestion_method"]
           interior_color: string | null
@@ -1443,10 +1446,13 @@ export type Database = {
           mileage: number | null
           model: string
           monthly_payment: number | null
+          mpg_city: number | null
+          mpg_highway: number | null
           partner_lot_id: string | null
           previous_price: number | null
           price: number | null
           price_changed_at: string | null
+          seating: number | null
           slug: string
           sold_at: string | null
           source: Database["public"]["Enums"]["vehicle_source"]
@@ -1455,17 +1461,23 @@ export type Database = {
           stock_number: string | null
           sync_enabled: boolean
           sync_state: Database["public"]["Enums"]["sync_state"]
+          title_status: Database["public"]["Enums"]["title_status"]
           transmission: string | null
           trim: string | null
           updated_at: string
+          video_url: string | null
           vin: string | null
+          warranty_details: string | null
+          warranty_status: Database["public"]["Enums"]["warranty_status"]
           year: number
         }
         Insert: {
           body_type?: string | null
           created_at?: string
           created_by?: string | null
+          cylinders?: number | null
           description?: string | null
+          doors?: number | null
           down_payment?: number | null
           drivetrain?: string | null
           engine?: string | null
@@ -1474,6 +1486,7 @@ export type Database = {
           features?: string[]
           feed_id?: string | null
           fuel_type?: string | null
+          history_report_url?: string | null
           id?: string
           ingestion_method?: Database["public"]["Enums"]["ingestion_method"]
           interior_color?: string | null
@@ -1484,10 +1497,13 @@ export type Database = {
           mileage?: number | null
           model: string
           monthly_payment?: number | null
+          mpg_city?: number | null
+          mpg_highway?: number | null
           partner_lot_id?: string | null
           previous_price?: number | null
           price?: number | null
           price_changed_at?: string | null
+          seating?: number | null
           slug: string
           sold_at?: string | null
           source?: Database["public"]["Enums"]["vehicle_source"]
@@ -1496,17 +1512,23 @@ export type Database = {
           stock_number?: string | null
           sync_enabled?: boolean
           sync_state?: Database["public"]["Enums"]["sync_state"]
+          title_status?: Database["public"]["Enums"]["title_status"]
           transmission?: string | null
           trim?: string | null
           updated_at?: string
+          video_url?: string | null
           vin?: string | null
+          warranty_details?: string | null
+          warranty_status?: Database["public"]["Enums"]["warranty_status"]
           year: number
         }
         Update: {
           body_type?: string | null
           created_at?: string
           created_by?: string | null
+          cylinders?: number | null
           description?: string | null
+          doors?: number | null
           down_payment?: number | null
           drivetrain?: string | null
           engine?: string | null
@@ -1515,6 +1537,7 @@ export type Database = {
           features?: string[]
           feed_id?: string | null
           fuel_type?: string | null
+          history_report_url?: string | null
           id?: string
           ingestion_method?: Database["public"]["Enums"]["ingestion_method"]
           interior_color?: string | null
@@ -1525,10 +1548,13 @@ export type Database = {
           mileage?: number | null
           model?: string
           monthly_payment?: number | null
+          mpg_city?: number | null
+          mpg_highway?: number | null
           partner_lot_id?: string | null
           previous_price?: number | null
           price?: number | null
           price_changed_at?: string | null
+          seating?: number | null
           slug?: string
           sold_at?: string | null
           source?: Database["public"]["Enums"]["vehicle_source"]
@@ -1537,10 +1563,14 @@ export type Database = {
           stock_number?: string | null
           sync_enabled?: boolean
           sync_state?: Database["public"]["Enums"]["sync_state"]
+          title_status?: Database["public"]["Enums"]["title_status"]
           transmission?: string | null
           trim?: string | null
           updated_at?: string
+          video_url?: string | null
           vin?: string | null
+          warranty_details?: string | null
+          warranty_status?: Database["public"]["Enums"]["warranty_status"]
           year?: number
         }
         Relationships: [
@@ -1782,6 +1812,13 @@ export type Database = {
         | "rejected_duplicate"
         | "error"
       sync_state: "not_synced" | "synced" | "stale" | "error" | "orphaned"
+      title_status:
+        | "clean"
+        | "salvage"
+        | "rebuilt"
+        | "flood"
+        | "lemon"
+        | "not_disclosed"
       trade_in_status:
         | "submitted"
         | "appraising"
@@ -1792,6 +1829,12 @@ export type Database = {
       user_role: "admin" | "sales" | "viewer"
       vehicle_source: "owned" | "partner"
       vehicle_status: "draft" | "available" | "pending" | "sold" | "archived"
+      warranty_status:
+        | "as_is"
+        | "remaining_factory"
+        | "dealer_warranty"
+        | "certified"
+        | "not_specified"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2024,6 +2067,14 @@ export const Constants = {
         "error",
       ],
       sync_state: ["not_synced", "synced", "stale", "error", "orphaned"],
+      title_status: [
+        "clean",
+        "salvage",
+        "rebuilt",
+        "flood",
+        "lemon",
+        "not_disclosed",
+      ],
       trade_in_status: [
         "submitted",
         "appraising",
@@ -2035,6 +2086,13 @@ export const Constants = {
       user_role: ["admin", "sales", "viewer"],
       vehicle_source: ["owned", "partner"],
       vehicle_status: ["draft", "available", "pending", "sold", "archived"],
+      warranty_status: [
+        "as_is",
+        "remaining_factory",
+        "dealer_warranty",
+        "certified",
+        "not_specified",
+      ],
     },
   },
 } as const

@@ -15,8 +15,12 @@ import {
 import type { PartnerLot, Vehicle } from "@/lib/vehicles";
 import { STATUS_LABELS } from "@/lib/vehicles";
 import {
+  TITLE_STATUS_LABELS,
+  TITLE_STATUSES,
   VEHICLE_SOURCES,
   VEHICLE_STATUSES,
+  WARRANTY_STATUS_LABELS,
+  WARRANTY_STATUSES,
 } from "@/lib/validation/vehicle";
 
 import type { FormState } from "./actions";
@@ -174,6 +178,129 @@ export function VehicleForm({
         </Field>
         <Field label="Engine" htmlFor="engine" error={err("engine")}>
           <TextInput id="engine" name="engine" defaultValue={vehicle?.engine ?? ""} />
+        </Field>
+        <Field label="Cylinders" htmlFor="cylinders" error={err("cylinders")}>
+          <TextInput
+            id="cylinders"
+            name="cylinders"
+            inputMode="numeric"
+            defaultValue={vehicle?.cylinders ?? ""}
+          />
+        </Field>
+        <Field label="Doors" htmlFor="doors" error={err("doors")}>
+          <TextInput
+            id="doors"
+            name="doors"
+            inputMode="numeric"
+            defaultValue={vehicle?.doors ?? ""}
+          />
+        </Field>
+        <Field label="Seats" htmlFor="seating" error={err("seating")}>
+          <TextInput
+            id="seating"
+            name="seating"
+            inputMode="numeric"
+            defaultValue={vehicle?.seating ?? ""}
+          />
+        </Field>
+        <Field label="MPG city" htmlFor="mpg_city" error={err("mpg_city")}>
+          <TextInput
+            id="mpg_city"
+            name="mpg_city"
+            inputMode="numeric"
+            defaultValue={vehicle?.mpg_city ?? ""}
+          />
+        </Field>
+        <Field label="MPG highway" htmlFor="mpg_highway" error={err("mpg_highway")}>
+          <TextInput
+            id="mpg_highway"
+            name="mpg_highway"
+            inputMode="numeric"
+            defaultValue={vehicle?.mpg_highway ?? ""}
+          />
+        </Field>
+      </Fieldset>
+
+      <Fieldset
+        legend="Disclosures"
+        description="What the buyer is entitled to know. A vehicle cannot be published while the title is still unanswered."
+        columns={2}
+      >
+        <Field
+          label="Title status"
+          htmlFor="title_status"
+          error={err("title_status")}
+          hint={lockHint("title_status") ?? "Required before this listing can go live."}
+        >
+          <Select
+            id="title_status"
+            name="title_status"
+            defaultValue={vehicle?.title_status ?? "not_disclosed"}
+          >
+            {TITLE_STATUSES.map((value) => (
+              <option key={value} value={value}>
+                {TITLE_STATUS_LABELS[value]}
+              </option>
+            ))}
+          </Select>
+        </Field>
+
+        <Field
+          label="Vehicle history report"
+          htmlFor="history_report_url"
+          error={err("history_report_url")}
+          hint="Carfax or AutoCheck link. Shows as a button on the listing."
+        >
+          <TextInput
+            id="history_report_url"
+            name="history_report_url"
+            inputMode="url"
+            placeholder="https://www.carfax.com/VehicleHistory/..."
+            defaultValue={vehicle?.history_report_url ?? ""}
+          />
+        </Field>
+
+        <Field label="Warranty" htmlFor="warranty_status" error={err("warranty_status")}>
+          <Select
+            id="warranty_status"
+            name="warranty_status"
+            defaultValue={vehicle?.warranty_status ?? "not_specified"}
+          >
+            {WARRANTY_STATUSES.map((value) => (
+              <option key={value} value={value}>
+                {WARRANTY_STATUS_LABELS[value]}
+              </option>
+            ))}
+          </Select>
+        </Field>
+
+        <Field
+          label="Warranty details"
+          htmlFor="warranty_details"
+          error={err("warranty_details")}
+          hint="Optional. Term, mileage limit, what it covers."
+        >
+          <TextInput
+            id="warranty_details"
+            name="warranty_details"
+            defaultValue={vehicle?.warranty_details ?? ""}
+          />
+        </Field>
+
+        <Field
+          label="Walkaround video"
+          htmlFor="video_url"
+          error={err("video_url")}
+          hint="YouTube link. Plays on the listing above the specs."
+          className="sm:col-span-2"
+        >
+          <TextInput
+            id="video_url"
+            name="video_url"
+            inputMode="url"
+            placeholder="https://www.youtube.com/watch?v=..."
+            defaultValue={vehicle?.video_url ?? ""}
+          />
         </Field>
       </Fieldset>
 
