@@ -87,7 +87,8 @@ export const STEPS: ProcessStep[] = [
     // Wording fixed by the client. Do not reword.
     body: "They will contact you and work to find the best vehicle and financing options for you.",
     image: "/brand/finance/step-3.webp",
-    imageAlt: "A member of the team taking a call at a desk",
+    imageAlt:
+      "Three members of The Key Konnect team at the sales desk in the office",
   },
 ];
 
