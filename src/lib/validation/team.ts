@@ -2,9 +2,11 @@ import { z } from "zod";
 
 import { ADMIN_SECTIONS } from "@/lib/admin-nav";
 
-export const USER_ROLES = ["admin", "sales", "viewer"] as const;
+export const USER_ROLES = ["owner", "admin", "sales", "viewer"] as const;
 
 export const ROLE_DESCRIPTIONS: Record<(typeof USER_ROLES)[number], string> = {
+  owner:
+    "The business owner. Reaches everything an admin does, and only another owner can change or switch off an owner.",
   admin:
     "Full control, including inviting staff and changing what everyone can reach.",
   sales: "Can add and edit records — vehicles, products, leads, customers.",
@@ -66,9 +68,45 @@ export const MemberSchema = z
   })
   .transform((data) => ({
     ...data,
-    // Admins are never section-restricted — the database trigger enforces the
-    // same thing, this just keeps the form honest about it.
-    sections: data.role === "admin" || !data.restrict ? null : data.sections,
+    // Owners and admins are never section-restricted — the database trigger
+    // enforces the same thing, this just keeps the form honest about it.
+    sections:
+      data.role === "owner" || data.role === "admin" || !data.restrict
+        ? null
+        : data.sections,
   }));
 
 export type MemberInput = z.infer<typeof MemberSchema>;
+
+/** The bit of a profile anybody may change about themselves. */
+export const MyProfileSchema = z.object({
+  fullName: z.preprocess(
+    (v) => (typeof v === "string" ? emptyToNull(v.trim()) : emptyToNull(v)),
+    z.string().max(120).nullable(),
+  ),
+  title: z.preprocess(
+    (v) => (typeof v === "string" ? emptyToNull(v.trim()) : emptyToNull(v)),
+    z.string().max(120).nullable(),
+  ),
+  phone: z.preprocess(
+    (v) => (typeof v === "string" ? emptyToNull(v.trim()) : emptyToNull(v)),
+    z.string().max(40).nullable(),
+  ),
+});
+
+export type MyProfileInput = z.infer<typeof MyProfileSchema>;
+
+/**
+ * Notably absent: role, is_active and sections.
+ *
+ * Nobody promotes themselves from this form, and the RLS policy on profiles
+ * refuses a self-update that changes either one, so leaving them out of the
+ * schema is the first of two locks rather than the only one.
+ */
+export const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
+export const AVATAR_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+] as const;

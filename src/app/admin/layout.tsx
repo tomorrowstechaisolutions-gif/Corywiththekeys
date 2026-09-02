@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
 import { requireStaff } from "@/lib/auth";
+import { avatarUrl } from "@/lib/avatars";
 
 export const metadata: Metadata = {
   title: { default: "Admin", template: "%s | Admin" },
@@ -23,12 +24,13 @@ export default async function AdminLayout({
   children: ReactNode;
 }) {
   const profile = await requireStaff();
+  const photo = await avatarUrl(profile);
 
   return (
     <div className="flex min-h-dvh">
       <AdminSidebar profile={profile} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <AdminTopbar profile={profile} />
+        <AdminTopbar profile={profile} avatarUrl={photo} />
         <main className="flex-1 bg-slate-50">{children}</main>
       </div>
     </div>

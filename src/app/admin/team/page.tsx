@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 
+import { Avatar } from "@/components/admin/Avatar";
 import { Container } from "@/components/ui/Container";
 import { navFor, sectionsForRole } from "@/lib/admin-nav";
 import {
   displayName,
   isAdmin,
+  isOwner,
   requireSection,
   ROLE_LABELS,
   type Profile,
 } from "@/lib/auth";
+import { avatarUrls, initials } from "@/lib/avatars";
 import { serverEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,6 +21,7 @@ import { MemberForm } from "./MemberForm";
 export const metadata: Metadata = { title: "Team" };
 
 const ROLE_STYLES: Record<string, string> = {
+  owner: "bg-gold-600 text-white",
   admin: "bg-keyblue-600 text-white",
   sales: "bg-keyblue-600/10 text-keyblue-700",
   viewer: "bg-slate-200 text-slate-800",
@@ -25,6 +29,7 @@ const ROLE_STYLES: Record<string, string> = {
 
 /** A plain-language summary of what this person can reach. */
 function accessSummary(member: Profile): string {
+  if (member.role === "owner") return "Every section — the owner's seat";
   if (member.role === "admin") return "Every section";
   const allowed = navFor(member);
   if (member.sections === null) {
@@ -46,7 +51,18 @@ export default async function AdminTeamPage() {
     .order("email");
 
   const list = members ?? [];
-  const activeAdmins = list.filter((m) => m.role === "admin" && m.is_active);
+  const photos = await avatarUrls(list);
+
+  // Nobody owns the console yet, so an admin gets to name the first owner.
+  // Once one exists this goes back to owner-only, in the actions and in the
+  // database trigger both.
+  const hasOwner = list.some((m) => m.role === "owner");
+  const canAppointOwner = isOwner(profile) || !hasOwner;
+  // Owner counts: they are a way back in too, so a lone owner alongside a
+  // lone admin is not the "only one way in" situation the warning is about.
+  const activeAdmins = list.filter(
+    (m) => (m.role === "admin" || m.role === "owner") && m.is_active,
+  );
 
   return (
     <Container className="py-8">
@@ -79,7 +95,10 @@ export default async function AdminTeamPage() {
       ) : null}
 
       <div className="mt-6">
-        <InviteForm canInvite={serverEnv.hasServiceRole} />
+        <InviteForm
+          canInvite={serverEnv.hasServiceRole}
+          actorIsOwner={canAppointOwner}
+        />
       </div>
 
       <h2 className="mt-10 text-lg font-bold text-navy-900">
@@ -94,6 +113,11 @@ export default async function AdminTeamPage() {
             open={!member.is_active}
           >
             <summary className="flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 p-5">
+              <Avatar
+                url={photos.get(member.id) ?? null}
+                initials={initials(displayName(member))}
+                size={44}
+              />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-semibold text-navy-900">
                   {displayName(member)}
@@ -138,7 +162,7 @@ export default async function AdminTeamPage() {
 
             <div className="border-t border-slate-200 p-5">
               {isAdmin(profile) ? (
-                <MemberForm member={member} isSelf={member.id === profile.id} />
+                <MemberForm actorIsOwner={canAppointOwner} member={member} isSelf={member.id === profile.id} />
               ) : (
                 <p className="text-sm text-navy-700">
                   Only an admin can change this.

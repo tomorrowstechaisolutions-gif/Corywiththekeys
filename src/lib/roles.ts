@@ -12,10 +12,20 @@ import type { Database } from "@/types/database";
 export type UserRole = Database["public"]["Enums"]["user_role"];
 
 export const ROLE_LABELS: Record<UserRole, string> = {
+  owner: "Owner",
   admin: "Admin",
   sales: "Sales",
   viewer: "Viewer",
 };
 
 /** Roles allowed to change operational data. Mirrors public.can_write(). */
-export const WRITE_ROLES: readonly UserRole[] = ["admin", "sales"];
+export const WRITE_ROLES: readonly UserRole[] = ["owner", "admin", "sales"];
+
+/**
+ * Roles that reach every section. Mirrors public.is_admin().
+ *
+ * Owner and Admin have identical reach on purpose. The difference is not what
+ * they can open, it is that an admin cannot demote the owner or switch him
+ * off — so the person who owns the business cannot be locked out of it.
+ */
+export const FULL_ACCESS_ROLES: readonly UserRole[] = ["owner", "admin"];

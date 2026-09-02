@@ -28,7 +28,14 @@ function InviteButton() {
  * No password field, deliberately. Supabase emails them a link and they choose
  * their own — it never passes through this screen, this app, or Cory's hands.
  */
-export function InviteForm({ canInvite }: { canInvite: boolean }) {
+export function InviteForm({
+  canInvite,
+  actorIsOwner,
+}: {
+  canInvite: boolean;
+  /** Only the owner can bring in another owner. */
+  actorIsOwner: boolean;
+}) {
   const [state, formAction] = useActionState<TeamState, FormData>(
     inviteMember,
     {},
@@ -111,7 +118,9 @@ export function InviteForm({ canInvite }: { canInvite: boolean }) {
             value={role}
             onChange={(event) => setRole(event.target.value as UserRole)}
           >
-            {USER_ROLES.map((value) => (
+            {USER_ROLES.filter(
+              (value) => value !== "owner" || actorIsOwner,
+            ).map((value) => (
               <option key={value} value={value}>
                 {ROLE_LABELS[value]}
               </option>

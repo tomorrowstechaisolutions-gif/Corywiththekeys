@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { navFor, sectionsForRole, type AdminSection } from "@/lib/admin-nav";
-import { WRITE_ROLES, type UserRole } from "@/lib/roles";
+import { FULL_ACCESS_ROLES, WRITE_ROLES, type UserRole } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
@@ -9,14 +9,31 @@ export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 // Re-exported so the many existing importers keep working; the definitions
 // live in lib/roles so client components can reach them too.
-export { ROLE_LABELS, WRITE_ROLES, type UserRole } from "@/lib/roles";
+export {
+  FULL_ACCESS_ROLES,
+  ROLE_LABELS,
+  WRITE_ROLES,
+  type UserRole,
+} from "@/lib/roles";
 
 export function canWrite(profile: Profile): boolean {
   return WRITE_ROLES.includes(profile.role);
 }
 
+/** Owner or admin: everything is open to both. Mirrors public.is_admin(). */
 export function isAdmin(profile: Profile): boolean {
-  return profile.role === "admin";
+  return FULL_ACCESS_ROLES.includes(profile.role);
+}
+
+/**
+ * The owner's seat, which only the owner may hand to anybody else.
+ *
+ * Kept separate from isAdmin because the two answer different questions:
+ * isAdmin is "can they open this", isOwner is "can they change who is in
+ * charge". Enforced in the database too — see protect_owner_seat().
+ */
+export function isOwner(profile: Pick<Profile, "role">): boolean {
+  return profile.role === "owner";
 }
 
 /**

@@ -1,4 +1,4 @@
-import type { UserRole } from "@/lib/roles";
+import { FULL_ACCESS_ROLES, type UserRole } from "@/lib/roles";
 import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -116,21 +116,21 @@ export const ADMIN_NAV: readonly AdminNavItem[] = [
     key: "analytics",
     label: "Analytics",
     href: "/admin/analytics",
-    roles: ["admin"],
+    roles: FULL_ACCESS_ROLES,
     description: "Traffic and performance figures.",
   },
   {
     key: "team",
     label: "Team",
     href: "/admin/team",
-    roles: ["admin"],
+    roles: FULL_ACCESS_ROLES,
     description: "Invite staff and set what they can reach.",
   },
   {
     key: "settings",
     label: "Settings",
     href: "/admin/settings",
-    roles: ["admin"],
+    roles: FULL_ACCESS_ROLES,
     description: "Business details and integrations.",
   },
 ];

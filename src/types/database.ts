@@ -1171,6 +1171,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_path: string | null
           created_at: string
           email: string
           full_name: string | null
@@ -1183,6 +1184,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar_path?: string | null
           created_at?: string
           email: string
           full_name?: string | null
@@ -1195,6 +1197,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar_path?: string | null
           created_at?: string
           email?: string
           full_name?: string | null
@@ -1959,7 +1962,7 @@ export type Database = {
         | "accepted"
         | "declined"
         | "expired"
-      user_role: "admin" | "sales" | "viewer"
+      user_role: "owner" | "admin" | "sales" | "viewer"
       vehicle_source: "owned" | "partner"
       vehicle_status: "draft" | "available" | "pending" | "sold" | "archived"
       warranty_status:
@@ -2216,7 +2219,7 @@ export const Constants = {
         "declined",
         "expired",
       ],
-      user_role: ["admin", "sales", "viewer"],
+      user_role: ["owner", "admin", "sales", "viewer"],
       vehicle_source: ["owned", "partner"],
       vehicle_status: ["draft", "available", "pending", "sold", "archived"],
       warranty_status: [

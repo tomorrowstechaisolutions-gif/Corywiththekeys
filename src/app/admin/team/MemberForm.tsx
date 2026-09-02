@@ -29,9 +29,15 @@ function SaveButton() {
 export function MemberForm({
   member,
   isSelf,
+  actorIsOwner,
 }: {
   member: Profile;
   isSelf: boolean;
+  /**
+   * True for the owner, and also for an admin while no owner exists yet —
+   * somebody has to be able to name the first one.
+   */
+  actorIsOwner: boolean;
 }) {
   const [state, formAction] = useActionState<TeamState, FormData>(
     updateMember,
@@ -45,6 +51,14 @@ export function MemberForm({
   const err = (field: string) => state.fieldErrors?.[field];
   const availableKeys = new Set(sectionsForRole(role).map((item) => item.key));
 
+  // An admin looking at the owner sees the role locked rather than an option
+  // that fails on save. They can still fix the name, title and phone.
+  const ownerSeatLocked = !actorIsOwner && (member.role === "owner" || role === "owner");
+
+  const roleOptions = USER_ROLES.filter(
+    (value) => value !== "owner" || actorIsOwner || member.role === "owner",
+  );
+
   const toggle = (key: string) =>
     setGranted((current) =>
       current.includes(key)
@@ -55,6 +69,20 @@ export function MemberForm({
   return (
     <form action={formAction} noValidate className="space-y-5">
       <input type="hidden" name="id" value={member.id} />
+
+      {/*
+        A disabled control posts nothing, so without these the locked owner
+        row would submit no role and an unticked Active box — and an admin
+        fixing a typo in the owner's name would appear to demote them.
+      */}
+      {ownerSeatLocked ? (
+        <>
+          <input type="hidden" name="role" value={member.role} />
+          {member.is_active ? (
+            <input type="hidden" name="isActive" value="on" />
+          ) : null}
+        </>
+      ) : null}
 
       {state.error ? (
         <p
@@ -116,9 +144,10 @@ export function MemberForm({
             id={`role-${member.id}`}
             name="role"
             value={role}
+            disabled={ownerSeatLocked}
             onChange={(event) => setRole(event.target.value as UserRole)}
           >
-            {USER_ROLES.map((value) => (
+            {roleOptions.map((value) => (
               <option key={value} value={value}>
                 {ROLE_LABELS[value]}
               </option>
@@ -132,10 +161,11 @@ export function MemberForm({
           What they can open
         </legend>
 
-        {role === "admin" ? (
+        {role === "admin" || role === "owner" ? (
           <p className="text-sm text-navy-700">
-            Admins reach every section. That is what makes them an admin — if
-            you want to limit somebody, make them Sales or Viewer instead.
+            {role === "owner" ? "The owner" : "Admins"} reach every section.
+            That is the point of the role — if you want to limit somebody, make
+            them Sales or Viewer instead.
           </p>
         ) : (
           <>
@@ -205,7 +235,8 @@ export function MemberForm({
             type="checkbox"
             name="isActive"
             defaultChecked={member.is_active}
-            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-keyblue-600 focus:ring-keyblue-500"
+            disabled={ownerSeatLocked}
+            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-keyblue-600 focus:ring-keyblue-500 disabled:cursor-not-allowed"
           />
           <span>
             <span className="block text-sm font-medium text-navy-900">
@@ -219,6 +250,13 @@ export function MemberForm({
 
         <SaveButton />
       </div>
+
+      {ownerSeatLocked ? (
+        <p className="text-xs text-navy-700/70">
+          This is the owner&rsquo;s account. Only the owner can change that
+          role or switch it off — you can still fix the details above.
+        </p>
+      ) : null}
 
       {isSelf ? (
         <p className="text-xs text-navy-700/70">

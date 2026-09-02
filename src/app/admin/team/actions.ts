@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { isAdmin, requireSection } from "@/lib/auth";
+import { isAdmin, isOwner, requireSection } from "@/lib/auth";
 import { serverEnv } from "@/lib/env";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import {
@@ -28,6 +28,22 @@ function collectFieldErrors(
   return out;
 }
 
+/**
+ * Is there an owner yet?
+ *
+ * Until there is, an admin may appoint the first one — otherwise the role
+ * could never be used at all, since only an owner can appoint an owner. The
+ * database applies the same one-time exception; see 0021.
+ */
+async function ownerExists(): Promise<boolean> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("role", "owner");
+  return (count ?? 0) > 0;
+}
+
 /** Every action here is admin-only, checked server-side on every call. */
 async function guard() {
   const profile = await requireSection("team");
@@ -49,7 +65,7 @@ export async function inviteMember(
   _prev: TeamState,
   formData: FormData,
 ): Promise<TeamState> {
-  const { denied } = await guard();
+  const { profile, denied } = await guard();
   if (denied) return { error: denied };
 
   const parsed = InviteSchema.safeParse({
@@ -71,6 +87,22 @@ export async function inviteMember(
   }
 
   const input = parsed.data;
+
+  /*
+   * Only an owner appoints an owner.
+   *
+   * This check matters more here than anywhere else: the invite runs on the
+   * service-role key, which bypasses RLS and is waved through by the database
+   * trigger precisely because there is no signed-in user at that point. So
+   * for this one path, the guard in front of it is the guard.
+   */
+  if (input.role === "owner" && !isOwner(profile) && (await ownerExists())) {
+    return {
+      error:
+        "Only the owner can invite somebody as an owner. Invite them as an admin instead.",
+    };
+  }
+
   const admin = createAdminClient();
 
   const { data, error } = await admin.auth.admin.inviteUserByEmail(input.email, {
@@ -138,6 +170,36 @@ export async function updateMember(
   const supabase = await createClient();
 
   /*
+   * The owner's seat.
+   *
+   * The database refuses this too — see protect_owner_seat() — but a refusal
+   * that arrives as a Postgres error code reads as a bug. Catching it here
+   * means an admin gets a sentence explaining why instead.
+   */
+  if (!isOwner(profile)) {
+    const { data: target } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", input.id)
+      .maybeSingle();
+
+    if (target?.role === "owner" && (input.role !== "owner" || !input.isActive)) {
+      return {
+        error:
+          "Only the owner can change or switch off the owner. You can still edit their name, title and phone.",
+      };
+    }
+
+    if (
+      input.role === "owner" &&
+      target?.role !== "owner" &&
+      (await ownerExists())
+    ) {
+      return { error: "Only the owner can make somebody else an owner." };
+    }
+  }
+
+  /*
    * Two locks on the last way in.
    *
    * An admin who demotes or deactivates themselves while they are the only
@@ -145,17 +207,19 @@ export async function updateMember(
    * no screen that can undo it. Both are refused here rather than explained
    * afterwards.
    */
-  if (input.id === profile.id && (input.role !== "admin" || !input.isActive)) {
+  const keepsFullAccess = input.role === "owner" || input.role === "admin";
+
+  if (input.id === profile.id && (!keepsFullAccess || !input.isActive)) {
     const { count } = await supabase
       .from("profiles")
       .select("id", { count: "exact", head: true })
-      .eq("role", "admin")
+      .in("role", ["owner", "admin"])
       .eq("is_active", true);
 
     if ((count ?? 0) <= 1) {
       return {
         error:
-          "You are the only active admin. Promote somebody else to admin first, otherwise nobody can get back in.",
+          "You are the only active admin. Promote somebody else to admin or owner first, otherwise nobody can get back in.",
       };
     }
   }
