@@ -10,6 +10,10 @@ export const RATE_LIMITS = {
   prequalification: { limit: 3, windowSeconds: 1800 },
   trade_in: { limit: 3, windowSeconds: 1800 },
   contact: { limit: 5, windowSeconds: 600 },
+  // The assistant sits on every page, so one person may legitimately open it
+  // twice while browsing. Still tighter than the contact form: it is the
+  // cheapest surface on the site for a script to hammer.
+  assistant: { limit: 4, windowSeconds: 600 },
   // A shopper legitimately asks about several cars in one sitting, so this is
   // looser than the application forms.
   vehicle_inquiry: { limit: 8, windowSeconds: 600 },

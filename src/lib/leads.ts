@@ -58,6 +58,7 @@ export const LEAD_SOURCE_LABELS: Record<LeadSource, string> = {
   prequalification: "Prequalification",
   trade_in: "Trade-in",
   contact_form: "Contact form",
+  page_assistant: "Page assistant",
   find_my_car: "Find my car",
   phone: "Phone call",
   walk_in: "Walk-in",

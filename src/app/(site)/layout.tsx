@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+import { PageAssistant } from "@/components/layout/PageAssistant";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SettingsProvider } from "@/components/providers/SettingsProvider";
@@ -24,6 +25,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
         <SiteHeader settings={settings} />
         <main className="flex-1">{children}</main>
         <SiteFooter settings={settings} />
+        <PageAssistant />
       </div>
     </SettingsProvider>
   );

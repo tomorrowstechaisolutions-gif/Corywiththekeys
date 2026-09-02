@@ -1976,6 +1976,7 @@ export type Database = {
         | "prequalification"
         | "trade_in"
         | "contact_form"
+        | "page_assistant"
         | "phone"
         | "walk_in"
         | "referral"
