@@ -1,11 +1,9 @@
-import Link from "next/link";
-
 import { Container } from "@/components/ui/Container";
 import { createClient } from "@/lib/supabase/server";
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <p className="text-sm tracking-widest text-amber-400" aria-label={`${rating} out of 5`}>
+    <p className="text-sm tracking-widest text-gold-500" aria-label={`${rating} out of 5`}>
       <span aria-hidden>{"★".repeat(rating)}{"☆".repeat(5 - rating)}</span>
     </p>
   );
@@ -57,14 +55,6 @@ export async function CustomerReviews() {
           ))}
         </ul>
 
-        <p className="mt-8 text-center">
-          <Link
-            href="/reviews"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-keyblue-400 transition hover:gap-2.5"
-          >
-            Read all reviews <span aria-hidden>→</span>
-          </Link>
-        </p>
       </Container>
     </section>
   );

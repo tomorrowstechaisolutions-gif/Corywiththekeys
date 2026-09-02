@@ -53,7 +53,7 @@ export function InventoryHero() {
               Get Pre-Approved <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/trade-in"
+              href="/contact?topic=Buy%20a%20car"
               className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 px-6 py-3.5 text-sm font-bold transition hover:border-white hover:bg-white/10"
             >
               Trade In Your Vehicle <span aria-hidden>→</span>

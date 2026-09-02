@@ -36,11 +36,8 @@ export const SITE_NAV = [
   { label: "Home", href: "/" },
   { label: "Inventory", href: "/inventory" },
   { label: "Financing", href: "/finance" },
-  { label: "Trade-In", href: "/trade-in" },
-  { label: "Reviews", href: "/reviews" },
   { label: "Music", href: "/music" },
   { label: "Shop", href: "/shop" },
-  { label: "Media", href: "/media" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
