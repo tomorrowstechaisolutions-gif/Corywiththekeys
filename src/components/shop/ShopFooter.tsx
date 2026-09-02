@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { COLLECTIONS, STORE } from "@/data/shop";
-import { CONTACT, SITE } from "@/lib/constants";
+import { CONTACT, SITE, SOCIAL_LINKS } from "@/lib/constants";
 
 export function ShopFooter() {
   return (
@@ -29,6 +29,22 @@ export function ShopFooter() {
             Official merch from {SITE.personality}. Built on hustle, worn by the
             movement.
           </p>
+
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {SOCIAL_LINKS.filter((social) => social.href).map((social) => (
+              <li key={social.label}>
+                <a
+                  href={social.href as string}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={social.label}
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-[11px] font-bold text-white transition hover:bg-keyblue-electric"
+                >
+                  {social.short}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>

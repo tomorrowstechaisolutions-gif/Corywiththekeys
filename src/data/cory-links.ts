@@ -54,29 +54,32 @@ export type Profile = {
 };
 
 /**
- * Cory's profiles. Only Linktree is confirmed; the rest are waiting on real
- * handles and URLs from Cory.
+ * Cory's profiles. Every URL below was opened and confirmed to resolve to him
+ * — not assumed from a handle. Two supplied links did not, and are recorded
+ * as null rather than shipped broken; see the note under CASH_APP_URL.
  */
 export const PROFILES: Profile[] = [
   {
     key: "tiktok",
     label: "TikTok",
-    handle: "@corywiththekeys",
-    url: null,
+    // Note the spelling: no "ith", matching his YouTube handle. The
+    // @corywiththekeys spelling is a dead account.
+    handle: "@corywthekeys",
+    url: "https://www.tiktok.com/@corywthekeys",
     accent: "bg-black text-white",
   },
   {
     key: "instagram",
     label: "Instagram",
     handle: "@corywiththekeys",
-    url: null,
+    url: "https://www.instagram.com/corywiththekeys",
     accent: "bg-linear-to-br from-fuchsia-600 to-amber-500 text-white",
   },
   {
     key: "facebook",
     label: "Facebook",
-    handle: "/corywiththekeys",
-    url: null,
+    handle: "/iamcorywiththekeys",
+    url: "https://www.facebook.com/iamcorywiththekeys",
     accent: "bg-[#1877F2] text-white",
   },
   {
@@ -90,14 +93,34 @@ export const PROFILES: Profile[] = [
   {
     key: "snapchat",
     label: "Snapchat",
-    handle: "corywiththekeys",
-    url: null,
+    handle: "@corywiththekeys",
+    url: "https://www.snapchat.com/@corywiththekeys",
     accent: "bg-[#FFFC00] text-black",
   },
 ];
 
 /** Confirmed. Kept as a secondary destination — the site is the main event. */
 export const LINKTREE_URL = "https://linktr.ee/corywiththekeys";
+
+/**
+ * Cash App — NOT LIVE, and deliberately not in the social row.
+ *
+ * Two separate reasons, either of which is enough on its own.
+ *
+ * 1. The supplied link 404s. cash.app/$CorywiththeKeys and the lowercase
+ *    spelling both return "Page Not Found". Cory's own Linktree carries the
+ *    same dead link, so it is worth him checking the cashtag really exists.
+ *
+ * 2. Even working, it does not belong beside car listings. A "send money"
+ *    link on a dealership page invites someone to pay a deposit through a
+ *    channel with no buyer protection, and impersonating a dealer to collect
+ *    a Cash App deposit is one of the commonest used-car scams there is. If
+ *    Cory wants tips from his music audience, the place for it is the music
+ *    page, clearly labelled as a tip — not the footer of every page.
+ *
+ * Paste a working cashtag here and decide where it goes, together.
+ */
+export const CASH_APP_URL: ExternalUrl = null;
 
 export type StreamingLinks = {
   spotify: ExternalUrl;

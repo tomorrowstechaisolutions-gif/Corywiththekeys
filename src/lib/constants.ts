@@ -47,23 +47,37 @@ export const SITE_NAV = [
  * the labels are correct, only the hrefs need swapping.
  */
 /**
- * Cory's profiles.
+ * Cory's profiles, for the footer and contact page.
  *
- * A null href means we do not have that profile's URL yet, and the link is
- * not rendered — the placeholders that used to sit here pointed at
- * facebook.com and instagram.com themselves, which sent visitors to a login
- * page rather than to Cory. Paste a real URL to switch one back on.
+ * Every URL here was opened and confirmed to resolve to Cory — not inferred
+ * from a handle. A null href is not rendered at all, because a social icon
+ * that goes nowhere is worse than one that is absent.
  *
- * YouTube and Linktree are confirmed; the rest are waiting on real handles.
+ * Cash App is deliberately absent. See CASH_APP_URL in src/data/cory-links.ts
+ * for why a "send money" link does not belong beside car listings.
  */
 export const SOCIAL_LINKS: {
   label: string;
   short: string;
   href: string | null;
 }[] = [
-  { label: "Facebook", short: "f", href: null },
-  { label: "Instagram", short: "ig", href: null },
-  { label: "TikTok", short: "tt", href: null },
+  {
+    label: "Facebook",
+    short: "f",
+    href: "https://www.facebook.com/iamcorywiththekeys",
+  },
+  {
+    label: "Instagram",
+    short: "ig",
+    href: "https://www.instagram.com/corywiththekeys",
+  },
+  // No "ith" — matches his YouTube handle. @corywiththekeys is a dead account.
+  { label: "TikTok", short: "tt", href: "https://www.tiktok.com/@corywthekeys" },
+  {
+    label: "Snapchat",
+    short: "sc",
+    href: "https://www.snapchat.com/@corywiththekeys",
+  },
   { label: "YouTube", short: "yt", href: "https://www.youtube.com/@Corywthekeys" },
   { label: "Linktree", short: "lt", href: "https://linktr.ee/corywiththekeys" },
 ] as const;
