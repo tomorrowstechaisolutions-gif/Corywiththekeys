@@ -9,7 +9,8 @@ import {
 } from "@/components/inventory/VehicleGallery";
 import { VehicleVideo } from "@/components/inventory/VehicleVideo";
 import { Container } from "@/components/ui/Container";
-import { CONTACT, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 import { publicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency } from "@/lib/utils";
@@ -86,14 +87,19 @@ export async function generateMetadata({
   const vehicle = await loadVehicle(slug);
   if (!vehicle) return { title: "Vehicle not found" };
 
+  const meta = await getSettings();
   const title = vehicleTitle(vehicle);
   const photos = galleryPhotos(vehicle, title);
+  // Prices switched off site-wide should not leak through the page title
+  // into search results either.
   const price =
-    vehicle.price !== null ? ` — ${formatCurrency(Number(vehicle.price))}` : "";
+    meta.switches.showInventoryPrices && vehicle.price !== null
+      ? ` — ${formatCurrency(Number(vehicle.price))}`
+      : "";
 
   const description =
     vehicle.description?.slice(0, 160) ??
-    `${title} for sale at ${SITE.name} in ${CONTACT.address.city}, ${CONTACT.address.state}.`;
+    `${title} for sale at ${SITE.name} in ${meta.contact.address.city}, ${meta.contact.address.state}.`;
 
   return {
     title: `${title}${price}`,
@@ -126,9 +132,13 @@ export default async function VehicleDetailPage({ params }: PageProps) {
   const vehicle = await loadVehicle(slug);
   if (!vehicle) notFound();
 
+  const settings = await getSettings();
+  const showPrices = settings.switches.showInventoryPrices;
+
   const title = vehicleTitle(vehicle);
   const photos = galleryPhotos(vehicle, title);
-  const payment = displayPayment(vehicle);
+  // Hidden along with the price: an estimated monthly payment gives it away.
+  const payment = showPrices ? displayPayment(vehicle) : null;
   const source = sourceLine(vehicle);
   const pending = vehicle.status === "pending";
 
@@ -340,7 +350,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
               ) : null}
 
               <div className="mt-4">
-                {vehicle.price !== null ? (
+                {showPrices && vehicle.price !== null ? (
                   <p className="text-3xl font-extrabold tracking-tight text-navy-900">
                     {formatCurrency(Number(vehicle.price))}
                   </p>
@@ -350,7 +360,8 @@ export default async function VehicleDetailPage({ params }: PageProps) {
                   </p>
                 )}
 
-                {vehicle.previous_price !== null &&
+                {showPrices &&
+                vehicle.previous_price !== null &&
                 vehicle.price !== null &&
                 Number(vehicle.previous_price) > Number(vehicle.price) ? (
                   <p className="mt-1 text-sm text-navy-700/70">
@@ -382,10 +393,10 @@ export default async function VehicleDetailPage({ params }: PageProps) {
                   Get Pre-Approved <span aria-hidden>→</span>
                 </Link>
                 <a
-                  href={CONTACT.phoneHref}
+                  href={settings.contact.phoneHref}
                   className="inline-flex items-center justify-center gap-2 rounded-md border border-navy-900 px-5 py-3 text-sm font-bold text-navy-900 transition hover:bg-navy-900 hover:text-white"
                 >
-                  Call or text {CONTACT.phone}
+                  Call or text {settings.contact.phone}
                 </a>
               </div>
 

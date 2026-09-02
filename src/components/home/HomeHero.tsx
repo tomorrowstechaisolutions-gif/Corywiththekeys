@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { CONTACT, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 
 /**
  * Homepage hero.
@@ -12,7 +13,9 @@ import { CONTACT, SITE } from "@/lib/constants";
  * Google, so the photograph was cropped out of it and the type rebuilt as
  * real HTML over the top.
  */
-export function HomeHero() {
+export async function HomeHero() {
+  const { contact } = await getSettings();
+
   return (
     <section className="relative isolate overflow-hidden bg-navy-950 text-white">
       {/* Desktop: photo occupies the right, gradient protects the copy. */}
@@ -63,7 +66,7 @@ export function HomeHero() {
           </div>
 
           <a
-            href={CONTACT.phoneHref}
+            href={contact.phoneHref}
             className="mt-7 inline-flex items-center gap-3 transition hover:opacity-90"
           >
             <span
@@ -77,7 +80,7 @@ export function HomeHero() {
                 Call or Text {SITE.personality.split(" ")[0]}
               </span>
               <span className="block text-2xl font-extrabold leading-tight">
-                {CONTACT.phone}
+                {contact.phone}
               </span>
             </span>
           </a>

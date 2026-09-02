@@ -6,10 +6,11 @@ import { useEffect, useRef } from "react";
 
 import { useCart } from "@/components/shop/CartProvider";
 import { CloseIcon } from "@/components/shop/icons";
+import { useSettings } from "@/components/providers/SettingsProvider";
 import { STORE, formatPrice } from "@/data/shop";
-import { CONTACT } from "@/lib/constants";
 
 export function CartDrawer() {
+  const { contact, switches } = useSettings();
   const { isOpen, close, items, subtotal, count, setQuantity, remove } =
     useCart();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -182,7 +183,7 @@ export function CartDrawer() {
                 Shipping and tax calculated at checkout.
               </p>
 
-              {STORE.checkoutEnabled ? (
+              {switches.shopCheckoutEnabled ? (
                 <Link
                   href="/shop/checkout"
                   onClick={close}
@@ -193,14 +194,14 @@ export function CartDrawer() {
               ) : (
                 <div className="mt-4">
                   <a
-                    href={`sms:${CONTACT.phoneHref.replace("tel:", "")}`}
+                    href={`sms:${contact.phoneHref.replace("tel:", "")}`}
                     className="block bg-keyblue-electric py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white transition hover:bg-keyblue-600"
                   >
                     Text Cory To Order
                   </a>
                   <p className="mt-2.5 text-[11px] leading-relaxed text-white/45">
                     Online checkout opens once the drop ships. Text{" "}
-                    {CONTACT.phone} with your size and colour and Cory will sort
+                    {contact.phone} with your size and colour and Cory will sort
                     you out.
                   </p>
                 </div>

@@ -3,18 +3,17 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
 import { SocialIcon } from "@/components/ui/SocialIcon";
-import { CONTACT, HOURS, SITE, SITE_NAV, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE, SITE_NAV } from "@/lib/constants";
+import { addressLine, type SiteSettings } from "@/lib/settings";
 
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  [
-    CONTACT.address.line1,
-    CONTACT.address.line2,
-    `${CONTACT.address.city}, ${CONTACT.address.state} ${CONTACT.address.postalCode}`,
-  ].join(", "),
-)}`;
-
-export function SiteFooter() {
+export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const year = new Date().getFullYear();
+  const { contact, hours, socials } = settings;
+
+  // Built from the saved address, so moving the lot in Settings moves the pin.
+  const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    addressLine(settings),
+  )}`;
 
   return (
     <footer className="mt-auto border-t-2 border-gold-500/45 bg-navy-950 text-white">
@@ -40,7 +39,7 @@ export function SiteFooter() {
             </p>
 
             <ul className="mt-5 flex gap-3">
-              {SOCIAL_LINKS.filter((social) => social.href).map((social) => (
+              {socials.filter((social) => social.href).map((social) => (
                 <li key={social.label}>
                   <a
                     href={social.href as string}
@@ -61,13 +60,13 @@ export function SiteFooter() {
             <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Contact</p>
             <ul className="mt-4 space-y-2.5 text-sm text-white/75">
               <li>
-                <a href={CONTACT.phoneHref} className="hover:text-white">
-                  {CONTACT.phone}
+                <a href={contact.phoneHref} className="hover:text-white">
+                  {contact.phone}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${CONTACT.email}`} className="hover:text-white">
-                  {CONTACT.email}
+                <a href={`mailto:${contact.email}`} className="hover:text-white">
+                  {contact.email}
                 </a>
               </li>
               <li>{SITE.domain}</li>
@@ -77,11 +76,11 @@ export function SiteFooter() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Location</p>
             <address className="mt-4 space-y-1 text-sm not-italic text-white/75">
-              <p>{CONTACT.address.line1}</p>
-              <p>{CONTACT.address.line2}</p>
+              <p>{contact.address.line1}</p>
+              {contact.address.line2 ? <p>{contact.address.line2}</p> : null}
               <p>
-                {CONTACT.address.city}, {CONTACT.address.state}{" "}
-                {CONTACT.address.postalCode}
+                {contact.address.city}, {contact.address.state}{" "}
+                {contact.address.postalCode}
               </p>
             </address>
             <a
@@ -97,7 +96,7 @@ export function SiteFooter() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-gold-500">Hours</p>
             <dl className="mt-4 space-y-2 text-sm text-white/75">
-              {HOURS.map((entry) => (
+              {hours.map((entry) => (
                 <div key={entry.days} className="flex justify-between gap-3">
                   <dt>{entry.days}</dt>
                   <dd className="text-right text-white/90">{entry.hours}</dd>

@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { useCart } from "@/components/shop/CartProvider";
+import { useSettings } from "@/components/providers/SettingsProvider";
 import { STORE, formatPrice, type Product } from "@/data/shop";
-import { CONTACT } from "@/lib/constants";
 
 /**
  * Product detail: gallery, variant pickers, quantity, add to cart.
@@ -16,6 +16,7 @@ import { CONTACT } from "@/lib/constants";
  * add button explains what is missing rather than silently doing nothing.
  */
 export function ProductDetail({ product }: { product: Product }) {
+  const { contact, switches } = useSettings();
   const { add, open } = useCart();
   const [size, setSize] = useState<string | null>(null);
   const [color, setColor] = useState(product.colors[0]?.name ?? "");
@@ -247,14 +248,14 @@ export function ProductDetail({ product }: { product: Product }) {
 
           {stockNotice ? (
             <p className="mt-3 text-[11px] leading-relaxed text-white/45">
-              {stockNotice} {CONTACT.phone}
+              {stockNotice} {contact.phone}
             </p>
           ) : null}
 
-          {!STORE.checkoutEnabled && !stockNotice ? (
+          {!switches.shopCheckoutEnabled && !stockNotice ? (
             <p className="mt-3 text-[11px] leading-relaxed text-white/45">
               Online checkout opens once this drop ships. Add to the bag to hold
-              your picks, then text {CONTACT.phone} to order.
+              your picks, then text {contact.phone} to order.
             </p>
           ) : null}
 
@@ -323,7 +324,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 Ships from Killeen, Texas. Free shipping on orders over $
                 {STORE.freeShippingOver}. Returns accepted within{" "}
                 {STORE.returnsWindowDays} days on unworn items with tags
-                attached. Questions? Call {CONTACT.phone}.
+                attached. Questions? Call {contact.phone}.
               </p>
             </details>
           </div>

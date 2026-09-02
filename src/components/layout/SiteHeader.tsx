@@ -4,7 +4,8 @@ import Link from "next/link";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { Container } from "@/components/ui/Container";
-import { CONTACT, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import type { SiteSettings } from "@/lib/settings";
 
 /**
  * Public site header.
@@ -13,7 +14,7 @@ import { CONTACT, SITE } from "@/lib/constants";
  * in the order they appear on the truck. "Get Approved" is gold because gold
  * is reserved site-wide for the one action that matters most: applying.
  */
-export function SiteHeader() {
+export function SiteHeader({ settings }: { settings: SiteSettings }) {
   return (
     <header className="sticky top-0 z-50 border-b-2 border-gold-500/45 bg-navy-950 text-white">
       <Container>
@@ -50,10 +51,10 @@ export function SiteHeader() {
 
           <div className="flex shrink-0 items-center gap-3">
             <a
-              href={CONTACT.phoneHref}
+              href={settings.contact.phoneHref}
               className="hidden text-sm font-bold leading-tight sm:block"
             >
-              {CONTACT.phone}
+              {settings.contact.phone}
             </a>
             <Link
               href="/finance"

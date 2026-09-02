@@ -3,9 +3,12 @@ import Link from "next/link";
 
 import { COLLECTIONS, STORE } from "@/data/shop";
 import { SocialIcon } from "@/components/ui/SocialIcon";
-import { CONTACT, SITE, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import type { SiteSettings } from "@/lib/settings";
 
-export function ShopFooter() {
+export function ShopFooter({ settings }: { settings: SiteSettings }) {
+  const { contact, socials } = settings;
+
   return (
     <footer className="border-t border-white/8 bg-shop-ink">
       <div className="mx-auto grid max-w-[1400px] gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
@@ -32,7 +35,7 @@ export function ShopFooter() {
           </p>
 
           <ul className="mt-5 flex flex-wrap gap-2">
-            {SOCIAL_LINKS.filter((social) => social.href).map((social) => (
+            {socials.filter((social) => social.href).map((social) => (
               <li key={social.label}>
                 <a
                   href={social.href as string}
@@ -94,25 +97,25 @@ export function ShopFooter() {
           <ul className="mt-3 space-y-2 text-xs text-shop-muted">
             <li>
               <a
-                href={CONTACT.phoneHref}
+                href={contact.phoneHref}
                 className="transition hover:text-white"
               >
-                {CONTACT.phone}
+                {contact.phone}
               </a>
             </li>
             <li>
               <a
-                href={`mailto:${CONTACT.email}`}
+                href={`mailto:${contact.email}`}
                 className="transition hover:text-white"
               >
-                {CONTACT.email}
+                {contact.email}
               </a>
             </li>
             <li className="pt-1 leading-relaxed">
-              {CONTACT.address.line1}
+              {contact.address.line1}
               <br />
-              {CONTACT.address.city}, {CONTACT.address.state}{" "}
-              {CONTACT.address.postalCode}
+              {contact.address.city}, {contact.address.state}{" "}
+              {contact.address.postalCode}
             </li>
           </ul>
         </div>

@@ -4,15 +4,24 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { CTA, HERO } from "@/data/contact";
-import { CONTACT, HOURS, SITE_NAV, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE_NAV } from "@/lib/constants";
+import { addressLine, getSettings, type SiteSettings } from "@/lib/settings";
 
 /** Maps directly, so the address is never typed twice. */
-const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${CONTACT.address.line1} ${CONTACT.address.line2}, ${CONTACT.address.city}, ${CONTACT.address.state} ${CONTACT.address.postalCode}`,
-)}`;
+function mapsUrl(settings: SiteSettings): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    addressLine(settings),
+  )}`;
+}
 
-function SocialRow({ className = "" }: { className?: string }) {
-  const live = SOCIAL_LINKS.filter((s) => s.href);
+function SocialRow({
+  settings,
+  className = "",
+}: {
+  settings: SiteSettings;
+  className?: string;
+}) {
+  const live = settings.socials.filter((s) => s.href);
   if (live.length === 0) return null;
 
   return (
@@ -41,7 +50,11 @@ function SocialRow({ className = "" }: { className?: string }) {
  * photograph. On a phone there is no room for two columns, so the car drops
  * to a band beneath the copy.
  */
-export function ContactHero() {
+export async function ContactHero() {
+  const settings = await getSettings();
+  const { contact } = settings;
+  const MAPS_URL = mapsUrl(settings);
+
   return (
     <section className="relative isolate overflow-hidden bg-navy-950 text-white">
       <div className="absolute inset-y-0 right-0 hidden w-[62%] lg:block">
@@ -79,7 +92,7 @@ export function ContactHero() {
 
           <div className="mt-7 flex flex-wrap gap-3">
             <a
-              href={CONTACT.phoneHref}
+              href={contact.phoneHref}
               className="inline-flex items-center gap-2 rounded-md bg-keyblue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-keyblue-500"
             >
               <span aria-hidden>✆</span> Call The Key Konnect
@@ -94,13 +107,13 @@ export function ContactHero() {
 
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/75">
             <a
-              href={CONTACT.phoneHref}
+              href={contact.phoneHref}
               className="inline-flex items-center gap-2 transition hover:text-white"
             >
               <span aria-hidden className="text-keyblue-400">
                 ✆
               </span>
-              {CONTACT.phone}
+              {contact.phone}
             </a>
             <a
               href={MAPS_URL}
@@ -111,9 +124,9 @@ export function ContactHero() {
               <span aria-hidden className="text-keyblue-400">
                 ⚲
               </span>
-              {CONTACT.address.city}, Texas
+              {contact.address.city}, {contact.address.state}
             </a>
-            <SocialRow />
+            <SocialRow settings={settings} />
           </div>
         </div>
       </Container>
@@ -137,7 +150,11 @@ export function ContactHero() {
   );
 }
 
-export function ContactInfoCards() {
+export async function ContactInfoCards() {
+  const settings = await getSettings();
+  const { contact, hours } = settings;
+  const MAPS_URL = mapsUrl(settings);
+
   return (
     <Container className="pb-4">
       <ul className="grid gap-4 md:grid-cols-3">
@@ -150,13 +167,13 @@ export function ContactInfoCards() {
               Call Us
             </h3>
             <a
-              href={CONTACT.phoneHref}
+              href={contact.phoneHref}
               className="mt-0.5 block text-lg font-bold text-keyblue-400 transition hover:text-keyblue-500"
             >
-              {CONTACT.phone}
+              {contact.phone}
             </a>
             <p className="mt-0.5 text-xs text-white/50">
-              {HOURS[0].days}: {HOURS[0].hours}
+              {hours[0].days}: {hours[0].hours}
             </p>
           </div>
         </li>
@@ -170,8 +187,8 @@ export function ContactInfoCards() {
               Visit The Key Konnect
             </h3>
             <p className="mt-0.5 text-sm text-white/75">
-              {CONTACT.address.line1}, {CONTACT.address.city}{" "}
-              {CONTACT.address.state}
+              {contact.address.line1}, {contact.address.city}{" "}
+              {contact.address.state}
             </p>
             <a
               href={MAPS_URL}
@@ -192,7 +209,7 @@ export function ContactInfoCards() {
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
               Follow The Movement
             </h3>
-            <SocialRow className="mt-2" />
+            <SocialRow settings={settings} className="mt-2" />
           </div>
         </li>
       </ul>

@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 
+import { useSettings } from "@/components/providers/SettingsProvider";
+
 import {
   submitVehicleInquiry,
   type InquiryState,
 } from "@/app/(site)/inventory/[slug]/actions";
-import { CONTACT } from "@/lib/constants";
 import {
   CONTACT_METHODS,
   CONTACT_METHOD_LABELS,
@@ -56,6 +57,7 @@ export function CheckAvailabilityForm({
   vehicleId: string;
   vehicleTitle: string;
 }) {
+  const { contact } = useSettings();
   const [state, formAction] = useActionState<InquiryState, FormData>(
     submitVehicleInquiry,
     {},
@@ -83,10 +85,10 @@ export function CheckAvailabilityForm({
           sooner?
         </p>
         <a
-          href={CONTACT.phoneHref}
+          href={contact.phoneHref}
           className="mt-4 inline-flex items-center justify-center rounded-md bg-keyblue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-keyblue-500"
         >
-          Call or text {CONTACT.phone}
+          Call or text {contact.phone}
         </a>
       </div>
     );

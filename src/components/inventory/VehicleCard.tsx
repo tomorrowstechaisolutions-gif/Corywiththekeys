@@ -44,18 +44,27 @@ export function VehicleCard({
   supabaseUrl,
   priority = false,
   layout = "grid",
+  showPrices = true,
 }: {
   vehicle: InventoryVehicle;
   supabaseUrl: string;
   /** Only the first row should preload; everything else lazy-loads. */
   priority?: boolean;
   layout?: "grid" | "list";
+  /**
+   * False when Settings has prices switched off site-wide. The card then
+   * behaves exactly as it already does for a vehicle with no price set, so
+   * there is one "Call for price" treatment rather than two.
+   */
+  showPrices?: boolean;
 }) {
   const title = vehicleTitle(vehicle);
   const photo = leadPhoto(vehicle);
   const url = photo ? photoUrl(photo, supabaseUrl) : null;
   const badge = vehicleBadge(vehicle);
-  const payment = displayPayment(vehicle);
+  // The estimated monthly payment is derived from the price, so hiding
+  // the price has to hide this too or the price is trivially recoverable.
+  const payment = showPrices ? displayPayment(vehicle) : null;
   const source = sourceLine(vehicle);
 
   const specs = [
@@ -125,7 +134,7 @@ export function VehicleCard({
 
         <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <div>
-            {vehicle.price !== null ? (
+            {showPrices && vehicle.price !== null ? (
               <p className="text-xl font-extrabold tracking-tight text-navy-900">
                 {formatCurrency(Number(vehicle.price))}
               </p>
@@ -133,7 +142,8 @@ export function VehicleCard({
               <p className="text-sm font-bold text-navy-900">Call for price</p>
             )}
 
-            {vehicle.previous_price !== null &&
+            {showPrices &&
+            vehicle.previous_price !== null &&
             vehicle.price !== null &&
             Number(vehicle.previous_price) > Number(vehicle.price) ? (
               <p className="text-xs text-navy-700/70 line-through">

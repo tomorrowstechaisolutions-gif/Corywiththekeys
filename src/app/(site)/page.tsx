@@ -4,7 +4,8 @@ import { CustomerReviews } from "@/components/home/CustomerReviews";
 import { FeaturedInventory } from "@/components/home/FeaturedInventory";
 import { HomeHero } from "@/components/home/HomeHero";
 import { TrustBar } from "@/components/home/TrustBar";
-import { CONTACT, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import { getSettings, openingHoursSpecification } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: SITE.headline,
@@ -26,43 +27,31 @@ export const metadata: Metadata = {
  * directly in search results — worth more than any on-page SEO copy for a
  * local dealership.
  */
-function LocalBusinessSchema() {
+async function LocalBusinessSchema() {
+  const settings = await getSettings();
+  const { contact } = settings;
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
     name: SITE.name,
     description: SITE.headline,
     url: SITE.url,
-    telephone: CONTACT.phone,
-    email: CONTACT.email,
+    telephone: contact.phone,
+    email: contact.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: `${CONTACT.address.line1}, ${CONTACT.address.line2}`,
-      addressLocality: CONTACT.address.city,
-      addressRegion: CONTACT.address.state,
-      postalCode: CONTACT.address.postalCode,
+      streetAddress: [contact.address.line1, contact.address.line2]
+        .filter(Boolean)
+        .join(", "),
+      addressLocality: contact.address.city,
+      addressRegion: contact.address.state,
+      postalCode: contact.address.postalCode,
       addressCountry: "US",
     },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-        ],
-        opens: "09:00",
-        closes: "19:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday"],
-        opens: "10:00",
-        closes: "17:00",
-      },
-    ],
+    // Generated from the saved hours, so editing them in Settings updates
+    // what Google shows rather than leaving this quietly wrong.
+    openingHoursSpecification: openingHoursSpecification(settings),
   };
 
   return (

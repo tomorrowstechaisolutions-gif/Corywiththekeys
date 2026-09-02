@@ -4,6 +4,8 @@ import { CartDrawer } from "@/components/shop/CartDrawer";
 import { CatalogueProvider } from "@/components/shop/CatalogueProvider";
 import { ShopFooter } from "@/components/shop/ShopFooter";
 import { ShopHeader } from "@/components/shop/ShopHeader";
+import { SettingsProvider } from "@/components/providers/SettingsProvider";
+import { getSettings } from "@/lib/settings";
 import { getStoreProducts } from "@/lib/shop-catalogue";
 
 /**
@@ -17,16 +19,21 @@ import { getStoreProducts } from "@/lib/shop-catalogue";
  * through useSyncExternalStore, so there is no cart provider to wrap.
  */
 export default async function ShopLayout({ children }: { children: ReactNode }) {
-  const products = await getStoreProducts();
+  const [products, settings] = await Promise.all([
+    getStoreProducts(),
+    getSettings(),
+  ]);
 
   return (
     <CatalogueProvider products={products}>
-      <div className="flex min-h-dvh flex-col bg-shop-bg text-white">
-        <ShopHeader />
-        <main className="flex-1">{children}</main>
-        <ShopFooter />
-        <CartDrawer />
-      </div>
+      <SettingsProvider value={settings}>
+        <div className="flex min-h-dvh flex-col bg-shop-bg text-white">
+          <ShopHeader />
+          <main className="flex-1">{children}</main>
+          <ShopFooter settings={settings} />
+          <CartDrawer />
+        </div>
+      </SettingsProvider>
     </CatalogueProvider>
   );
 }

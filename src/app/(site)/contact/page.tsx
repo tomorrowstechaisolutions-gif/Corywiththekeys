@@ -7,7 +7,8 @@ import {
   NextRideCta,
 } from "@/components/contact/ContactSections";
 import { Container } from "@/components/ui/Container";
-import { CONTACT, SITE } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 
 const DESCRIPTION =
   "Get in touch with The Key Konnect in Killeen, Texas — cars, merch, music and community. Call 254-987-0063 or send a message and we'll reply within one business day.";
@@ -26,7 +27,9 @@ export const metadata: Metadata = {
 };
 
 /** Lets search engines offer the phone number directly in results. */
-function ContactSchema() {
+async function ContactSchema() {
+  const { contact } = await getSettings();
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -35,14 +38,16 @@ function ContactSchema() {
     mainEntity: {
       "@type": "Organization",
       name: SITE.name,
-      telephone: CONTACT.phone,
-      email: CONTACT.email,
+      telephone: contact.phone,
+      email: contact.email,
       address: {
         "@type": "PostalAddress",
-        streetAddress: `${CONTACT.address.line1}, ${CONTACT.address.line2}`,
-        addressLocality: CONTACT.address.city,
-        addressRegion: CONTACT.address.state,
-        postalCode: CONTACT.address.postalCode,
+        streetAddress: [contact.address.line1, contact.address.line2]
+          .filter(Boolean)
+          .join(", "),
+        addressLocality: contact.address.city,
+        addressRegion: contact.address.state,
+        postalCode: contact.address.postalCode,
         addressCountry: "US",
       },
     },

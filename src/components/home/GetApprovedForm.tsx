@@ -3,11 +3,12 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 
+import { useSettings } from "@/components/providers/SettingsProvider";
+
 import {
   submitPrequalification,
   type PrequalFormState,
 } from "@/app/(site)/apply/actions";
-import { CONTACT } from "@/lib/constants";
 import {
   CONSENT_TEXT,
   DOWN_PAYMENT_OPTIONS,
@@ -44,6 +45,7 @@ function SubmitButton() {
  * Server Action; there is no anonymous database access.
  */
 export function GetApprovedForm() {
+  const { contact } = useSettings();
   const [state, formAction] = useActionState<PrequalFormState, FormData>(
     submitPrequalification,
     {},
@@ -69,10 +71,10 @@ export function GetApprovedForm() {
           Cory has your details and will reach out shortly. Want to talk sooner?
         </p>
         <a
-          href={CONTACT.phoneHref}
+          href={contact.phoneHref}
           className="mt-5 inline-flex items-center justify-center rounded-md bg-gold-500 px-5 py-3 text-sm font-bold text-navy-950 transition hover:bg-gold-400"
         >
-          Call or text {CONTACT.phone}
+          Call or text {contact.phone}
         </a>
       </div>
     );

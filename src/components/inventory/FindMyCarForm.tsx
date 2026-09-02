@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 
 import { findMyCar, type LeadFormState } from "@/app/(site)/inventory/actions";
-import { CONTACT } from "@/lib/constants";
+import { useSettings } from "@/components/providers/SettingsProvider";
 import { VEHICLE_TYPE_OPTIONS } from "@/lib/validation/lead";
 
 const FIELD =
@@ -28,6 +28,7 @@ function SubmitButton() {
 }
 
 export function FindMyCarForm() {
+  const { contact } = useSettings();
   const [state, formAction] = useActionState<LeadFormState, FormData>(
     findMyCar,
     {},
@@ -56,8 +57,8 @@ export function FindMyCarForm() {
         <p className="mt-2 text-sm text-emerald-800">
           We&rsquo;ll reach out on the number you gave us. If you need someone
           sooner, call or text{" "}
-          <a href={CONTACT.phoneHref} className="font-semibold underline">
-            {CONTACT.phone}
+          <a href={contact.phoneHref} className="font-semibold underline">
+            {contact.phone}
           </a>
           .
         </p>

@@ -4,11 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { CONTACT, SITE_NAV } from "@/lib/constants";
+import { useSettings } from "@/components/providers/SettingsProvider";
+import { SITE_NAV } from "@/lib/constants";
 
 /** Slide-down navigation for screens too narrow for the full menu. */
 export function MobileNav() {
   const pathname = usePathname();
+  const { contact } = useSettings();
 
   // The panel is open only for the route it was opened on. Deriving it this
   // way means navigating anywhere closes it — including via the back button —
@@ -71,10 +73,10 @@ export function MobileNav() {
 
           <div className="mt-5 space-y-3 px-5">
             <a
-              href={CONTACT.phoneHref}
+              href={contact.phoneHref}
               className="flex items-center justify-center rounded-md border border-white/25 px-4 py-3 text-base font-bold text-white"
             >
-              Call or text {CONTACT.phone}
+              Call or text {contact.phone}
             </a>
             <Link
               href="/finance"

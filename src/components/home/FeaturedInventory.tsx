@@ -4,6 +4,7 @@ import { VehicleCard } from "@/components/inventory/VehicleCard";
 import { Container } from "@/components/ui/Container";
 import { publicEnv } from "@/lib/env";
 import { VEHICLE_CARD_COLUMNS } from "@/lib/inventory-query";
+import { getSettings } from "@/lib/settings";
 import { createClient } from "@/lib/supabase/server";
 import { PAYMENT_DISCLAIMER } from "@/lib/vehicles";
 
@@ -18,6 +19,7 @@ import { GetApprovedForm } from "./GetApprovedForm";
  */
 export async function FeaturedInventory() {
   const supabase = await createClient();
+  const { switches } = await getSettings();
 
   const { data: featured } = await supabase
     .from("vehicles")
@@ -59,6 +61,7 @@ export async function FeaturedInventory() {
                       key={vehicle.id}
                       vehicle={vehicle}
                       supabaseUrl={supabaseUrl}
+                      showPrices={switches.showInventoryPrices}
                       priority={index < 2}
                     />
                   ))}

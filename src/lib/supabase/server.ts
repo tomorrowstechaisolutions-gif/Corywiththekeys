@@ -37,6 +37,25 @@ export async function createClient() {
 }
 
 /**
+ * Anonymous client for public data, with no cookies involved.
+ *
+ * Reading cookies makes a page dynamic, so a page that only needs public
+ * information — the opening hours in the footer, say — would lose static
+ * rendering for no benefit. This client has no session and gets exactly what
+ * a logged-out visitor gets, which for public tables is the whole point.
+ *
+ * Use it only where the answer does not depend on who is asking. Anything
+ * behind a login needs `createClient` so RLS can see the user.
+ */
+export function createPublicClient() {
+  return createSupabaseClient<Database>(
+    publicEnv.supabaseUrl,
+    publicEnv.supabaseAnonKey,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+}
+
+/**
  * Service-role client. Bypasses Row Level Security — server-only.
  * Never import this from a Client Component.
  */

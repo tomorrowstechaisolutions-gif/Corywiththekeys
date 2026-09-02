@@ -7,8 +7,8 @@ import {
   sendContactMessage,
   type ContactFormState,
 } from "@/app/(site)/contact/actions";
+import { useSettings } from "@/components/providers/SettingsProvider";
 import { TOPICS } from "@/data/contact";
-import { CONTACT } from "@/lib/constants";
 import { CONTACT_TOPICS } from "@/lib/validation/contact";
 
 const FIELD =
@@ -51,6 +51,7 @@ export function ContactForm({
   topic: string;
   onTopicChange: (value: string) => void;
 }) {
+  const { contact } = useSettings();
   const [state, formAction] = useActionState<ContactFormState, FormData>(
     sendContactMessage,
     {},
@@ -79,8 +80,8 @@ export function ContactForm({
         <p className="mt-2 text-sm text-emerald-100/80">
           We typically reply within one business day. If you need someone
           sooner, call or text{" "}
-          <a href={CONTACT.phoneHref} className="font-semibold underline">
-            {CONTACT.phone}
+          <a href={contact.phoneHref} className="font-semibold underline">
+            {contact.phone}
           </a>
           .
         </p>

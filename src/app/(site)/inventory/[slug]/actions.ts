@@ -1,10 +1,10 @@
 "use server";
 
-import { CONTACT } from "@/lib/constants";
 import { serverEnv } from "@/lib/env";
 import { evaluateBot } from "@/lib/security/bot";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { getRequestMeta } from "@/lib/security/request-meta";
+import { getSettings } from "@/lib/settings";
 import { logSubmission } from "@/lib/security/submissions";
 import { createAdminClient } from "@/lib/supabase/server";
 import { vehicleTitle } from "@/lib/vehicles";
@@ -22,7 +22,19 @@ export type InquiryState = {
 
 const FORM_KEY = "vehicle_inquiry";
 
-const CALL_INSTEAD = `Something went wrong saving that. Call or text Cory on ${CONTACT.phone} and he will pick it up straight away.`;
+/**
+ * Every one of these tells the visitor to phone instead, so the number has to
+ * be the live one from Settings — a fallback message with a disconnected
+ * number in it is worse than no message at all.
+ */
+async function phoneNumber(): Promise<string> {
+  const { contact } = await getSettings();
+  return contact.phone;
+}
+
+async function callInstead(): Promise<string> {
+  return `Something went wrong saving that. Call or text Cory on ${await phoneNumber()} and he will pick it up straight away.`;
+}
 
 /**
  * "Check availability" on a vehicle listing.
@@ -67,7 +79,7 @@ export async function submitVehicleInquiry(
     });
     return {
       code: "rate_limit",
-      message: `You have sent that a few times already. Give it a few minutes, or call Cory on ${CONTACT.phone}.`,
+      message: `You have sent that a few times already. Give it a few minutes, or call Cory on ${await phoneNumber()}.`,
     };
   }
 
@@ -107,7 +119,7 @@ export async function submitVehicleInquiry(
       bot,
       errorCode: "missing_service_role",
     });
-    return { code: "unavailable", message: CALL_INSTEAD };
+    return { code: "unavailable", message: await callInstead() };
   }
 
   const input = parsed.data;
@@ -133,7 +145,7 @@ export async function submitVehicleInquiry(
       });
       return {
         code: "unavailable",
-        message: `That listing is no longer available. Call or text Cory on ${CONTACT.phone} and he will find you something close.`,
+        message: `That listing is no longer available. Call or text Cory on ${await phoneNumber()} and he will find you something close.`,
       };
     }
 
@@ -165,7 +177,7 @@ export async function submitVehicleInquiry(
         bot,
         errorCode: error?.code ?? "insert_failed",
       });
-      return { code: "server", message: CALL_INSTEAD };
+      return { code: "server", message: await callInstead() };
     }
 
     await logSubmission({
@@ -187,6 +199,6 @@ export async function submitVehicleInquiry(
       bot,
       errorCode: "exception",
     });
-    return { code: "server", message: CALL_INSTEAD };
+    return { code: "server", message: await callInstead() };
   }
 }

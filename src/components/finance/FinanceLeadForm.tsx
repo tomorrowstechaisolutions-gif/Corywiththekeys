@@ -9,8 +9,8 @@ import {
 } from "@/app/(site)/finance/actions";
 import { ApplyButton } from "@/components/finance/ApplyButton";
 import { Container } from "@/components/ui/Container";
+import { useSettings } from "@/components/providers/SettingsProvider";
 import { track } from "@/lib/analytics";
-import { CONTACT } from "@/lib/constants";
 import {
   CONTACT_METHODS,
   DOWN_PAYMENT_OPTIONS,
@@ -59,6 +59,7 @@ function SubmitButton() {
  * and still points at the application rather than trapping anyone.
  */
 export function FinanceLeadForm() {
+  const { contact } = useSettings();
   const [state, formAction] = useActionState<FinanceLeadState, FormData>(
     submitFinanceLead,
     {},
@@ -302,7 +303,7 @@ export function FinanceLeadForm() {
                 We never ask for a Social Security number, driver&rsquo;s licence,
                 date of birth or bank details on this site. Those are only ever
                 entered on The Key Konnect&rsquo;s secure financing application.
-                Questions? Call {CONTACT.phone}.
+                Questions? Call {contact.phone}.
               </p>
             </form>
           )}

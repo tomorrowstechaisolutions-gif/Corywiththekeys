@@ -9,6 +9,7 @@ import { InventoryPagination } from "@/components/inventory/InventoryPagination"
 import { ResultsToolbar } from "@/components/inventory/ResultsToolbar";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
 import { Container } from "@/components/ui/Container";
+import { getSettings } from "@/lib/settings";
 import { publicEnv } from "@/lib/env";
 import {
   BANNER_AFTER,
@@ -39,10 +40,12 @@ export default async function InventoryPage({
   const supabase = await createClient();
 
   // Facets and results in parallel — neither depends on the other.
-  const [{ vehicles, total, pageCount, error }, facets] = await Promise.all([
-    queryInventory(supabase, filters),
-    getFilterFacets(supabase),
-  ]);
+  const [{ vehicles, total, pageCount, error }, facets, { switches }] =
+    await Promise.all([
+      queryInventory(supabase, filters),
+      getFilterFacets(supabase),
+      getSettings(),
+    ]);
 
   const supabaseUrl = publicEnv.supabaseUrl;
   const filtered = hasActiveFilters(filters);
@@ -90,6 +93,7 @@ export default async function InventoryPage({
                   vehicle={vehicle}
                   supabaseUrl={supabaseUrl}
                   layout={filters.view}
+                  showPrices={switches.showInventoryPrices}
                 />
               ))}
             </div>
@@ -117,11 +121,13 @@ function PositionedCard({
   vehicle,
   supabaseUrl,
   layout,
+  showPrices,
 }: {
   index: number;
   vehicle: Parameters<typeof VehicleCard>[0]["vehicle"];
   supabaseUrl: string;
   layout: "grid" | "list";
+  showPrices: boolean;
 }) {
   return (
     <>
@@ -130,6 +136,7 @@ function PositionedCard({
         vehicle={vehicle}
         supabaseUrl={supabaseUrl}
         layout={layout}
+        showPrices={showPrices}
         // Only the first row preloads. The rest lazy-load on scroll.
         priority={index < 4}
       />

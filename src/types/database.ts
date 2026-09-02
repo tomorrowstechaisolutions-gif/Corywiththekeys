@@ -1,9 +1,3 @@
-/**
- * Supabase schema types — GENERATED. Do not edit by hand.
- *
- * Regenerate after any migration:
- *   npx supabase gen types typescript --project-id jxcwytbeiskjtgvumlws > src/types/database.ts
- */
 export type Json =
   | string
   | number
@@ -147,6 +141,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      business_hours: {
+        Row: {
+          closes: string | null
+          day_of_week: number
+          is_closed: boolean
+          opens: string | null
+          updated_at: string
+        }
+        Insert: {
+          closes?: string | null
+          day_of_week: number
+          is_closed?: boolean
+          opens?: string | null
+          updated_at?: string
+        }
+        Update: {
+          closes?: string | null
+          day_of_week?: number
+          is_closed?: boolean
+          opens?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       customers: {
         Row: {
@@ -829,6 +847,38 @@ export type Database = {
           },
         ]
       }
+      notification_settings: {
+        Row: {
+          id: boolean
+          leads_email: string | null
+          messages_email: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: boolean
+          leads_email?: string | null
+          messages_email?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: boolean
+          leads_email?: string | null
+          messages_email?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_lots: {
         Row: {
           address_line1: string | null
@@ -1232,6 +1282,86 @@ export type Database = {
             columns: ["vehicle_id"]
             isOneToOne: false
             referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          announcement_enabled: boolean
+          announcement_href: string | null
+          announcement_text: string | null
+          city: string | null
+          email: string | null
+          facebook_url: string | null
+          id: boolean
+          instagram_url: string | null
+          linktree_url: string | null
+          phone: string | null
+          postal_code: string | null
+          shop_checkout_enabled: boolean
+          show_inventory_prices: boolean
+          snapchat_url: string | null
+          state: string | null
+          tiktok_url: string | null
+          updated_at: string
+          updated_by: string | null
+          youtube_url: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          announcement_enabled?: boolean
+          announcement_href?: string | null
+          announcement_text?: string | null
+          city?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          id?: boolean
+          instagram_url?: string | null
+          linktree_url?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          shop_checkout_enabled?: boolean
+          show_inventory_prices?: boolean
+          snapchat_url?: string | null
+          state?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          youtube_url?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          announcement_enabled?: boolean
+          announcement_href?: string | null
+          announcement_text?: string | null
+          city?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          id?: boolean
+          instagram_url?: string | null
+          linktree_url?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          shop_checkout_enabled?: boolean
+          show_inventory_prices?: boolean
+          snapchat_url?: string | null
+          state?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
