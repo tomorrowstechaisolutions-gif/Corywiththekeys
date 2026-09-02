@@ -3,9 +3,14 @@
 Working sheet for bringing partner-lot inventory into The Key Konnect.
 
 Cory sells for these lots; their cars appear on our site alongside his own.
-The schema was built for this from day one — `partner_lots`, `inventory_staging`,
-`inventory_sync_runs` and `feed_upsert_vehicle()` — so the work left is getting
-each lot to authorise a feed, then writing one connector per feed format.
+The schema was built for this from day one — `partner_lots`, `inventory_feeds`,
+`inventory_staging`, `inventory_sync_runs` and `feed_upsert_vehicle()` — so the
+work left is getting each lot to authorise a feed, then writing one connector
+per feed format.
+
+Status as of the last check: five lots loaded, all `display_on_site = false`;
+zero feeds configured; zero partner vehicles. Nothing technical is blocking
+this. The data has not arrived yet.
 
 ## The lots
 
@@ -38,15 +43,40 @@ Loop, and Platinum Autoplex sits on W Veterans Memorial a few blocks from The
 Key Konnect's own lot. Four of the five are in Killeen; only Shelley's is out
 in Belton.
 
-## Feeds, not scraping
+## What each lot's robots.txt actually says
 
-Three of the five sites — Performance Motors, Shelley's and Drive Away —
-publish a `robots.txt` that blocks scrapers and AI crawlers with a blanket
-`Disallow: /` (GPTBot, CCBot, Bytespider, Diffbot, AI2Bot, Google-Extended,
-Amazonbot and roughly twenty more). That is a refusal in the only
-machine-readable form a website has. We honour it.
+Checked directly, not from memory. An earlier version of this document claimed
+three of the five publish a blanket `Disallow: /`. **That was wrong.** None of
+them does.
 
-The practical case is just as strong:
+| Lot | `User-agent: *` | AI crawlers |
+|---|---|---|
+| McLeod Auto Sales | Allowed, `crawl-delay: 10` — but `/rss-usedinventory.aspx` and `/rss-newinventory.aspx` are explicitly disallowed | not mentioned |
+| Platinum Autoplex | Allowed, everything (`Disallow:` empty, `crawl-delay: 2`) | not mentioned |
+| Performance Motors | Allowed on general paths | ~20 named, `Disallow: /` |
+| Shelley's Auto Sales | Allowed on general paths | 30+ named, `Disallow: /` |
+| Drive Away Auto Sales | Allowed on general paths | 31 named, `Disallow: /` |
+
+Three of the five name AI crawlers — GPTBot, CCBot, Bytespider, Diffbot,
+PerplexityBot, Google-Extended, Amazonbot, cohere-ai and the rest — and refuse
+them the whole site. A scraper written to ingest their inventory into another
+system is the thing being refused there, whatever user-agent string it sends.
+Choosing a neutral one to get past a list like that is circumventing a stated
+no, so we do not do it for those three.
+
+McLeod is worth reading closely. The site is crawlable, but the two DealerOn
+RSS inventory endpoints — precisely the structured data we would want — are the
+paths they singled out to block. That looks deliberate.
+
+Platinum Autoplex raises no objection of any kind.
+
+Note also that robots.txt permission is not terms-of-service permission. Dealer
+sites commonly prohibit automated extraction in their ToS, and that is a legal
+question for the business to answer, not a technical one.
+
+## Feeds beat scraping anyway
+
+Even where crawling is permitted, a feed is the better instrument:
 
 - Every one of these lots already syndicates to Cars.com, Autotrader or
   Facebook Marketplace, so the export pipeline exists at each vendor. The
@@ -57,6 +87,10 @@ The practical case is just as strong:
   restyles a template — and the failure mode is publishing a wrong price on
   Cory's site for a car he does not own. That is the one mistake a dealer
   cannot afford, and the one a customer will remember.
+
+And the shortest path of all is a phone call. These are Cory's partners, not
+strangers. Asking converts a grey area into a documented yes, and the naming
+and pricing questions below have to be asked either way.
 
 ## What to ask each lot for
 
