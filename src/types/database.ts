@@ -591,6 +591,54 @@ export type Database = {
           },
         ]
       }
+      lead_events: {
+        Row: {
+          author_id: string | null
+          body: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["lead_status"] | null
+          id: string
+          lead_id: string
+          to_status: Database["public"]["Enums"]["lead_status"] | null
+          type: Database["public"]["Enums"]["lead_event_type"]
+        }
+        Insert: {
+          author_id?: string | null
+          body?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["lead_status"] | null
+          id?: string
+          lead_id: string
+          to_status?: Database["public"]["Enums"]["lead_status"] | null
+          type: Database["public"]["Enums"]["lead_event_type"]
+        }
+        Update: {
+          author_id?: string | null
+          body?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["lead_status"] | null
+          id?: string
+          lead_id?: string
+          to_status?: Database["public"]["Enums"]["lead_status"] | null
+          type?: Database["public"]["Enums"]["lead_event_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_events_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -600,8 +648,10 @@ export type Database = {
           email: string | null
           first_name: string | null
           id: string
+          last_activity_at: string
           last_name: string | null
           message: string | null
+          next_follow_up_at: string | null
           phone: string | null
           preferred_contact: Database["public"]["Enums"]["contact_method"]
           referrer: string | null
@@ -621,8 +671,10 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           id?: string
+          last_activity_at?: string
           last_name?: string | null
           message?: string | null
+          next_follow_up_at?: string | null
           phone?: string | null
           preferred_contact?: Database["public"]["Enums"]["contact_method"]
           referrer?: string | null
@@ -642,8 +694,10 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           id?: string
+          last_activity_at?: string
           last_name?: string | null
           message?: string | null
+          next_follow_up_at?: string | null
           phone?: string | null
           preferred_contact?: Database["public"]["Enums"]["contact_method"]
           referrer?: string | null
@@ -1906,6 +1960,12 @@ export type Database = {
         | "xml_feed"
         | "json_api"
         | "partner_api"
+      lead_event_type:
+        | "note"
+        | "status_change"
+        | "assignment"
+        | "contact_logged"
+        | "follow_up_set"
       lead_source:
         | "homepage_form"
         | "vehicle_inquiry"
@@ -2156,6 +2216,13 @@ export const Constants = {
         "xml_feed",
         "json_api",
         "partner_api",
+      ],
+      lead_event_type: [
+        "note",
+        "status_change",
+        "assignment",
+        "contact_logged",
+        "follow_up_set",
       ],
       lead_source: [
         "homepage_form",
