@@ -46,10 +46,6 @@ export const SITE_NAV = [
 ] as const;
 
 /**
- * Social profiles. Placeholder URLs until Cory confirms the real handles —
- * the labels are correct, only the hrefs need swapping.
- */
-/**
  * Cory's profiles, for the footer and contact page.
  *
  * Every URL here was opened and confirmed to resolve to Cory — not inferred

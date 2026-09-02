@@ -14,7 +14,7 @@ export default async function AdminTradeInsPage() {
     <PagePlaceholder
       eyebrow="Admin"
       title="Trade-Ins"
-      description="Trade-in valuation requests submitted through /trade-in."
+      description="Trade-in valuation requests from customers. The public form that would feed this is not built yet."
       scope={[
         "Request queue with vehicle details",
         "Photo review",
