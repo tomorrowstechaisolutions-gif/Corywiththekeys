@@ -96,8 +96,6 @@ export type Profile = {
   label: string;
   handle: string | null;
   url: ExternalUrl;
-  /** Tailwind classes for the platform's brand colour. */
-  accent: string;
 };
 
 /**
@@ -113,21 +111,18 @@ export const PROFILES: Profile[] = [
     // @corywiththekeys spelling is a dead account.
     handle: "@corywthekeys",
     url: "https://www.tiktok.com/@corywthekeys",
-    accent: "bg-black text-white",
   },
   {
     key: "instagram",
     label: "Instagram",
     handle: "@corywiththekeys",
     url: "https://www.instagram.com/corywiththekeys",
-    accent: "bg-linear-to-br from-fuchsia-600 to-amber-500 text-white",
   },
   {
     key: "facebook",
     label: "Facebook",
     handle: "/iamcorywiththekeys",
     url: "https://www.facebook.com/iamcorywiththekeys",
-    accent: "bg-[#1877F2] text-white",
   },
   {
     key: "youtube",
@@ -135,14 +130,12 @@ export const PROFILES: Profile[] = [
     handle: "@Corywthekeys",
     // Confirmed: this is the channel that hosts his official videos.
     url: YOUTUBE_CHANNEL_URL,
-    accent: "bg-[#FF0000] text-white",
   },
   {
     key: "snapchat",
     label: "Snapchat",
     handle: "@corywiththekeys",
     url: "https://www.snapchat.com/@corywiththekeys",
-    accent: "bg-[#FFFC00] text-black",
   },
 ];
 
@@ -157,21 +150,18 @@ export const LISTEN_PROFILES: Profile[] = [
     label: "Spotify",
     handle: "Cory with the Keys",
     url: SPOTIFY_ARTIST_URL,
-    accent: "bg-[#1DB954] text-black",
   },
   {
     key: "appleMusic",
     label: "Apple Music",
     handle: "Cory with the Keys",
     url: APPLE_MUSIC_ARTIST_URL,
-    accent: "bg-[#FA243C] text-white",
   },
   {
     key: "youtubeMusic",
     label: "YouTube Music",
     handle: "Cory with the Keys",
     url: YOUTUBE_MUSIC_ARTIST_URL,
-    accent: "bg-[#FF0000] text-white",
   },
 ];
 
@@ -221,7 +211,7 @@ export const EMPTY_STREAMING: StreamingLinks = {
  *
  * `youtubeMusic` is null throughout on purpose. His songs are on YouTube
  * Music, but per-song ids there differ from the ids on his main channel, and
- * a wrong id would play the wrong song. The artist link in the follow row
+ * a wrong id would play the wrong song. The artist link in the Listen row
  * covers it until we have the real per-song ids.
  */
 const STREAMING = {
@@ -528,11 +518,10 @@ export function mediaImage(item: {
 export const STREAMING_LABELS: {
   key: keyof StreamingLinks;
   label: string;
-  accent: string;
 }[] = [
-  { key: "spotify", label: "Spotify", accent: "bg-[#1DB954] text-black" },
-  { key: "appleMusic", label: "Apple Music", accent: "bg-[#FA243C] text-white" },
-  { key: "youtubeMusic", label: "YouTube Music", accent: "bg-[#FF0000] text-white" },
+  { key: "spotify", label: "Spotify" },
+  { key: "appleMusic", label: "Apple Music" },
+  { key: "youtubeMusic", label: "YouTube Music" },
 ];
 
 export function hasAnyStreaming(links: StreamingLinks): boolean {

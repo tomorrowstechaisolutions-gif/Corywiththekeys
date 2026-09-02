@@ -1,5 +1,6 @@
 import { MediaTile } from "@/components/music/MediaTile";
 import { Container } from "@/components/ui/Container";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import {
   LINKTREE_URL,
   NEW_RELEASE,
@@ -101,12 +102,7 @@ export function NewRelease() {
                       rel="noreferrer"
                       className="flex items-center gap-3 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/5"
                     >
-                      <span
-                        aria-hidden
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${platform.accent}`}
-                      >
-                        {platform.label.charAt(0)}
-                      </span>
+                      <SocialIcon name={platform.key} className="h-7 w-7" />
                       {platform.label}
                     </a>
                   </li>

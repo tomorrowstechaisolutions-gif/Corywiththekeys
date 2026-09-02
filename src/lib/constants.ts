@@ -3,6 +3,9 @@
  * Everything here is safe to render on the client.
  */
 
+// Type-only, so this file still compiles away to plain data.
+import type { SocialIconName } from "@/components/ui/SocialIcon";
+
 export const SITE = {
   name: "The Key Konnect",
   personality: "Cory With The Keys",
@@ -58,26 +61,39 @@ export const SITE_NAV = [
  */
 export const SOCIAL_LINKS: {
   label: string;
-  short: string;
+  /** Which brand mark to draw. See components/ui/SocialIcon. */
+  icon: SocialIconName;
   href: string | null;
 }[] = [
   {
     label: "Facebook",
-    short: "f",
+    icon: "facebook",
     href: "https://www.facebook.com/iamcorywiththekeys",
   },
   {
     label: "Instagram",
-    short: "ig",
+    icon: "instagram",
     href: "https://www.instagram.com/corywiththekeys",
   },
   // No "ith" — matches his YouTube handle. @corywiththekeys is a dead account.
-  { label: "TikTok", short: "tt", href: "https://www.tiktok.com/@corywthekeys" },
+  {
+    label: "TikTok",
+    icon: "tiktok",
+    href: "https://www.tiktok.com/@corywthekeys",
+  },
   {
     label: "Snapchat",
-    short: "sc",
+    icon: "snapchat",
     href: "https://www.snapchat.com/@corywiththekeys",
   },
-  { label: "YouTube", short: "yt", href: "https://www.youtube.com/@Corywthekeys" },
-  { label: "Linktree", short: "lt", href: "https://linktr.ee/corywiththekeys" },
+  {
+    label: "YouTube",
+    icon: "youtube",
+    href: "https://www.youtube.com/@Corywthekeys",
+  },
+  {
+    label: "Linktree",
+    icon: "linktree",
+    href: "https://linktr.ee/corywiththekeys",
+  },
 ] as const;

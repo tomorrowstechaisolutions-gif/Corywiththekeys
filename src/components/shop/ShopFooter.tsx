@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { COLLECTIONS, STORE } from "@/data/shop";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import { CONTACT, SITE, SOCIAL_LINKS } from "@/lib/constants";
 
 export function ShopFooter() {
@@ -38,9 +39,10 @@ export function ShopFooter() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={social.label}
-                  className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-[11px] font-bold text-white transition hover:bg-keyblue-electric"
+                  title={social.label}
+                  className="block rounded-full transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
-                  {social.short}
+                  <SocialIcon name={social.icon} className="h-9 w-9" />
                 </a>
               </li>
             ))}

@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/music/SectionHeading";
 import { Container } from "@/components/ui/Container";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import { LINKTREE_URL, LISTEN_PROFILES, PROFILES } from "@/data/cory-links";
 
 export function FollowCory() {
@@ -17,12 +18,7 @@ export function FollowCory() {
                 rel="noreferrer"
                 className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-white/30 hover:bg-white/10"
               >
-                <span
-                  aria-hidden
-                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${profile.accent}`}
-                >
-                  {profile.label.charAt(0)}
-                </span>
+                <SocialIcon name={profile.key} className="h-9 w-9" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">
                     {profile.label}
@@ -44,12 +40,7 @@ export function FollowCory() {
           {PROFILES.map((profile) => {
             const inner = (
               <>
-                <span
-                  aria-hidden
-                  className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${profile.accent}`}
-                >
-                  {profile.label.charAt(0)}
-                </span>
+                <SocialIcon name={profile.key} className="h-9 w-9" />
                 <span className="mt-2.5 block text-sm font-bold text-white">
                   {profile.label}
                 </span>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import { CONTACT, HOURS, SITE, SITE_NAV, SOCIAL_LINKS } from "@/lib/constants";
 
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -46,9 +47,10 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={social.label}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-xs font-bold transition hover:bg-keyblue-600"
+                    title={social.label}
+                    className="block rounded-full transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
                   >
-                    {social.short}
+                    <SocialIcon name={social.icon} className="h-9 w-9" />
                   </a>
                 </li>
               ))}

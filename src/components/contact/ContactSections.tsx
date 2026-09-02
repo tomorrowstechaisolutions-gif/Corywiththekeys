@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import { CTA, HERO } from "@/data/contact";
 import { CONTACT, HOURS, SITE_NAV, SOCIAL_LINKS } from "@/lib/constants";
 
@@ -23,9 +24,10 @@ function SocialRow({ className = "" }: { className?: string }) {
             target="_blank"
             rel="noreferrer"
             aria-label={social.label}
-            className="grid h-9 w-9 place-items-center rounded-md border border-white/12 bg-white/5 text-xs font-bold text-white/80 transition hover:border-white/35 hover:text-white"
+            title={social.label}
+            className="block rounded-full transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
           >
-            {social.short}
+            <SocialIcon name={social.icon} className="h-9 w-9" />
           </a>
         </li>
       ))}
