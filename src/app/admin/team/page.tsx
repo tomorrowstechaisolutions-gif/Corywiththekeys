@@ -15,7 +15,9 @@ import { avatarUrls, initials } from "@/lib/avatars";
 import { serverEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
+import { accountStatuses } from "./account-status";
 import { InviteForm } from "./InviteForm";
+import { InviteLine, InvitePanel, InvitePill } from "./InviteStatus";
 import { MemberForm } from "./MemberForm";
 
 export const metadata: Metadata = { title: "Team" };
@@ -51,7 +53,16 @@ export default async function AdminTeamPage() {
     .order("email");
 
   const list = members ?? [];
-  const photos = await avatarUrls(list);
+  // Both read per render rather than cached: an invite accepted five minutes
+  // ago should show as accepted the next time this page is opened.
+  const [photos, statuses] = await Promise.all([
+    avatarUrls(list),
+    accountStatuses(),
+  ]);
+
+  const pending = list.filter(
+    (m) => statuses.get(m.id)?.state === "pending",
+  ).length;
 
   // Nobody owns the console yet, so an admin gets to name the first owner.
   // Once one exists this goes back to owner-only, in the actions and in the
@@ -101,9 +112,18 @@ export default async function AdminTeamPage() {
         />
       </div>
 
-      <h2 className="mt-10 text-lg font-bold text-navy-900">
-        {list.length} {list.length === 1 ? "person" : "people"}
-      </h2>
+      <div className="mt-10 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h2 className="text-lg font-bold text-navy-900">
+          {list.length} {list.length === 1 ? "person" : "people"}
+        </h2>
+        {pending > 0 ? (
+          <span className="text-sm font-medium text-amber-800">
+            {pending === 1
+              ? "1 invite sent and waiting to be accepted"
+              : `${pending} invites sent and waiting to be accepted`}
+          </span>
+        ) : null}
+      </div>
 
       <div className="mt-4 space-y-4">
         {list.map((member) => (
@@ -134,7 +154,10 @@ export default async function AdminTeamPage() {
                 <span className="mt-1 block truncate text-xs text-navy-700/70">
                   {accessSummary(member)}
                 </span>
+                <InviteLine status={statuses.get(member.id)} />
               </span>
+
+              <InvitePill status={statuses.get(member.id)} />
 
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-semibold ${ROLE_STYLES[member.role]}`}
@@ -161,6 +184,12 @@ export default async function AdminTeamPage() {
             </summary>
 
             <div className="border-t border-slate-200 p-5">
+              <InvitePanel
+                status={statuses.get(member.id)}
+                email={member.email}
+                canResend={isAdmin(profile) && serverEnv.hasServiceRole}
+              />
+
               {isAdmin(profile) ? (
                 <MemberForm actorIsOwner={canAppointOwner} member={member} isSelf={member.id === profile.id} />
               ) : (

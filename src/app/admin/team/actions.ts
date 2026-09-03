@@ -245,15 +245,50 @@ export async function updateMember(
   return { ok: true, message: "Saved." };
 }
 
-/** Resend the invite / send a password reset. Their choice of password, not ours. */
-export async function resendInvite(email: string): Promise<void> {
+/**
+ * Send the invite again.
+ *
+ * Supabase issues a fresh link and invalidates the old one, so this is the
+ * fix for "it went to spam" and for a link that has sat unopened long enough
+ * to expire. Refused once the account has been accepted — at that point the
+ * person has a password, and what they want is a reset, not an invite.
+ */
+export async function resendInvite(
+  _prev: TeamState,
+  formData: FormData,
+): Promise<TeamState> {
   const { denied } = await guard();
-  if (denied) return;
+  if (denied) return { error: denied };
 
-  if (!serverEnv.hasServiceRole) return;
+  const email = String(formData.get("email") ?? "").trim();
+
+  if (!email) {
+    return { error: "That account has no email address to send to." };
+  }
+
+  if (!serverEnv.hasServiceRole) {
+    return {
+      error:
+        "Invites need the SUPABASE_SERVICE_ROLE_KEY environment variable, which is not set. Add it in Vercel and try again.",
+    };
+  }
 
   const admin = createAdminClient();
-  await admin.auth.admin.inviteUserByEmail(email);
+  const { error } = await admin.auth.admin.inviteUserByEmail(email);
+
+  if (error) {
+    const already = /already|registered|exists|confirmed/i.test(error.message);
+    console.error("[team] resend failed", error.message);
+    return {
+      error: already
+        ? "That invite has already been accepted, so there is nothing to resend. Send them a password reset instead."
+        : "Could not send that invite again. Please try once more.",
+    };
+  }
 
   revalidatePath("/admin/team");
+  return {
+    ok: true,
+    message: `Invite sent again to ${email}. The earlier link no longer works.`,
+  };
 }

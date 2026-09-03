@@ -12,7 +12,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-2 w-full rounded-md bg-keyblue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-keyblue-500 disabled:cursor-not-allowed disabled:opacity-60"
+      className="mt-2 w-full rounded-lg bg-keyblue-600 px-4 py-3 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-keyblue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-keyblue-500/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Signing in…" : "Sign in"}
     </button>
@@ -20,13 +20,13 @@ function SubmitButton() {
 }
 
 const FIELD =
-  "mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-navy-900 outline-none focus:border-keyblue-500 focus:ring-2 focus:ring-keyblue-500/30";
+  "mt-1.5 w-full rounded-lg border border-slate-300 bg-slate-50/60 px-3 py-2.5 text-sm text-navy-900 outline-none transition focus:border-keyblue-500 focus:bg-white focus:ring-2 focus:ring-keyblue-500/25";
 
 export function LoginForm({ next }: { next: string }) {
   const [state, formAction] = useActionState<SignInState, FormData>(signIn, {});
 
   return (
-    <form action={formAction} noValidate className="space-y-4">
+    <form action={formAction} noValidate className="space-y-5">
       <input type="hidden" name="next" value={next} />
 
       {state.error ? (
