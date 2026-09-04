@@ -1,13 +1,18 @@
 import Link from "next/link";
 
 import { signOut } from "@/app/(auth)/login/actions";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
 import { Avatar } from "@/components/admin/Avatar";
-import { navFor } from "@/lib/admin-nav";
+import {
+  ADMIN_GROUP_LABELS,
+  groupNav,
+  navFor,
+} from "@/lib/admin-nav";
 import { displayName, ROLE_LABELS, type Profile } from "@/lib/auth";
 import { initials } from "@/lib/avatars";
 
-/** Admin console top bar. Shows who is signed in and how to leave. */
+/** Admin console top bar. Shows who is signed in, where they are, and how to leave. */
 export function AdminTopbar({
   profile,
   avatarUrl,
@@ -16,10 +21,18 @@ export function AdminTopbar({
   avatarUrl: string | null;
 }) {
   const name = displayName(profile);
+  const items = navFor(profile);
+  const groups = groupNav(items);
+
+  const crumbs = items.map((item) => ({
+    href: item.href,
+    label: item.label,
+    group: ADMIN_GROUP_LABELS[item.group],
+  }));
 
   return (
-    <header className="flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:gap-4 sm:px-6">
-      <AdminMobileNav items={navFor(profile)} />
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:gap-4 sm:px-6">
+      <AdminMobileNav groups={groups} />
 
       {/*
         The whole name block is the link to your own profile. Everyone has one,
@@ -28,7 +41,7 @@ export function AdminTopbar({
       */}
       <Link
         href="/admin/profile"
-        className="flex min-w-0 flex-1 items-center gap-3 rounded-md px-1 py-1 transition hover:bg-slate-50"
+        className="flex min-w-0 items-center gap-3 rounded-md px-1 py-1 transition hover:bg-slate-50"
       >
         <Avatar url={avatarUrl} initials={initials(name)} size={32} />
         <span className="min-w-0">
@@ -44,8 +57,15 @@ export function AdminTopbar({
         </span>
       </Link>
 
+      <div className="min-w-0 flex-1">
+        <AdminBreadcrumb items={crumbs} />
+      </div>
+
       <div className="flex shrink-0 items-center gap-4 text-sm">
-        <Link href="/" className="text-navy-700 hover:text-keyblue-600">
+        <Link
+          href="/"
+          className="hidden text-navy-700 transition hover:text-keyblue-600 sm:block"
+        >
           View site
         </Link>
 

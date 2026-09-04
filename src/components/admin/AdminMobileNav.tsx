@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { AdminNavLinks } from "@/components/admin/AdminNavLinks";
-import type { AdminNavItem } from "@/lib/admin-nav";
+import type { AdminNavGroup } from "@/lib/admin-nav";
 
 /**
  * Admin navigation for narrow viewports.
@@ -15,9 +15,9 @@ import type { AdminNavItem } from "@/lib/admin-nav";
  * physically wide window reports well under 1024 CSS pixels.
  */
 export function AdminMobileNav({
-  items,
+  groups,
 }: {
-  items: readonly AdminNavItem[];
+  groups: readonly AdminNavGroup[];
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -104,7 +104,7 @@ export function AdminMobileNav({
 
             <div className="px-2 pb-8">
               <AdminNavLinks
-                items={items}
+                groups={groups}
                 size="roomy"
                 onNavigate={() => setOpen(false)}
               />

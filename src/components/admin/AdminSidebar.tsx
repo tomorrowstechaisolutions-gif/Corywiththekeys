@@ -1,8 +1,6 @@
-import Link from "next/link";
+import { AdminSidebarRail } from "@/components/admin/AdminSidebarRail";
 
-import { AdminNavLinks } from "@/components/admin/AdminNavLinks";
-
-import { navFor } from "@/lib/admin-nav";
+import { groupNav, navFor } from "@/lib/admin-nav";
 import { ROLE_LABELS, type Profile } from "@/lib/auth";
 import { SITE } from "@/lib/constants";
 
@@ -13,30 +11,17 @@ import { SITE } from "@/lib/constants";
  * reports well under 1024 CSS pixels, which used to leave the console with no
  * navigation on a screen that is physically wide. Below `md`, AdminMobileNav
  * in the topbar takes over.
+ *
+ * This stays a server component so `lib/auth` — and through it the server-only
+ * Supabase client — never reaches the browser bundle. The rail's collapse
+ * state lives in AdminSidebarRail, which takes plain data as props.
  */
 export function AdminSidebar({ profile }: { profile: Profile }) {
-  const items = navFor(profile);
-
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-line bg-navy-950 text-white md:block">
-      <div className="px-5 py-5">
-        <Link href="/admin/dashboard" className="block leading-tight">
-          <span className="block text-sm font-bold">{SITE.name}</span>
-          <span className="block text-[10px] uppercase tracking-[0.18em] text-gold-500">
-            Admin Console
-          </span>
-        </Link>
-      </div>
-
-      <nav aria-label="Admin" className="px-2 pb-8">
-        <AdminNavLinks items={items} />
-      </nav>
-
-      <div className="px-5 pb-6">
-        <p className="text-[10px] uppercase tracking-[0.18em] text-muted">
-          Signed in as {ROLE_LABELS[profile.role]}
-        </p>
-      </div>
-    </aside>
+    <AdminSidebarRail
+      groups={groupNav(navFor(profile))}
+      siteName={SITE.name}
+      roleLabel={ROLE_LABELS[profile.role]}
+    />
   );
 }

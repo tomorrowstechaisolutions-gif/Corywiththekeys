@@ -4,7 +4,12 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { Field, Select, TextInput } from "@/components/ui/Field";
-import { ADMIN_NAV, sectionsForRole, type AdminSection } from "@/lib/admin-nav";
+import {
+  ADMIN_NAV,
+  groupNav,
+  sectionsForRole,
+  type AdminSection,
+} from "@/lib/admin-nav";
 import { ROLE_LABELS, type UserRole } from "@/lib/roles";
 import type { Database } from "@/types/database";
 import { ROLE_DESCRIPTIONS, USER_ROLES } from "@/lib/validation/team";
@@ -189,32 +194,44 @@ export function MemberForm({
 
             {restrict ? (
               <>
-                <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
-                  {ADMIN_NAV.filter((item) => availableKeys.has(item.key)).map(
-                    (item) => (
-                      <li key={item.key}>
-                        <label className="flex cursor-pointer items-start gap-2.5 rounded-md border border-slate-200 p-3 transition hover:border-keyblue-400">
-                          <input
-                            type="checkbox"
-                            name="sections"
-                            value={item.key}
-                            checked={granted.includes(item.key)}
-                            onChange={() => toggle(item.key)}
-                            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-keyblue-600 focus:ring-keyblue-500"
-                          />
-                          <span>
-                            <span className="block text-sm font-semibold text-navy-900">
-                              {item.label}
+                {groupNav(
+                  ADMIN_NAV.filter((item) => availableKeys.has(item.key)),
+                ).map((group) => (
+                  <div key={group.key} className="mt-5">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-navy-700">
+                      {group.label}
+                    </p>
+                    <ul className="mt-2 grid gap-2.5 sm:grid-cols-2">
+                      {group.items.map((item) => (
+                        <li key={item.key}>
+                          <label className="flex h-full cursor-pointer items-start gap-2.5 rounded-md border border-slate-200 p-3 transition hover:border-keyblue-400">
+                            <input
+                              type="checkbox"
+                              name="sections"
+                              value={item.key}
+                              checked={granted.includes(item.key)}
+                              onChange={() => toggle(item.key)}
+                              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-keyblue-600 focus:ring-keyblue-500"
+                            />
+                            <span>
+                              <span className="block text-sm font-semibold text-navy-900">
+                                {item.label}
+                                {item.planned ? (
+                                  <span className="ml-1.5 rounded bg-slate-100 px-1 py-px align-middle text-[9px] font-semibold uppercase tracking-wider text-slate-500">
+                                    Soon
+                                  </span>
+                                ) : null}
+                              </span>
+                              <span className="block text-xs leading-snug text-navy-700">
+                                {item.description}
+                              </span>
                             </span>
-                            <span className="block text-xs leading-snug text-navy-700">
-                              {item.description}
-                            </span>
-                          </span>
-                        </label>
-                      </li>
-                    ),
-                  )}
-                </ul>
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
 
                 {granted.filter((key) => availableKeys.has(key as AdminSection))
                   .length === 0 ? (
