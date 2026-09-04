@@ -4,7 +4,8 @@ import { cache } from "react";
 import { unstable_rethrow } from "next/navigation";
 
 import { createPublicClient } from "@/lib/supabase/server";
-import { CONTACT, HOURS, SOCIAL_LINKS } from "@/lib/constants";
+import { BRAND_FALLBACKS, brandImageUrl } from "@/lib/brand";
+import { CONTACT, HOURS, SITE, SOCIAL_LINKS } from "@/lib/constants";
 import type { SocialIconName } from "@/components/ui/SocialIcon";
 import type { Database } from "@/types/database";
 
@@ -39,6 +40,21 @@ export type SiteSettings = {
   };
   announcement: { text: string; href: string | null } | null;
   /**
+   * The marks and wording, already resolved to something renderable.
+   *
+   * A null URL means "no image for this one" — the caller falls back to type,
+   * or to Next's own icon file. The two strings are never null: an unset
+   * wordmark is the name compiled into the code, not a blank space where the
+   * business name should be.
+   */
+  brand: {
+    loginLogoUrl: string | null;
+    adminMarkUrl: string | null;
+    faviconUrl: string | null;
+    wordmark: string;
+    tagline: string;
+  };
+  /**
    * True when the values above came from the code rather than the database.
    * The admin screen surfaces this so a save that silently did nothing is
    * visible instead of mysterious.
@@ -66,6 +82,13 @@ function fallback(): SiteSettings {
     socials: SOCIAL_LINKS.map((social) => ({ ...social })),
     switches: { shopCheckoutEnabled: false, showInventoryPrices: true },
     announcement: null,
+    brand: {
+      loginLogoUrl: BRAND_FALLBACKS.login_logo,
+      adminMarkUrl: BRAND_FALLBACKS.admin_mark,
+      faviconUrl: BRAND_FALLBACKS.favicon,
+      wordmark: SITE.name,
+      tagline: SITE.tagline,
+    },
     usedFallback: true,
   };
 }
@@ -228,6 +251,25 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
               href: row.announcement_href?.trim() || null,
             }
           : null,
+      /*
+       * `?? null` on each path is doing real work: until migration 0026 is
+       * applied these columns do not exist, so `select("*")` simply does not
+       * return them and the property is undefined rather than null. Reading
+       * them defensively means the sign-in screen and the tab icon keep
+       * working on an un-migrated database instead of throwing.
+       */
+      brand: {
+        loginLogoUrl:
+          brandImageUrl(row.login_logo_path ?? null) ??
+          BRAND_FALLBACKS.login_logo,
+        adminMarkUrl:
+          brandImageUrl(row.admin_mark_path ?? null) ??
+          BRAND_FALLBACKS.admin_mark,
+        faviconUrl:
+          brandImageUrl(row.favicon_path ?? null) ?? BRAND_FALLBACKS.favicon,
+        wordmark: row.brand_wordmark?.trim() || base.brand.wordmark,
+        tagline: row.brand_tagline?.trim() || base.brand.tagline,
+      },
       usedFallback: false,
     };
   } catch (error) {

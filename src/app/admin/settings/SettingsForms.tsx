@@ -4,10 +4,13 @@ import { useActionState, useState } from "react";
 
 import { Field, TextArea, TextInput } from "@/components/ui/Field";
 import { SocialGlyph } from "@/components/ui/SocialIcon";
+import { SITE } from "@/lib/constants";
+import { PLATFORM } from "@/lib/platform";
 import { DAY_LABELS } from "@/lib/validation/settings";
 import type { Database } from "@/types/database";
 
 import {
+  saveBrandText,
   saveBusiness,
   saveHours,
   saveNotifications,
@@ -15,6 +18,7 @@ import {
   saveSwitches,
   type SettingsState,
 } from "./actions";
+import { BrandUploader } from "./BrandUploader";
 import { SettingsCard, Toggle } from "./SettingsCard";
 
 type SettingsRow = Database["public"]["Tables"]["site_settings"]["Row"];
@@ -428,5 +432,118 @@ export function NotificationsForm({
         </Field>
       </div>
     </SettingsCard>
+  );
+}
+
+/**
+ * The marks and wording on the staff sign-in screen and the console rail.
+ *
+ * The uploaders sit outside the form deliberately. Each one saves the moment
+ * a file lands, so putting them inside a form with a Save button would
+ * suggest a change is unsaved when it is already live — and would leave an
+ * uploaded logo in place if the person then hit the browser back button.
+ * The Save button below belongs to the two text fields only.
+ */
+export function BrandForm({
+  settings,
+  brand,
+}: {
+  settings: SettingsRow;
+  brand: {
+    loginLogoUrl: string | null;
+    adminMarkUrl: string | null;
+    faviconUrl: string | null;
+  };
+}) {
+  const [state, action] = useActionState(saveBrandText, EMPTY);
+  const err = (f: string) => state.fieldErrors?.[f];
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6">
+        <h2 className="text-lg font-bold text-navy-900">Logos and icons</h2>
+        <p className="mt-1 max-w-2xl text-sm text-navy-700">
+          Change these and the new picture appears straight away — there is no
+          Save button, and no developer needed. Upload something wrong and
+          &ldquo;Put the original back&rdquo; returns it to the mark built into
+          the site.
+        </p>
+
+        <div className="mt-5 space-y-3">
+          <BrandUploader
+            slot="login_logo"
+            currentUrl={brand.loginLogoUrl}
+            isCustom={Boolean(settings.login_logo_path)}
+            hint="The mark above the staff sign-in box. Staff see it every time they log in; the public never does."
+          />
+
+          <BrandUploader
+            slot="admin_mark"
+            currentUrl={brand.adminMarkUrl}
+            isCustom={Boolean(settings.admin_mark_path)}
+            hint="A small mark beside the business name at the top of the admin menu. Leave it empty for text on its own."
+          />
+
+          <BrandUploader
+            slot="favicon"
+            currentUrl={brand.faviconUrl}
+            isCustom={Boolean(settings.favicon_path)}
+            preview="light"
+            hint="The little picture on the browser tab, for the whole public site. Use a square image — anything else gets squashed. Browsers cache it hard, so it can take a while to change on a computer that has already been to the site."
+          />
+        </div>
+      </div>
+
+      <SettingsCard
+        title="Sign-in wording"
+        description="The two lines of type under the logo on the staff sign-in screen."
+        state={state}
+        action={action}
+        saveLabel="Save wording"
+        footnote="Leave either box empty to go back to the wording built into the site. The sign-in screen never shows a blank name."
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            label="Business name"
+            htmlFor="brandWordmark"
+            error={err("brandWordmark")}
+            hint="Shown large, under the logo."
+          >
+            <TextInput
+              id="brandWordmark"
+              name="brandWordmark"
+              maxLength={60}
+              placeholder={SITE.name}
+              defaultValue={settings.brand_wordmark ?? ""}
+            />
+          </Field>
+
+          <Field
+            label="Line underneath"
+            htmlFor="brandTagline"
+            error={err("brandTagline")}
+            hint="Small gold capitals."
+          >
+            <TextInput
+              id="brandTagline"
+              name="brandTagline"
+              maxLength={80}
+              placeholder={SITE.tagline}
+              defaultValue={settings.brand_tagline ?? ""}
+            />
+          </Field>
+        </div>
+      </SettingsCard>
+
+      {/*
+        Said plainly, because somebody will look for it. The credit under the
+        sign-in box is the vendor's, not the dealership's, so it is in the
+        code rather than on this screen.
+      */}
+      <p className="px-1 text-xs leading-relaxed text-slate-500">
+        The &ldquo;Powered by {PLATFORM.vendor}&rdquo; line beneath the sign-in
+        box is part of the software itself and is not editable here.
+      </p>
+    </div>
   );
 }

@@ -4,7 +4,10 @@ import { Container } from "@/components/ui/Container";
 import { requireSection } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+import { brandImageUrl, BRAND_FALLBACKS } from "@/lib/brand";
+
 import {
+  BrandForm,
   BusinessForm,
   HoursForm,
   NotificationsForm,
@@ -66,6 +69,22 @@ export default async function AdminSettingsPage() {
         <HoursForm hours={hours} />
         <SocialsForm settings={settings} />
         <SwitchesForm settings={settings} />
+        <BrandForm
+          settings={settings}
+          brand={{
+            // Resolved here rather than in the form, which is a client
+            // component and has no business building storage URLs.
+            loginLogoUrl:
+              brandImageUrl(settings.login_logo_path ?? null) ??
+              BRAND_FALLBACKS.login_logo,
+            adminMarkUrl:
+              brandImageUrl(settings.admin_mark_path ?? null) ??
+              BRAND_FALLBACKS.admin_mark,
+            faviconUrl:
+              brandImageUrl(settings.favicon_path ?? null) ??
+              BRAND_FALLBACKS.favicon,
+          }}
+        />
         <NotificationsForm notifications={notifications} />
       </div>
 

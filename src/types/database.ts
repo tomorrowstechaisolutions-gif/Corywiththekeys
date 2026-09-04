@@ -1350,15 +1350,20 @@ export type Database = {
         Row: {
           address_line1: string | null
           address_line2: string | null
+          admin_mark_path: string | null
           announcement_enabled: boolean
           announcement_href: string | null
           announcement_text: string | null
+          brand_tagline: string | null
+          brand_wordmark: string | null
           city: string | null
           email: string | null
           facebook_url: string | null
+          favicon_path: string | null
           id: boolean
           instagram_url: string | null
           linktree_url: string | null
+          login_logo_path: string | null
           phone: string | null
           postal_code: string | null
           shop_checkout_enabled: boolean
@@ -1373,15 +1378,20 @@ export type Database = {
         Insert: {
           address_line1?: string | null
           address_line2?: string | null
+          admin_mark_path?: string | null
           announcement_enabled?: boolean
           announcement_href?: string | null
           announcement_text?: string | null
+          brand_tagline?: string | null
+          brand_wordmark?: string | null
           city?: string | null
           email?: string | null
           facebook_url?: string | null
+          favicon_path?: string | null
           id?: boolean
           instagram_url?: string | null
           linktree_url?: string | null
+          login_logo_path?: string | null
           phone?: string | null
           postal_code?: string | null
           shop_checkout_enabled?: boolean
@@ -1396,15 +1406,20 @@ export type Database = {
         Update: {
           address_line1?: string | null
           address_line2?: string | null
+          admin_mark_path?: string | null
           announcement_enabled?: boolean
           announcement_href?: string | null
           announcement_text?: string | null
+          brand_tagline?: string | null
+          brand_wordmark?: string | null
           city?: string | null
           email?: string | null
           facebook_url?: string | null
+          favicon_path?: string | null
           id?: boolean
           instagram_url?: string | null
           linktree_url?: string | null
+          login_logo_path?: string | null
           phone?: string | null
           postal_code?: string | null
           shop_checkout_enabled?: boolean

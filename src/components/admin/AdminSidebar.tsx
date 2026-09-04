@@ -2,7 +2,7 @@ import { AdminSidebarRail } from "@/components/admin/AdminSidebarRail";
 
 import { groupNav, navFor } from "@/lib/admin-nav";
 import { ROLE_LABELS, type Profile } from "@/lib/auth";
-import { SITE } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 
 /**
  * Admin console navigation rail, filtered to what this role may open.
@@ -16,11 +16,14 @@ import { SITE } from "@/lib/constants";
  * Supabase client — never reaches the browser bundle. The rail's collapse
  * state lives in AdminSidebarRail, which takes plain data as props.
  */
-export function AdminSidebar({ profile }: { profile: Profile }) {
+export async function AdminSidebar({ profile }: { profile: Profile }) {
+  const { brand } = await getSettings();
+
   return (
     <AdminSidebarRail
       groups={groupNav(navFor(profile))}
-      siteName={SITE.name}
+      siteName={brand.wordmark}
+      markUrl={brand.adminMarkUrl}
       roleLabel={ROLE_LABELS[profile.role]}
     />
   );

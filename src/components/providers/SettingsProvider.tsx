@@ -3,7 +3,8 @@
 import { createContext, useContext, type ReactNode } from "react";
 
 import type { SiteSettings } from "@/lib/settings";
-import { CONTACT, HOURS, SOCIAL_LINKS } from "@/lib/constants";
+import { BRAND_FALLBACKS } from "@/lib/brand";
+import { CONTACT, HOURS, SITE, SOCIAL_LINKS } from "@/lib/constants";
 
 /**
  * Live business settings, for the parts of the site that run in the browser.
@@ -33,6 +34,13 @@ const DEFAULT: SiteSettings = {
   socials: SOCIAL_LINKS.map((social) => ({ ...social })),
   switches: { shopCheckoutEnabled: false, showInventoryPrices: true },
   announcement: null,
+  brand: {
+    loginLogoUrl: BRAND_FALLBACKS.login_logo,
+    adminMarkUrl: BRAND_FALLBACKS.admin_mark,
+    faviconUrl: BRAND_FALLBACKS.favicon,
+    wordmark: SITE.name,
+    tagline: SITE.tagline,
+  },
   usedFallback: true,
 };
 

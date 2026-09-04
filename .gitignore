@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Sync tarballs used to move work onto this machine — never source.
 *.tgz
+
+# Files the Claude desktop app drops here when it hands back a result.
+Claude outputs/

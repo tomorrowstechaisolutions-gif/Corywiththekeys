@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
@@ -23,10 +24,13 @@ import {
 export function AdminSidebarRail({
   groups,
   siteName,
+  markUrl,
   roleLabel,
 }: {
   groups: readonly AdminNavGroup[];
   siteName: string;
+  /** Uploaded console mark, or null for type only. */
+  markUrl: string | null;
   roleLabel: string;
 }) {
   const collapsed = useSyncExternalStore(
@@ -47,11 +51,46 @@ export function AdminSidebarRail({
           collapsed ? "justify-center" : "justify-between pl-5"
         }`}
       >
-        {collapsed ? null : (
-          <Link href="/admin/dashboard" className="block min-w-0 leading-tight">
-            <span className="block truncate text-sm font-bold">{siteName}</span>
-            <span className="block text-[10px] uppercase tracking-[0.18em] text-gold-500">
-              Admin Console
+        {/*
+          Collapsed, the mark is the only thing identifying the console, so it
+          stays and the type goes. With no mark uploaded there is nothing to
+          show at that width, which is fine — the icons below carry it.
+        */}
+        {collapsed ? (
+          markUrl ? (
+            <Link href="/admin/dashboard" aria-label={`${siteName} — dashboard`}>
+              <Image
+                src={markUrl}
+                alt=""
+                width={64}
+                height={64}
+                unoptimized={markUrl.startsWith("http")}
+                className="h-7 w-7 object-contain"
+              />
+            </Link>
+          ) : null
+        ) : (
+          <Link
+            href="/admin/dashboard"
+            className="flex min-w-0 items-center gap-2.5 leading-tight"
+          >
+            {markUrl ? (
+              <Image
+                src={markUrl}
+                alt=""
+                width={64}
+                height={64}
+                unoptimized={markUrl.startsWith("http")}
+                className="h-8 w-8 shrink-0 object-contain"
+              />
+            ) : null}
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-bold">
+                {siteName}
+              </span>
+              <span className="block text-[10px] uppercase tracking-[0.18em] text-gold-500">
+                Admin Console
+              </span>
             </span>
           </Link>
         )}

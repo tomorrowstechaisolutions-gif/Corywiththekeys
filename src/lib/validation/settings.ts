@@ -135,3 +135,39 @@ export const DAY_LABELS = [
   "Saturday",
   "Sunday",
 ] as const;
+
+/**
+ * The two lines of type under the sign-in mark.
+ *
+ * Both may be left blank, which means "use the name compiled into the code"
+ * rather than "show nothing" — a sign-in screen with no business name on it
+ * is a bug, not a design choice.
+ */
+export const BrandTextSchema = z.object({
+  brandWordmark: z.preprocess(
+    trimToNull,
+    z.string().max(60, "That name is too long for the sign-in screen.").nullable(),
+  ),
+  brandTagline: z.preprocess(
+    trimToNull,
+    z.string().max(80, "That line is too long for the sign-in screen.").nullable(),
+  ),
+});
+
+/**
+ * A storage path handed back by the uploader.
+ *
+ * Rejects anything that is not a plain relative path. The browser uploads
+ * straight to Storage and then tells a Server Action where it put the file,
+ * so this value arrives from the client and is written into an image `src`:
+ * a full URL, a protocol, a leading slash or a `..` segment would each turn
+ * that into a way to point the site's own logo at somebody else's server.
+ * The same rule is a check constraint on the column.
+ */
+export const BrandPathSchema = z
+  .string()
+  .min(1, "That upload did not arrive.")
+  .max(300, "That file name is too long.")
+  .refine((value) => !/^[a-zA-Z]+:/.test(value), "That is not a stored file.")
+  .refine((value) => !value.startsWith("/"), "That is not a stored file.")
+  .refine((value) => !value.includes(".."), "That is not a stored file.");

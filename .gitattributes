@@ -1,0 +1,19 @@
+# Line endings are LF in this repository, on every machine.
+#
+# Without this, git on Windows with core.autocrlf=true rewrites files to CRLF
+# on checkout. Everything here was written with LF, so the result is a diff of
+# fifty files where nothing actually changed — which buries the real change and
+# turns every branch switch into a conflict. Marking the repo `text eol=lf`
+# makes the working tree match what is stored, whoever checks it out.
+* text=auto eol=lf
+
+# Binary, so git must never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.mp4 binary
+*.woff binary
+*.woff2 binary

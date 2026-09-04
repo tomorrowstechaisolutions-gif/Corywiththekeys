@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SITE } from "@/lib/constants";
+import { PLATFORM } from "@/lib/platform";
+import { getSettings } from "@/lib/settings";
 
 import { LoginForm } from "./LoginForm";
 
@@ -24,6 +26,11 @@ export default async function LoginPage({
   const { next, error } = await searchParams;
   const notice = error ? ERRORS[error] : undefined;
 
+  // The mark and the two lines of type under it are set in Settings. Nothing
+  // here is required: getSettings() falls back to the compiled-in brand, so
+  // this screen renders even with the database unreachable.
+  const { brand } = await getSettings();
+
   return (
     <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-navy-950 px-4 py-12">
       {/*
@@ -40,7 +47,7 @@ export default async function LoginPage({
         <div className="mb-8 flex flex-col items-center text-center">
           <Link
             href="/"
-            aria-label={`${SITE.name} — home`}
+            aria-label={`${brand.wordmark} — home`}
             className="group flex flex-col items-center"
           >
             {/* The crossed keys, with a warm halo so the gold lifts off navy. */}
@@ -49,21 +56,27 @@ export default async function LoginPage({
                 aria-hidden
                 className="absolute inset-0 rounded-full bg-gold-400/20 blur-2xl transition group-hover:bg-gold-400/30"
               />
-              <Image
-                src="/brand/key-mark.png"
-                alt=""
-                width={512}
-                height={512}
-                priority
-                className="relative h-24 w-24 drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)]"
-              />
+              {brand.loginLogoUrl ? (
+                <Image
+                  src={brand.loginLogoUrl}
+                  alt=""
+                  width={512}
+                  height={512}
+                  priority
+                  // An uploaded mark is any shape the business chose, so it is
+                  // fitted rather than filled — a wide wordmark would
+                  // otherwise be cropped to a square.
+                  className="relative h-24 w-24 object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)]"
+                  unoptimized={brand.loginLogoUrl.startsWith("http")}
+                />
+              ) : null}
             </span>
 
             <span className="mt-4 block font-serif text-2xl font-bold italic tracking-tight text-white">
-              {SITE.name}
+              {brand.wordmark}
             </span>
             <span className="mt-1.5 block text-[10px] font-semibold uppercase tracking-[0.22em] text-gold-400">
-              {SITE.tagline}
+              {brand.tagline}
             </span>
           </Link>
 
@@ -80,7 +93,7 @@ export default async function LoginPage({
           <div className="p-7">
             <h1 className="text-lg font-bold text-navy-900">Staff sign in</h1>
             <p className="mt-1 text-sm text-navy-700">
-              Admin console for {SITE.name}.
+              Admin console for {brand.wordmark}.
             </p>
 
             {notice ? (
@@ -108,6 +121,35 @@ export default async function LoginPage({
             &larr; Back to {SITE.domain}
           </Link>
         </p>
+
+        {/*
+          Vendor attribution. Compiled in, not a setting — see lib/platform.
+          It sits below the fold of the card on purpose: present at every sign
+          in, quiet enough not to compete with the dealership's own mark.
+        */}
+        <div className="mt-8 border-t border-white/10 pt-5 text-center">
+          {/*
+            `muted` and `muted/80` rather than white at a low opacity. White at
+            30% over this navy lands at 2.6:1 — under the 4.5:1 AA floor for
+            body text, so the notice would be there without being readable,
+            which is the worst of both. The brand's own muted token clears 7:1
+            and 5:1 respectively.
+          */}
+          <p className="text-[11px] text-muted">
+            Powered by{" "}
+            <a
+              href={PLATFORM.vendorUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-semibold text-white underline decoration-white/30 underline-offset-2 transition hover:text-gold-400 hover:decoration-gold-400 focus-visible:text-gold-400"
+            >
+              {PLATFORM.vendor}
+            </a>
+          </p>
+          <p className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-muted/80">
+            {PLATFORM.notice}
+          </p>
+        </div>
       </div>
     </div>
   );

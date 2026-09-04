@@ -13,6 +13,7 @@
  * module that imports nothing.
  */
 export const AVATAR_BUCKET = "staff-avatars";
+export const MEDIA_BUCKET = "media";
 export const VEHICLE_PHOTO_BUCKET = "vehicle-photos";
 export const PRODUCT_PHOTO_BUCKET = "product-photos";
 export const TRADE_IN_PHOTO_BUCKET = "trade-in-photos";
