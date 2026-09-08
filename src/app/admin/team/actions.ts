@@ -175,19 +175,31 @@ export async function updateMember(
    * The database refuses this too — see protect_owner_seat() — but a refusal
    * that arrives as a Postgres error code reads as a bug. Catching it here
    * means an admin gets a sentence explaining why instead.
+   *
+   * Switching a switched-off owner ON is the one change an admin may make
+   * here. An invited owner arrives inactive, and only an owner could turn
+   * them on — so the seat could never be taken up at all. Letting an admin
+   * do it costs nothing: it hands the business back to the person who owns
+   * it, and cannot lock anybody out. Demoting or switching OFF an owner
+   * stays the owner's alone, which is the rule that matters.
    */
   if (!isOwner(profile)) {
     const { data: target } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, is_active")
       .eq("id", input.id)
       .maybeSingle();
 
-    if (target?.role === "owner" && (input.role !== "owner" || !input.isActive)) {
-      return {
-        error:
-          "Only the owner can change or switch off the owner. You can still edit their name, title and phone.",
-      };
+    if (target?.role === "owner") {
+      const demoting = input.role !== "owner";
+      const switchingOff = target.is_active && !input.isActive;
+
+      if (demoting || switchingOff) {
+        return {
+          error:
+            "Only the owner can change the owner's role or switch the owner off. You can still edit their name, title and phone — and switch them on.",
+        };
+      }
     }
 
     if (

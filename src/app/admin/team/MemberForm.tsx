@@ -60,6 +60,16 @@ export function MemberForm({
   // that fails on save. They can still fix the name, title and phone.
   const ownerSeatLocked = !actorIsOwner && (member.role === "owner" || role === "owner");
 
+  /*
+   * The one exception: an admin may switch a switched-off owner ON.
+   *
+   * An invited owner arrives inactive and only an owner could activate them,
+   * so without this the seat can never be taken up. Turning somebody on can
+   * never lock anybody out; turning the owner OFF still cannot be done here.
+   */
+  const canActivateOwner = ownerSeatLocked && !member.is_active;
+  const activeLocked = ownerSeatLocked && !canActivateOwner;
+
   const roleOptions = USER_ROLES.filter(
     (value) => value !== "owner" || actorIsOwner || member.role === "owner",
   );
@@ -79,11 +89,14 @@ export function MemberForm({
         A disabled control posts nothing, so without these the locked owner
         row would submit no role and an unticked Active box — and an admin
         fixing a typo in the owner's name would appear to demote them.
+
+        No hidden isActive when the owner is switched off: the real tick box
+        is live in that case, and a hidden field would override it.
       */}
       {ownerSeatLocked ? (
         <>
           <input type="hidden" name="role" value={member.role} />
-          {member.is_active ? (
+          {activeLocked ? (
             <input type="hidden" name="isActive" value="on" />
           ) : null}
         </>
@@ -252,7 +265,7 @@ export function MemberForm({
             type="checkbox"
             name="isActive"
             defaultChecked={member.is_active}
-            disabled={ownerSeatLocked}
+            disabled={activeLocked}
             className="mt-0.5 h-4 w-4 rounded border-slate-300 text-keyblue-600 focus:ring-keyblue-500 disabled:cursor-not-allowed"
           />
           <span>
@@ -260,7 +273,9 @@ export function MemberForm({
               Active
             </span>
             <span className="block text-xs text-navy-700">
-              Switch off to block access without deleting anything.
+              {canActivateOwner
+                ? "The owner is switched off. Tick this and save to let them in."
+                : "Switch off to block access without deleting anything."}
             </span>
           </span>
         </label>
@@ -270,8 +285,9 @@ export function MemberForm({
 
       {ownerSeatLocked ? (
         <p className="text-xs text-navy-700/70">
-          This is the owner&rsquo;s account. Only the owner can change that
-          role or switch it off — you can still fix the details above.
+          {canActivateOwner
+            ? "This is the owner\u2019s account, and it is switched off. You can switch it on and fix the details above, but only the owner can change that role or switch it back off."
+            : "This is the owner\u2019s account. Only the owner can change that role or switch it off \u2014 you can still fix the details above."}
         </p>
       ) : null}
 
